@@ -24,15 +24,13 @@ There is a 40-pin header on RAK7391 board, it uses the same pinout Raspberry Pi 
 
 Check the following figure for the pinout, make sure don't get confused by BCM numbering (aka “Broadcom” or ”GPIO“ ）and Board pin numbering (aka "physical pin)". They are two different numbering systems. BCM numbering refers to the pins defined by the "Broadcom SOC channel", while the Board pin refers to the pin's physical location on the header. For example, Board pin 7 is actually GPIO 4.  
 
-<img src="assets\GPIO-Pinout-Diagram.png" alt="GPIO-Pinout-Diagram" style="zoom:67%;" />
+![GPIO-Pinout-Diagram](assets\GPIO-Pinout-Diagram.png)
 
 <span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO-Pinout-Diagram-2.png), need the documentation team to cite it or create a new one?</span>
 
 By configuring the status of each pin in software, users can define each pin as an input or output pin, and use them for different real-world applications.
 
-<img src="assets\GPIO_pins.png" alt="GPIO_pins" style="zoom:67%;" />
-
-<span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO.png), need the documentation team to cite it or create a new one?</span>
+![GPIO_pins](assets\GPIO_pins.png)<span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO.png), need the documentation team to cite it or create a new one?</span>
 
 ## 2. Preparation
 
