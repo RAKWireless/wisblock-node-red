@@ -1,0 +1,96 @@
+[
+    {
+        "id": "8ae7f3d34a9429a3",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8d57bb31b29af70a",
+        "type": "inject",
+        "z": "8ae7f3d34a9429a3",
+        "name": "ON",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 310,
+        "y": 240,
+        "wires": [
+            [
+                "178d0b1fb974d3f6"
+            ]
+        ]
+    },
+    {
+        "id": "178d0b1fb974d3f6",
+        "type": "pi-gpiod out",
+        "z": "8ae7f3d34a9429a3",
+        "name": "",
+        "host": "localhost",
+        "port": 8888,
+        "pin": "4",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 530,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "75c6a0e9a3fa6ce2",
+        "type": "inject",
+        "z": "8ae7f3d34a9429a3",
+        "name": "OFF",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "178d0b1fb974d3f6"
+            ]
+        ]
+    },
+    {
+        "id": "b84f88fdef4d87bb",
+        "type": "comment",
+        "z": "8ae7f3d34a9429a3",
+        "name": "Notes",
+        "info": "Host is set to localhost as pigpiod is running inside the node-red container.\nCheck node-red-node-pi-gpiod's [usage example](https://flows.nodered.org/node/node-red-node-pi-gpiod) for more information. ",
+        "x": 530,
+        "y": 140,
+        "wires": []
+    }
+]
