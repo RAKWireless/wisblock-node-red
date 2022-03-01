@@ -1,0 +1,83 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "ads1115-read",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "98e86b77ef2b58e2",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 220,
+        "wires": [
+            [
+                "d270fe599e9073f2"
+            ]
+        ]
+    },
+    {
+        "id": "d270fe599e9073f2",
+        "type": "ads1x15_i2c",
+        "z": "f6f2187d.f17ca8",
+        "property": "payload",
+        "name": "",
+        "i2c_device_number": 1,
+        "chip": "0x01",
+        "i2c_address": "0x48",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": true,
+        "singleEndedChannel1": true,
+        "singleEndedChannel2": true,
+        "singleEndedChannel3": true,
+        "differentialChannel0_1": true,
+        "differentialChannel0_3": false,
+        "differentialChannel1_3": false,
+        "differentialChannel2_3": true,
+        "samplesPerSecond0": "920",
+        "samplesPerSecond1": "128",
+        "progGainAmp": "4096",
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "3ad7074e7adcd9aa"
+            ]
+        ]
+    },
+    {
+        "id": "3ad7074e7adcd9aa",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 220,
+        "wires": []
+    }
+]
