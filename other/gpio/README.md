@@ -24,13 +24,13 @@ There is a 40-pin header on RAK7391 board, it uses the same pinout Raspberry Pi 
 
 Check the following figure for the pinout, make sure don't get confused by BCM numbering (aka “Broadcom” or ”GPIO“ ）and Board pin numbering (aka "physical pin)". They are two different numbering systems. BCM numbering refers to the pins defined by the "Broadcom SOC channel", while the Board pin refers to the pin's physical location on the header. For example, Board pin 7 is actually GPIO 4.  
 
-![GPIO-Pinout-Diagram](assets\GPIO-Pinout-Diagram.png)
+![GPIO-Pinout-Diagram](assets/GPIO-Pinout-Diagram.png)
 
 <span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO-Pinout-Diagram-2.png), need the documentation team to cite it or create a new one?</span>
 
 By configuring the status of each pin in software, users can define each pin as an input or output pin, and use them for different real-world applications.
 
-![GPIO_pins](assets\GPIO_pins.png)<span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO.png), need the documentation team to cite it or create a new one?</span>
+![GPIO_pins](assets/GPIO_pins.png)<span style="color:blue">here is the [reference](https://www.raspberrypi.com/documentation/computers/images/GPIO.png), need the documentation team to cite it or create a new one?</span>
 
 ## 2. Preparation
 
@@ -38,7 +38,7 @@ By configuring the status of each pin in software, users can define each pin as 
 
 In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then create a flow in node-red to toggle the led.  Please check the figure below for how to connect the LED:
 
-![led_diagram](assets\led_diagram.png)
+![led_diagram](assets/led_diagram.png)
 
 <span style="color:blue">need the documentation team to create a new one?</span>
 
@@ -50,7 +50,7 @@ After you deployed the Node-Red container using the [portainer app template](lin
 
 After the import is done, the new flow should look like this:
 
-![gpio-toggle-led-overview](assets\gpio-toggle-led-overview.png)
+![gpio-toggle-led-overview](assets/gpio-toggle-led-overview.png)
 
 Hit the **Deploy** button on the top right to deploy the flow.
 
