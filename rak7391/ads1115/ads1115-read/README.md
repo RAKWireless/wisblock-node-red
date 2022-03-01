@@ -18,7 +18,7 @@ in this flow, inject node just as a trigger to start a reading data.
 
 an ads1x15_i2c node provide access to a ADS1x15 I2C analog to digital converter, to get a voltage or difference of voltage from a ADS1115 or ADS1015  just select the correct setting for your device and trigger the node.
 
-![ads1x15_i2c](assets\ads1x15_i2c.png)
+![ads1x15_i2c](assets/ads1x15_i2c.png)
 
 
 
@@ -60,7 +60,7 @@ I Select the Gain you want. To increase accuracy of smaller voltage signals, the
 
 debug node prints the read details about each channels to debug window.
 
-![ads1115-read](assets\ads1115-read.png)
+![ads1115-read](assets/ads1115-read.png)
 
 
 
@@ -86,6 +86,6 @@ cat /etc/group | grep i2c | awk -F: '{print $3}'
 
 if you try to run a node-red container with Docker Portainer, you also need to do some configuration similar in the `advanced container settings`
 
-![dev](assets\dev_mount.png)
+![dev](assets/dev_mount.png)
 
-![user_setting](assets\user_setting.png)
+![user_setting](assets/user_setting.png)
