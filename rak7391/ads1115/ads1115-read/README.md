@@ -29,7 +29,7 @@ no additional settings are required when you run node-red on your host directly.
 
 to run in Docker in its simplest form just run:
 
-`docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --name 		node-red:998 nodered/node-red`
+`docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --name node-red:998 nodered/node-red`
 
 the `--device` can mount device to container, and `--name` can add an user with specified group.
 
