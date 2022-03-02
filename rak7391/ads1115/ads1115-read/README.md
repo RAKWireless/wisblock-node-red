@@ -1,5 +1,7 @@
 # Read 4 ADC channels on RAK7391 board from NodeRed
 
+[TOC]
+
 ## 1.Introduction
 
 the **ADC**(Analog to Digital Converter)  chip on **RAK7391** board is **ADS1115**. this flow explains how to read 4 input channels of ads1115 with **node-red-contrib-ads1x15_i2c** when using a RAK7391 board.
@@ -39,20 +41,21 @@ cat /etc/group | grep i2c | awk -F: '{print $3}'
 
 if you try to run a node-red container with Docker Portainer, you also need to do some configuration similar in the `Advanced container settings`.
 
-<img src="assets/dev_mount.png" alt="dev_mount" style="zoom:67%;" />
+<img src="assets/dev_mount.png" alt="dev_mount" style="zoom: 50%;" />
 
 
-<img src="assets/user_setting.png" alt="user_setting" style="zoom:67%;" />
 
-### 2.3. flow configuration
+<img src="assets/user_setting.png" alt="user_setting" style="zoom: 50%;" />
+
+### 2.2. flow configuration
 
 after you deploy node-red container,  you can import  [ads1115_read.json](ads1115_read.json) flow. this flow consists of three nodes: `inject` node,  `ads1x15_i2c` node, `debug` node. after the import is done, the new flow should look like this:
 
-<img src="assets/ads1115_read.png" alt="ads1115_read" style="zoom:67%;" />
+<img src="assets/ads1115_read.png" alt="ads1115_read" style="zoom: 50%;" />
 
 before you deploy this flow, you need to select the correct setting for `ads1x15_i2c` node
 
-<img src="assets/ads1x15_i2c.png" alt="ads1x15_i2c" style="zoom:67%;" />
+<img src="assets/ads1x15_i2c.png" alt="ads1x15_i2c" style="zoom: 50%;" />
 
 - **Name**: define the msg name if you wish to change the name displayed on the node.
 
@@ -75,7 +78,6 @@ before you deploy this flow, you need to select the correct setting for `ads1x15
 Hit the `Deploy` button on the top right to deploy the flow, then click inject node to trigger a reading, debug node will print the details about each channels to debug window.
 
 <img src="assets/debug.png" alt="debug" style="zoom:67%;" />
-
 
 
 
