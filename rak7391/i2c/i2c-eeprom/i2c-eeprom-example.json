@@ -1,5 +1,213 @@
 [
     {
+        "id": "06308f478fc88158",
+        "type": "tab",
+        "label": "i2c-eeprom-example",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a5bb4882c0c471c7",
+        "type": "i2c scan",
+        "z": "06308f478fc88158",
+        "name": "scan bus 1",
+        "busno": "1",
+        "x": 830,
+        "y": 200,
+        "wires": [
+            [
+                "5633d2a347601fa7"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "58a5953a268cd523",
+        "type": "inject",
+        "z": "06308f478fc88158",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "a5bb4882c0c471c7"
+            ]
+        ]
+    },
+    {
+        "id": "5633d2a347601fa7",
+        "type": "debug",
+        "z": "06308f478fc88158",
+        "name": "available i2c device address",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "8d493f3e0141e928",
+        "type": "i2c in",
+        "z": "06308f478fc88158",
+        "name": "read first byte from eeprom ",
+        "busno": "1",
+        "address": "80",
+        "command": "3",
+        "count": "3",
+        "x": 1100,
+        "y": 700,
+        "wires": [
+            [
+                "e378c0664614a504"
+            ]
+        ]
+    },
+    {
+        "id": "839c60a19d7620c0",
+        "type": "i2c out",
+        "z": "06308f478fc88158",
+        "name": "write to eeprom",
+        "busno": "1",
+        "address": "80",
+        "command": "1",
+        "payload": "payload",
+        "payloadType": "msg",
+        "count": "2",
+        "x": 800,
+        "y": 620,
+        "wires": [
+            [
+                "8d493f3e0141e928",
+                "01cae6c139da055b",
+                "37e3b52e0473b6aa"
+            ]
+        ]
+    },
+    {
+        "id": "e378c0664614a504",
+        "type": "debug",
+        "z": "06308f478fc88158",
+        "name": "byte 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1370,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "fa4f0b651340774c",
+        "type": "inject",
+        "z": "06308f478fc88158",
+        "name": "write 1 to register 0",
+        "props": [
+            {
+                "p": "command",
+                "v": "0,0,1",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 570,
+        "y": 540,
+        "wires": [
+            [
+                "839c60a19d7620c0"
+            ]
+        ]
+    },
+    {
+        "id": "66720931183c8175",
+        "type": "inject",
+        "z": "06308f478fc88158",
+        "name": "write 8 to regiser 2",
+        "props": [
+            {
+                "p": "command",
+                "v": "0,0,2",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 570,
+        "y": 700,
+        "wires": [
+            [
+                "839c60a19d7620c0"
+            ]
+        ]
+    },
+    {
+        "id": "37e3b52e0473b6aa",
+        "type": "i2c in",
+        "z": "06308f478fc88158",
+        "name": "read first byte from eeprom ",
+        "busno": "1",
+        "address": "80",
+        "command": "2",
+        "count": "2",
+        "x": 1100,
+        "y": 620,
+        "wires": [
+            [
+                "0994f49cd83906bb"
+            ]
+        ]
+    },
+    {
+        "id": "0994f49cd83906bb",
+        "type": "debug",
+        "z": "06308f478fc88158",
+        "name": "byte 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1370,
+        "y": 620,
+        "wires": []
+    },
+    {
         "id": "01cae6c139da055b",
         "type": "i2c in",
         "z": "06308f478fc88158",
@@ -15,5 +223,22 @@
                 "efcce33881974dbf"
             ]
         ]
+    },
+    {
+        "id": "efcce33881974dbf",
+        "type": "debug",
+        "z": "06308f478fc88158",
+        "name": "byte 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1370,
+        "y": 540,
+        "wires": []
     }
 ]
