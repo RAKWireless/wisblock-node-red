@@ -1,0 +1,19 @@
+[
+    {
+        "id": "01cae6c139da055b",
+        "type": "i2c in",
+        "z": "06308f478fc88158",
+        "name": "read first byte from eeprom ",
+        "busno": "1",
+        "address": "80",
+        "command": "1",
+        "count": "1",
+        "x": 1100,
+        "y": 540,
+        "wires": [
+            [
+                "efcce33881974dbf"
+            ]
+        ]
+    }
+]
