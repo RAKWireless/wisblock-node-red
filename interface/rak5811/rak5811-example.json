@@ -1,92 +1,10 @@
 [
     {
-        "id": "191afa82ad0a9aef",
-        "type": "tab",
-        "label": "rak5811-example",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "9aa0ce9eb6979573",
-        "type": "inject",
-        "z": "191afa82ad0a9aef",
-        "name": "trigger",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 130,
-        "y": 100,
-        "wires": [
-            [
-                "ca06fad256436754"
-            ]
-        ]
-    },
-    {
-        "id": "ca06fad256436754",
-        "type": "ads1x15_i2c",
-        "z": "191afa82ad0a9aef",
-        "property": "payload",
-        "name": "",
-        "i2c_device_number": 1,
-        "chip": "0x01",
-        "i2c_address": "0x48",
-        "inputsForChannel": "singleEnded",
-        "singleEndedChannel0": true,
-        "singleEndedChannel1": true,
-        "singleEndedChannel2": true,
-        "singleEndedChannel3": true,
-        "differentialChannel0_1": true,
-        "differentialChannel0_3": false,
-        "differentialChannel1_3": false,
-        "differentialChannel2_3": true,
-        "samplesPerSecond0": "920",
-        "samplesPerSecond1": "128",
-        "progGainAmp": "4096",
-        "x": 290,
-        "y": 100,
-        "wires": [
-            [
-                "f6fc988655a77646"
-            ]
-        ]
-    },
-    {
-        "id": "e19ca185c1f349ce",
-        "type": "debug",
-        "z": "191afa82ad0a9aef",
-        "name": "read analog voltage input",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 710,
-        "y": 100,
-        "wires": []
-    },
-    {
         "id": "f6fc988655a77646",
         "type": "function",
         "z": "191afa82ad0a9aef",
         "name": "convert raw data",
-        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_0.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
+        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_1.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

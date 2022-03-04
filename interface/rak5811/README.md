@@ -51,7 +51,7 @@ after the app is deployed, you can browse to http://{host-ip}:1880 to access Nod
 
 ### 2.2. Hardware preparation 
 
-To use RAK5811 on RAK7391 board, you need to connect RAK5811 to the high-density slots on RAK7391 board. In this example, we use slot 1, and trying to measure the input voltage connected to channel 1. Please check the picture below for more details.
+To use RAK5811 on RAK7391 board, you need to connect RAK5811 to the high-density slots on RAK7391 board. In this example, we use slot 1, and trying to measure the input voltage connected to channel 1. Please check the picture below for more details. Please connect your analog input to the RAK5811. In this example below, the positive pin goes to the red wire, and the ground pin goes to the brown wire.
 
 ![rak5811+rak7391](assets/rak5811+rak7391.png)
 
@@ -91,15 +91,15 @@ Hit the `Deploy` button on the top right to deploy the flow, then click inject n
 
 Thus we need to add a unction node to the flow to process the output. 
 
-![image-20220304112456367](assets/function-node.png)Inside the function node, we have the following code to convert the raw readings to something makes more sense:
+![image-20220304112456367](assets/function-node.png)Inside the function node, we have the following code to convert the raw readings to the actual measurements:
 
 ```
-raw_voltage = msg.payload["/dev/i2c-1"].ads1115["0x48"].singleEnded.channel_0.Volts;
+raw_voltage = msg.payload["/dev/i2c-1"].ads1115["0x48"].singleEnded.channel_1.Volts;
 msg.payload = raw_voltage/0.6;
 return msg;
 ```
 
-The code above convert the readings from channel 1 by divided the `raw_voltage` by 0.6 to get the correct measurement value.
+The code above convert the readings from channel 1 by divided the `raw_voltage` by 0.6 to get the correct measurement value. In order to read from other channels. please change both the channel number in the code and how you connect the anlog input to RAK7391. Slot 1 on RAK7391 handles channel 0 and 1 of RAK5811, while slot 2 on RAK7391 handels channel 2 and 3 of RAK5811.
 
 
 
