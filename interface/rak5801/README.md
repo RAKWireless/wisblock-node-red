@@ -59,11 +59,9 @@ after the app is deployed, you can browse to http://{host-ip}:1880 to access Nod
 
 <img src="assets/rak5801-read-flow.png" alt="rak5801-read-flow" style="zoom:67%;" />
 
-`ads1x15_i2c` node provides access to onboard ADS1115 , to get a voltage from RAK5801 analog input.  is `voltage2current` is a function node convert voltage to the corresponding current.
+`ads1x15_i2c` node provides access to onboard ADS1115 , to get a voltage from RAK5801 analog input.  is `voltage2current` is a function node convert voltage to the corresponding current.before you deploy this flow, you need to select the correct channel and other configuration for `ads1x15_i2c` node.
 
 <img src="assets/ads1x15_i2c.png" alt="ads1x15_i2c" style="zoom:67%;" />
-
-before you deploy this flow, you need to select the correct channel and other configuration for `ads1x15_i2c` node.
 
 - **Name**: define the msg name if you wish to change the name displayed on the node.
 
