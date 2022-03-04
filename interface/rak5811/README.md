@@ -53,13 +53,13 @@ after the app is deployed, you can browse to http://{host-ip}:1880 to access Nod
 
 To use RAK5811 on RAK7391 board, you need to connect RAK5811 to the high-density slots on RAK7391 board. In this example, we use slot 1, and trying to measure the input voltage connected to channel 1. Please check the picture below for more details.
 
-![rak5811+rak7391](assets\rak5811+rak7391.png)
+![rak5811+rak7391](assets/rak5811+rak7391.png)
 
 ### 2.3. Flow configuration
 
 After you deploy node-red container,  you can import  [rak5811-example.json](rak5811-example.json) flow. This flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `function` node , and  `debug` node. After the import is done, the new flow should look like this:
 
-![image-20220304111658844](assets\rak5811-example.png)
+![image-20220304111658844](assets/rak5811-example.png)
 
 before you deploy this flow, you need to select the correct configuration for `ads1x15_i2c` node
 
@@ -85,13 +85,13 @@ before you deploy this flow, you need to select the correct configuration for `a
 
 Hit the `Deploy` button on the top right to deploy the flow, then click inject node to trigger a reading, debug node will print the details about each channels to debug window. However, without a function node to convert the raw readings, the value in the msg.payload object is not right (as shown below). 
 
-<img src="assets\debug.png" alt="debug" style="zoom:67%;" />
+<img src="assets/debug.png" alt="debug" style="zoom:67%;" />
 
 
 
 Thus we need to add a unction node to the flow to process the output. 
 
-![image-20220304112456367](assets\function-node.png)Inside the function node, we have the following code to convert the raw readings to something makes more sense:
+![image-20220304112456367](assets/function-node.png)Inside the function node, we have the following code to convert the raw readings to something makes more sense:
 
 ```
 raw_voltage = msg.payload["/dev/i2c-1"].ads1115["0x48"].singleEnded.channel_0.Volts;
