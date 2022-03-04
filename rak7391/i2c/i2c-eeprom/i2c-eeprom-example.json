@@ -8,131 +8,32 @@
         "env": []
     },
     {
-        "id": "a5bb4882c0c471c7",
-        "type": "i2c scan",
-        "z": "06308f478fc88158",
-        "name": "scan bus 1",
-        "busno": "1",
-        "x": 830,
-        "y": 200,
-        "wires": [
-            [
-                "5633d2a347601fa7"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "58a5953a268cd523",
-        "type": "inject",
-        "z": "06308f478fc88158",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 600,
-        "y": 200,
-        "wires": [
-            [
-                "a5bb4882c0c471c7"
-            ]
-        ]
-    },
-    {
-        "id": "5633d2a347601fa7",
-        "type": "debug",
-        "z": "06308f478fc88158",
-        "name": "available i2c device address",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "8d493f3e0141e928",
-        "type": "i2c in",
-        "z": "06308f478fc88158",
-        "name": "read first byte from eeprom ",
-        "busno": "1",
-        "address": "80",
-        "command": "3",
-        "count": "3",
-        "x": 1100,
-        "y": 700,
-        "wires": [
-            [
-                "e378c0664614a504"
-            ]
-        ]
-    },
-    {
         "id": "839c60a19d7620c0",
         "type": "i2c out",
         "z": "06308f478fc88158",
         "name": "write to eeprom",
         "busno": "1",
         "address": "80",
-        "command": "1",
+        "command": "",
         "payload": "payload",
         "payloadType": "msg",
-        "count": "2",
-        "x": 800,
-        "y": 620,
+        "count": "4",
+        "x": 760,
+        "y": 220,
         "wires": [
             [
-                "8d493f3e0141e928",
-                "01cae6c139da055b",
-                "37e3b52e0473b6aa"
+                "249c7735c178e37a"
             ]
         ]
-    },
-    {
-        "id": "e378c0664614a504",
-        "type": "debug",
-        "z": "06308f478fc88158",
-        "name": "byte 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1370,
-        "y": 700,
-        "wires": []
     },
     {
         "id": "fa4f0b651340774c",
         "type": "inject",
         "z": "06308f478fc88158",
-        "name": "write 1 to register 0",
+        "name": "replace the first bytes in the EEPROM to 10",
         "props": [
             {
-                "p": "command",
-                "v": "0,0,1",
-                "vt": "num"
+                "p": "payload"
             }
         ],
         "repeat": "",
@@ -140,8 +41,10 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 570,
-        "y": 540,
+        "payload": "[0,0,0,10]",
+        "payloadType": "bin",
+        "x": 390,
+        "y": 160,
         "wires": [
             [
                 "839c60a19d7620c0"
@@ -152,12 +55,10 @@
         "id": "66720931183c8175",
         "type": "inject",
         "z": "06308f478fc88158",
-        "name": "write 8 to regiser 2",
+        "name": "replace the first bytes in the EEPROM to 100",
         "props": [
             {
-                "p": "command",
-                "v": "0,0,2",
-                "vt": "num"
+                "p": "payload"
             }
         ],
         "repeat": "",
@@ -165,8 +66,10 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 570,
-        "y": 700,
+        "payload": "[0,0,0,100]",
+        "payloadType": "bin",
+        "x": 390,
+        "y": 280,
         "wires": [
             [
                 "839c60a19d7620c0"
@@ -174,61 +77,27 @@
         ]
     },
     {
-        "id": "37e3b52e0473b6aa",
+        "id": "87e4a1338edc2b30",
         "type": "i2c in",
         "z": "06308f478fc88158",
-        "name": "read first byte from eeprom ",
+        "name": "read eeprom ",
         "busno": "1",
         "address": "80",
-        "command": "2",
-        "count": "2",
-        "x": 1100,
-        "y": 620,
-        "wires": [
-            [
-                "0994f49cd83906bb"
-            ]
-        ]
-    },
-    {
-        "id": "0994f49cd83906bb",
-        "type": "debug",
-        "z": "06308f478fc88158",
-        "name": "byte 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1370,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "01cae6c139da055b",
-        "type": "i2c in",
-        "z": "06308f478fc88158",
-        "name": "read first byte from eeprom ",
-        "busno": "1",
-        "address": "80",
-        "command": "1",
+        "command": "",
         "count": "1",
-        "x": 1100,
-        "y": 540,
+        "x": 970,
+        "y": 400,
         "wires": [
             [
-                "efcce33881974dbf"
+                "7ba839993dcd25d5"
             ]
         ]
     },
     {
-        "id": "efcce33881974dbf",
+        "id": "7ba839993dcd25d5",
         "type": "debug",
         "z": "06308f478fc88158",
-        "name": "byte 1",
+        "name": "output",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -237,8 +106,88 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1370,
-        "y": 540,
+        "x": 1150,
+        "y": 400,
         "wires": []
+    },
+    {
+        "id": "5b91d28b4d395cc5",
+        "type": "debug",
+        "z": "06308f478fc88158",
+        "name": "output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "e10c7e6d7fe2d147",
+        "type": "i2c out",
+        "z": "06308f478fc88158",
+        "name": "write the register number to eeprom",
+        "busno": "1",
+        "address": "80",
+        "command": "",
+        "payload": "payload",
+        "payloadType": "msg",
+        "count": "2",
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "87e4a1338edc2b30"
+            ]
+        ]
+    },
+    {
+        "id": "50caff1f175b1bb4",
+        "type": "inject",
+        "z": "06308f478fc88158",
+        "name": "send the register number to read",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[0,1]",
+        "payloadType": "bin",
+        "x": 410,
+        "y": 400,
+        "wires": [
+            [
+                "e10c7e6d7fe2d147"
+            ]
+        ]
+    },
+    {
+        "id": "249c7735c178e37a",
+        "type": "function",
+        "z": "06308f478fc88158",
+        "name": "clean-up payload",
+        "func": "msg.payload='Wrote ' + msg.payload[3] +' to eeprom registery ' + msg.payload[2];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 220,
+        "wires": [
+            [
+                "5b91d28b4d395cc5"
+            ]
+        ]
     }
 ]
