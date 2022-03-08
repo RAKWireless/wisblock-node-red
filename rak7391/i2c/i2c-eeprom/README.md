@@ -49,7 +49,7 @@ In the command above, the `--device` can mount device to container, the `--cap-a
 
 If you try to run a Node-RED container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-RED container use the template (shown below), 
 
-![image-20220304093748592](assets/portainer-Node-RED.png)
+![image-20220304093748592](assets/portainer-node-red.png)
 
 after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-RED's web interface.
 
@@ -63,7 +63,7 @@ On RAK7391, the device address of CAT24C32 is configured to 0x50, and connected 
 
 After you deploy Node-RED container,  you can import  [**i2c-EEPROM-example.json**](**i2c-EEPROM-example.json**.json) flow. This flow consists of four sets of nodes: `inject` node,   `node-red-contrib-i2c` nodes (`i2c in` node and `i2c out` node), `function` node , and  `debug` node. After the import is done, the new flow should look like this:
 
-![i2c-EEPROM-example](assets\i2c-EEPROM-example.png)
+![i2c-EEPROM-example](assets/i2c-eeprom-example.png)
 
 
 
@@ -73,17 +73,17 @@ One of the most important thing to know before you deploy this flow is that you 
 
 The first node we we want to introduce is the "write to EEPROM" node, it is a `i2c out` node. The node is responsible for writing/updating a specific byte in the EEPROM. One thing to notice is that the bus address is set to 80, as it's **0x50** in decimal; this node send 3 bytes of data to the EEPROM chip to change the first bytes stored in the EEPROM, which consists of the address of the register, and also the new value we want to write to the chip. The actual bytes are defined in the `inject` nodes, which will be explained later.
 
-<img src="assets/write-to-EEPROM-node.png" alt="write to EEPROM" style="zoom: 100%;" />
+<img src="assets/write-to-eeprom-node.png" alt="write to EEPROM" style="zoom: 100%;" />
 
 
 
 Next is the "write the register number to EEPROM" node, it is a `i2c out` node. This node write the number of the register we want to read to the EEPROM chip. This time we only send two bytes of data to the EEPROM chip.
 
-<img src="assets/write-the-register-number-to-EEPROM.png" alt="node write the register number to EEPROM" style="zoom: 90%;" />
+<img src="assets/write-the-register-number-to-eeprom.png" alt="node write the register number to EEPROM" style="zoom: 90%;" />
 
 The last `node-red-contrib-i2c` node we include in this example is the `i2c in` node. We use this node to read only one byte of data from the EEPROM chip.
 
-<img src="assets/read-EEPROM.png" alt="node read EEPROM" style="zoom: 90%;" />
+<img src="assets/read-eeprom.png" alt="node read EEPROM" style="zoom: 90%;" />
 
 
 
