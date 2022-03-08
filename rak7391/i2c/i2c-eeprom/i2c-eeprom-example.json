@@ -17,9 +17,9 @@
         "command": "",
         "payload": "payload",
         "payloadType": "msg",
-        "count": "4",
-        "x": 760,
-        "y": 220,
+        "count": "3",
+        "x": 600,
+        "y": 180,
         "wires": [
             [
                 "249c7735c178e37a"
@@ -41,10 +41,10 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "[0,0,0,10]",
+        "payload": "[0,0,10]",
         "payloadType": "bin",
-        "x": 390,
-        "y": 160,
+        "x": 230,
+        "y": 120,
         "wires": [
             [
                 "839c60a19d7620c0"
@@ -66,10 +66,10 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "[0,0,0,100]",
+        "payload": "[0,0,100]",
         "payloadType": "bin",
-        "x": 390,
-        "y": 280,
+        "x": 230,
+        "y": 240,
         "wires": [
             [
                 "839c60a19d7620c0"
@@ -85,8 +85,8 @@
         "address": "80",
         "command": "",
         "count": "1",
-        "x": 970,
-        "y": 400,
+        "x": 750,
+        "y": 360,
         "wires": [
             [
                 "7ba839993dcd25d5"
@@ -106,8 +106,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 400,
+        "x": 930,
+        "y": 360,
         "wires": []
     },
     {
@@ -123,8 +123,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 220,
+        "x": 990,
+        "y": 180,
         "wires": []
     },
     {
@@ -138,8 +138,8 @@
         "payload": "payload",
         "payloadType": "msg",
         "count": "2",
-        "x": 720,
-        "y": 400,
+        "x": 500,
+        "y": 360,
         "wires": [
             [
                 "87e4a1338edc2b30"
@@ -161,10 +161,10 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "[0,1]",
+        "payload": "[0,0]",
         "payloadType": "bin",
-        "x": 410,
-        "y": 400,
+        "x": 190,
+        "y": 360,
         "wires": [
             [
                 "e10c7e6d7fe2d147"
@@ -176,18 +176,28 @@
         "type": "function",
         "z": "06308f478fc88158",
         "name": "clean-up payload",
-        "func": "msg.payload='Wrote ' + msg.payload[3] +' to eeprom registery ' + msg.payload[2];\nreturn msg;",
+        "func": "msg.payload='Wrote ' + msg.payload[2] +' to eeprom registery ' + msg.payload[1];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 970,
-        "y": 220,
+        "x": 810,
+        "y": 180,
         "wires": [
             [
                 "5b91d28b4d395cc5"
             ]
         ]
+    },
+    {
+        "id": "9439bf886755dcf7",
+        "type": "comment",
+        "z": "06308f478fc88158",
+        "name": "",
+        "info": " In the inject node, you need to define an array as buffer. In this array, the second element defines the which register you want to change/update, the third element defines the value you want to change/update it to. For example, if you want to change/update the second byte in EEPROM to 50, just change the buffer payload to [0,1,50]. \n \n It works the same when you trying to read from the EEPROM. For example, if you wan to read the first byte, just send [0,0] to the \"i2c out\" node as the inject payload, if you want to read the second byte, just send [0,1].The only difference is that when reading, you need to write first, and then use a \"i2c in\" node to read.",
+        "x": 100,
+        "y": 40,
+        "wires": []
     }
 ]
