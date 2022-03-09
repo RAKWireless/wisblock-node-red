@@ -36,7 +36,7 @@ Install node-red-contrib-ads7830 node according to [README](https://git.rak-inte
 
 ## 2.2. Run
 
-After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `other/interface/rak16001` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak16001-read.json** file or just copy and paste the .json file contents into your new flow.
+After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `interface/rak16001` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak16001-read.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
@@ -44,7 +44,7 @@ After the import is done, the new flow should look like this:
 
 Hit the **Deploy** button on the top right to deploy the flow.
 
-This is a simple flow  contains three nodes, where inject node trigger input every 5 seconds,  ads7830_i2c read 2 channels(A0 and A7) input with single end mode, and debug node print the read result.
+This is a simple flow  contains three nodes, where inject node trigger input every 5 seconds,  ads7830_i2c read 8 channels input with single end mode, and debug node print the read result.
 
 The result  is shown as below.
 
