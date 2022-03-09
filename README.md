@@ -28,15 +28,14 @@ Copyright (c) 2022 RAKwireless, under MIT License.
 
 The repository structure follows that on the [RAKwireless store](https://store.rakwireless.com/pages/wisblock)
 
-* Display
 * Interface
-    * RAK5802
-    * ...
-* Sensor
-    * RAK1901
-    * ...
+    * [RAK5801 example](interface/rak5801/)
+    * [RAK5802 ModBUS example](interface/rak5802/rak5802_modbus/)
+    * [RAK5811 example](interface/rak5811/)
+    * [RAK16001 example](interface/rak16001/)
 * Other
-    * ADS1115 Analog-to-Digital Converter
-    * PI4IOE5V96224 GPIO Expander
-    * ...
+    * [ADS1115 example](other/ads1115/ads1115-read/)
+    * [GPIO toggle LED example](other/gpio/gpio-toggle-led/)
+    * [I2C EEPROM example](other/i2c/i2c-eeprom/)
+    * [PI4IOE5V96224 toggle LED example](other/pi4ioe5v/pi4ioe5v-toggle-led/)
 
