@@ -1,0 +1,36 @@
+[
+    {
+        "id": "effbb56fdcfe3e98",
+        "type": "ads7830_i2c",
+        "z": "d0f4ea7a6c4df086",
+        "name": "",
+        "i2c_device_number": 1,
+        "i2c_address": "0x4A",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": true,
+        "singleEndedChannel1": true,
+        "singleEndedChannel2": true,
+        "singleEndedChannel3": true,
+        "singleEndedChannel4": true,
+        "singleEndedChannel5": true,
+        "singleEndedChannel6": true,
+        "singleEndedChannel7": true,
+        "differentialChannel0_1": false,
+        "differentialChannel2_3": false,
+        "differentialChannel4_5": false,
+        "differentialChannel6_7": false,
+        "differentialChannel1_0": false,
+        "differentialChannel3_2": false,
+        "differentialChannel5_4": false,
+        "differentialChannel7_6": false,
+        "internalReferenceOnOff": "0",
+        "ADConverterOnOff": "1",
+        "x": 450,
+        "y": 260,
+        "wires": [
+            [
+                "81b4056d9710d09e"
+            ]
+        ]
+    }
+]
