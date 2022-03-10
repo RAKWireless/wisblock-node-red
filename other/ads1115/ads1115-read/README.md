@@ -4,42 +4,42 @@
 
 ## 1.Introduction
 
-the **ADC**(Analog to Digital Converter)  chip on **RAK7391** board is **ADS1115**. this flow explains how to read 4 input channels of ads1115 with **node-red-contrib-ads1x15_i2c** when using a RAK7391 board.
+The **ADC**(Analog to Digital Converter)  chip on **RAK7391** board is **ADS1115**. this flow explains how to read 4 input channels of ads1115 with **node-red-contrib-ads1x15_i2c** when using a RAK7391 board.
 
-### 1.1.ADS1115
+### 1.1. ADS1115
 
 ADS1115 is  a high recision16-bit ADC with 4 channels.  it have a programmable gain from 2/3x to 16x so you can amplify small signals and read them with higher precision. Refer to datasheet for more information : [ADS1115 datasheet](https://cdn-shop.adafruit.com/datasheets/ads1115.pdf).
 
-### 1.2.node-red-contrib-ads1x15_i2c
+### 1.2. node-red-contrib-ads1x15_i2c
 
-node-red-contrib-ads1x15_i2c is a node-red module provide access to a ADS1x15 I2C analog to digital converter, to get a voltage or difference of voltage from a ADS1115 or ADS1015. More information is available at: [node-red-contrib-ads1x15_i2c]([node-red-contrib-ads1x15_i2c (node) - Node-RED (nodered.org)](https://flows.nodered.org/node/node-red-contrib-ads1x15_i2c))
+node-red-contrib-ads1x15_i2c is a node-red module provide access to a ADS1x15 I2C analog to digital converter, to get a voltage or difference of voltage from a ADS1115 or ADS1015. More information is available at: [node-red-contrib-ads1x15_i2c](https://flows.nodered.org/node/node-red-contrib-ads1x15_i2c)
 
 
 
-## 2 Preparation
+## 2.Preparation
 
 
 ### 2.1. access setup
 
 ADS1115 use an I2C communication protocol to read analog values, in order to ensure this flow works well in your node-red runtime, the node-red user should have access to i2c bus(`/dev/i2c-1` by default) on your host.
 
-no additional settings are required when you run node-red on your host directly. if running node-red using docker, you need to mount `/dev/i2c-1` device to the node-red container and add node-red user to the i2c group on your host.
+No additional settings are required when you run node-red on your host directly. if running node-red using docker, you need to mount `/dev/i2c-1` device to the node-red container and add node-red user to the i2c group on your host.
 
 #### Running under Docker Command Line
 
-to run in Docker in its simplest form just run:
+To run in Docker in its simplest form just run:
 
 `docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --name node-red:998 nodered/node-red`
 
-the `--device` can mount device to container, and `--name` can add an user with specified group.
+The `--device` can mount device to container, and `--name` can add an user with specified group.
 
-before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
+Before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
 
-cat /etc/group | grep i2c | awk -F: '{print $3}'
+`cat /etc/group | grep i2c | awk -F: '{print $3}'`
 
 #### Running under Docker Portainer
 
-if you try to run a node-red container with Docker Portainer, you also need to do some configuration similar in the `Advanced container settings`.
+If you try to run a node-red container with Docker Portainer, you also need to do some configuration similar in the `Advanced container settings`.
 
 <img src="assets/dev_mount.png" alt="dev_mount" style="zoom: 50%;" />
 
@@ -47,13 +47,29 @@ if you try to run a node-red container with Docker Portainer, you also need to d
 
 <img src="assets/user_setting.png" alt="user_setting" style="zoom: 50%;" />
 
+#### Running under Docker Compose 
+
+An easier way to deploy node-red container is to use docker compose.  we provide a [docker-compose.yml](docker-compose.yml) file which has configured everything,  there is no additional settings are required, just start up your node-red by running `docker-compose up`.
+
+### 2.3. required modules
+
+This flow use node-red-contrib-ads1x15_i2c  module, so you must install the module to your node-red first. run the following command in the root directory of your node-red install
+
+```
+npm install node-red-contrib-ads1x15_i2c
+```
+
+ Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-modbus modules in the `Install` tab and install it.
+
+
+
 ### 2.2. flow configuration
 
-after you deploy node-red container,  you can import  [ads1115_read.json](ads1115_read.json) flow. this flow consists of three nodes: `inject` node,  `ads1x15_i2c` node, `debug` node. after the import is done, the new flow should look like this:
+After you deploy node-red container,  you can import  [ads1115_read.json](ads1115_read.json) flow. this flow consists of three nodes: `inject` node,  `ads1x15_i2c` node, `debug` node. after the import is done, the new flow should look like this:
 
 <img src="assets/ads1115_read.png" alt="ads1115_read" style="zoom: 50%;" />
 
-before you deploy this flow, you need to select the correct setting for `ads1x15_i2c` node
+Before you deploy this flow, you need to select the correct setting for `ads1x15_i2c` node
 
 <img src="assets/ads1x15_i2c.png" alt="ads1x15_i2c" style="zoom: 50%;" />
 
