@@ -30,11 +30,53 @@ Then we connect rak16001 with a DC power supply as follows. A0 of rak16001 conne
 
 ### 2.2. Software
 
-Install node-red-contrib-ads7830 node according to [README](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ads7830).
+Please install `node-red-contrib-pi4ioe5v` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
 
+```
+git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
+```
 
+```
+cp -rf node-red-nodes/node-red-contrib-ads7830 ~/.node-red/node_modules
+```
 
-## 2.2. Run
+```
+cd ~/.node-red/node_modules/node-red-contrib-ads7830 && npm install
+```
+
+## 
+
+## 3. Configure
+
+To get a voltage or difference of voltage from a ADS7830  analog to digital converter just select the correct setting for your device and trigger the node.
+
+<img src="assets/image-20220309092410807.png" alt="image-20220309092410807" style="zoom:80%;" />
+
+- **Name**
+
+  Define the msg name if you wish to change the name displayed on the node.
+
+- **/dev/i2c-?**
+
+  Default I2C Bus is 1.  `1` is for `'/dev/i2c-1'`.
+
+- **i2c_Address**
+
+  The Address by default is set to `0x4A`. You can setup the ADS7830 with one of four addresses, 0x48, 0x49, 0x4a, 0x4b. Please see ads7830 documentation for more information.
+
+- **Inputs**
+
+  Inputs may be used for Single-ended measurements (like A0-GND) or Differential measurements (like A0-A1). Single-ended measurements measure voltages relative to a shared reference point which is almost always the main units ground. Differential measurements are “floating”, meaning that it has no reference to ground. The measurement is taken as the voltage difference between the two wires. Example: The voltage of a battery can be taken by connecting A0 to one terminal and A1 to the othe with Common-ground.
+
+- **Internal Reference**
+
+  Open or close internal Reference in chip.
+
+- **A/D Converter**
+
+  Open or close A/D Converter in chip.
+
+## 4. Run example
 
 After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `interface/rak16001` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak16001-read.json** file or just copy and paste the .json file contents into your new flow.
 
