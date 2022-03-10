@@ -23,13 +23,13 @@ ADS1115 is an onboard ADC chip in the RAK7391. it is a high recision16-bit ADC w
 
 There are two WisBlock IO connectors (`wisblock#1` and `wisblock#2`)on the RAK7391 already. user can connect RAK5801 module with any one of them. there are two analog input pins(`A0` and `A1`) on the RAK5801, but only `A1` is available now.  you can use it as long as your sensors operate at 3.3 V or 12 V with 4-20 mA operating current. 
 
-In my example, I use an external power supply  to simulate changes in the sensor's input current.
+In my example, I use an external power supply to simulate changes in the sensor's input current.
 
 <img src="assets/setup.jpg" alt="setup" style="zoom:67%;" />
 
 ### 2.2.software
 
-#### 2.2.1 Access Setup
+#### 2.2.1. Access Setup
 
 ADS1115 use an I2C communication protocol to read analog values, in order to ensure this flow works well in your node-red runtime, the node-red user should have access to i2c bus(`/dev/i2c-1` by default) on your host.
 
@@ -40,10 +40,14 @@ No additional settings are required when you run node-red on your host directly.
 To run in Docker in its simplest form just run:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --cap-add=SYS_RAWIO nodered/node-red
+docker run -it -p 1880:1880 -v /node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --name node-red:998 nodered/node-red
 ```
 
-In the command above, the `--device` can mount device to container, the `--cap-add=SYS_RAWIO` give docker the capability to Perform I/O port operations (iopl(2) and ioperm(2)).
+In the command above, the `--device` can mount device to container, and `--name` can add an user with specified group.
+
+Before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
+
+`cat /etc/group | grep i2c | awk -F: '{print $3}'`
 
 ##### Running under Docker Portainer
 
@@ -53,9 +57,23 @@ We strongly recommend you run a Node-Red container with Docker Portainer using t
 
 after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
 
-#### 2.2.2 Flow configuration 
+##### Running under Docker Compose 
 
- Now you can import [rak5801-example](rak5801-example-flow.json) flow. this flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `voltage2current` node , and  `debug` node. After the import is done, the new flow should look like this:
+An easier way to deploy node-red container is to use docker compose.  we provide a [docker-compose.yml](docker-compose.yml) file which has configured everything,  there is no additional settings are required, just start up your node-red by running `docker-compose up`.
+
+#### 2.2.2. Required modules
+
+This flow use node-red-contrib-ads1x15_i2c  module, so you must install the module to your node-red first. run the following command in the root directory of your node-red install
+
+```
+npm install node-red-contrib-ads1x15_i2c
+```
+
+Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-ads1x15_i2c modules in the `Install` tab and install it.
+
+#### 2.2.3. Flow configuration 
+
+Now you can import [rak5801-example](rak5801-example-flow.json) flow. this flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `voltage2current` node , and  `debug` node. After the import is done, the new flow should look like this:
 
 <img src="assets/rak5801-read-flow.png" alt="rak5801-read-flow" style="zoom:67%;" />
 

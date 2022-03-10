@@ -59,7 +59,7 @@ This flow use node-red-contrib-ads1x15_i2c  module, so you must install the modu
 npm install node-red-contrib-ads1x15_i2c
 ```
 
- Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-modbus modules in the `Install` tab and install it.
+Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-ads1x15_i2c modules in the `Install` tab and install it.
 
 
 
