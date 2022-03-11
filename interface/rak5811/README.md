@@ -33,19 +33,56 @@ ADS1115 use an I2C communication protocol to read analog values, in order to ens
 
 No additional settings are required when you run node-red on your host directly. If running node-red using docker, you need to mount `/dev/i2c-1` device to the node-red container. If you use the portainer template provided by us, you don't need to change anything, as we already mount the device for you.
 
-#### Running under Docker Command Line
+#### 2.1.1 Docker command line
 
-To run in Docker in its simplest form just run:
+The simplest way to bring up Node-RED container is through docker command line: 
 
-`docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-1 --cap-add=SYS_RAWIO nodered/node-red`
+```
+docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/i2c-1:/dev/i2c-1 --user node-red:998 nodered/node-red
+```
 
-In the command above, the `--device` can mount device to container, the `--cap-add=SYS_RAWIO` give docker the capability to Perform I/O port operations (iopl(2) and ioperm(2)).
+In the command above, the `--device` can mount device to container, and `--name` can add an user with specified group.
 
-#### Running under Docker Portainer
+Before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
+
+```
+cat /etc/group | grep i2c | awk -F: '{print $3}'
+```
+
+#### 2.1.2 Docker compose
+
+Another way to bring up Node-RED container is to use docker-compose file:
+
+```
+version: "3.9"
+
+services:
+
+  node-red:
+    image: sheng2216/nodered-docker:alpine-latest
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - 998
+    ports:
+      - "1880:1880"
+    restart: unless-stopped
+    volumes:
+      - 'node-red-data:/data'
+    devices:
+      - "/dev/i2c-1:/dev/i2c-1"
+
+volumes:
+  node-red-data:
+```
+
+To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
+
+#### 2.1.3 Running under Docker Portainer
 
 If you try to run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below), 
 
-![image-20220304093748592](assets/portainer-node-red.png)
+![Portainer webUI](assets/portainer-node-red.png)
 
 after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
 
@@ -56,6 +93,12 @@ To use RAK5811 on RAK7391 board, you need to connect RAK5811 to the high-density
 ![rak5811+rak7391](assets/rak5811+rak7391.png)
 
 ### 2.3. Flow configuration
+
+If you are using the Node-Red docker image provided by RAKwireless, the `ads1x15_i2c` node is installed by default, however, if you are using the official docker image, or you are hosting your Node-RED service on you host machine, you need to install the `ads1x15_i2c` node first.
+
+To install a new new node, go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **ads1x15-i2c**. Now you should be able to install this node.
+
+![install ads1x15_i2c node](assets/install-ads1x15_i2c.png)
 
 After you deploy node-red container,  you can import  [rak5811-example.json](rak5811-example.json) flow. This flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `function` node , and  `debug` node. After the import is done, the new flow should look like this:
 
@@ -85,7 +128,7 @@ before you deploy this flow, you need to select the correct configuration for `a
 
 Hit the `Deploy` button on the top right to deploy the flow, then click inject node to trigger a reading, debug node will print the details about each channels to debug window. However, without a function node to convert the raw readings, the value in the msg.payload object is not right (as shown below). 
 
-<img src="assets/debug.png" alt="debug" style="zoom:67%;" />
+![rak5811 raw debug](assets/rak5811-raw-debug.png)
 
 
 
