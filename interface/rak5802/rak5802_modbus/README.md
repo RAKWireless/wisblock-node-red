@@ -39,7 +39,7 @@ On the client side (a.k.a. receiver) we have two options:
 - Raspberry Pi + RAK6421 WisBlock Hat + WisBlock IO RAK5802
 - RAK7391 WisGate Developer Connect + WisBlock IO RAK5802
 
-in this example, we use a RAK7391 board to interface RAK5802. there are two WisBlock IO Connecter on the RAK7391 already, you can connect RAK5802 with any one of them.
+In this example, we use a RAK7391 board to interface RAK5802. there are two WisBlock IO Connecter on the RAK7391 already, you can connect RAK5802 with any one of them.
 
 ### 2.3. Other hardware
 
@@ -83,25 +83,29 @@ The client side is a node-red flow with [node-red-contrib-modbus](https://flows.
 
 RAK5802 use Modbus over RS485 serial line, in order to run this flow, the node-red user must have access to the corresponding serial ports. serial ports are `/dev/ttyUSB0` and `/dev/ttyUSB1` on RAK7391, which correspond to two WisBlock IO Connecter(`Wisblcok1` and `Wisblock2`).
 
-No additional settings are required when you run node-red on your host directly. if running node-red using docker,  you need to mount `/dev/ttyUSB0` and `/dev/ttyUSB1` to the node-red container. 
+No additional settings are required when you run node-red on your host directly. if running node-red using docker,  you need to mount `/dev/ttyUSB0` and `/dev/ttyUSB1` to the node-red container and add node-red user to the i2c group on your host. 
 
-- **Running under Docker Command Line**
+##### Running under Docker Command Line
 
 To run in Docker in its simplest form just run:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 cap-add=SYS_RAWIO nodered/node-red
+docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 --user node-red:dialout nodered/node-red
 ```
 
-In the command above, the `--device` can mount device to container, the `--cap-add=SYS_RAWIO` give docker the capability to Perform I/O port operations (iopl(2) and ioperm(2)).
+In the command above, the `--device` can mount serial device to container, and `--name` can add an user with specified group.
 
-- **Running under Docker Portainer**
+##### Running under Docker Portainer
 
 We strongly recommend you run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below),
 
 <img src="assets/app_template.png" alt="app_template" style="zoom:67%;" />
 
 after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
+
+##### Running under Docker Compose 
+
+An easier way to deploy node-red container is to use docker compose.  we provide a [docker-compose.yml](docker-compose.yml) file which has configured everything,  there is no additional settings are required, just start up your node-red by running `docker-compose up`.
 
 #### 3.2.2. Required modules
 
@@ -111,7 +115,7 @@ You must install `node-red-contrib-modbus` module before import this flow, run t
 npm install node-red-contrib-modbus
 ```
 
-You also can install it directly within the editor by selecting the `Manage Palette` option from the main menu to open the [Palette Manager](https://nodered.org/docs/user-guide/editor/palette/manager). search `node-red-contrib-modbus` modules in the ‘Install’ tab and install it.
+Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-modbus modules in the `Install` tab and install it.
 
 #### 3.2.3. Flow configuration
 
@@ -119,17 +123,17 @@ After all the preparation, you can import the flow now, the new flow should look
 
 <img src="assets/rak5802-flow.png" alt="rak5802-flow" style="zoom:67%;" />
 
-there are two part in this flow:
+There are two part in this flow:
 
 - **toggle LED**
 
-​	this part toggle a build-in LED on the WisBlock Base RAK5005-O by writing a single coil to either ON or 	OFF.
+This part toggle a build-in LED on the WisBlock Base RAK5005-O by writing a single coil to either ON or OFF.
 
-​	`Read LED` is a Modbus-read node, you should set `FC` to `Read Coin Status`
+`Read LED` is a Modbus-read node, you should set `FC` to `Read Coin Status`
 
 <img src="assets/read_led.png" alt="read_led" style="zoom: 67%;" />
 
-​	`Set LED` is a Modbus-wirte node, you should set `FC` to `Force Single Coin`
+`Set LED` is a Modbus-wirte node, you should set `FC` to `Force Single Coin`
 
 <img src="assets/set_led.png" alt="set_led" style="zoom:67%;" />
 
@@ -141,11 +145,11 @@ You also need to configure Modbus server correctly, if you use `Wisblcok1`,  sho
 
 - **read RAK1901**
 
-​	this part read temperature and humidity data from RAK1901 by reading holding register. 
+This part read temperature and humidity data from RAK1901 by reading holding register. 
 
-​	`READ RAK1901` is a Modbus-read node you should set `FC` to `READING HOLDING REGISTER`.
+`READ RAK1901` is a Modbus-read node you should set `FC` to `READING HOLDING REGISTER`.
 
-`	Quantity` specifies the quantity of registers to be read.
+`Quantity` specifies the quantity of registers to be read.
 
 <img src="assets/read_rak19001.png" alt="read_rak19001" style="zoom:67%;" />
 
