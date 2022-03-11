@@ -1,8 +1,16 @@
 [
     {
-        "id": "effbb56fdcfe3e98",
+        "id": "903fc29aeb6467f7",
+        "type": "tab",
+        "label": "rak16001-read",
+        "disabled": false,
+        "info": "The example is to read 8 channels data from ads7830 every 5 seconds with singleEnded mode.",
+        "env": []
+    },
+    {
+        "id": "db4e1e9fea0295f5",
         "type": "ads7830_i2c",
-        "z": "d0f4ea7a6c4df086",
+        "z": "903fc29aeb6467f7",
         "name": "",
         "i2c_device_number": 1,
         "i2c_address": "0x4A",
@@ -26,11 +34,57 @@
         "internalReferenceOnOff": "0",
         "ADConverterOnOff": "1",
         "x": 450,
-        "y": 260,
+        "y": 220,
         "wires": [
             [
-                "81b4056d9710d09e"
+                "bbadd339d650ae1c"
             ]
         ]
+    },
+    {
+        "id": "ee3e49e648d66cd5",
+        "type": "inject",
+        "z": "903fc29aeb6467f7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 230,
+        "y": 220,
+        "wires": [
+            [
+                "db4e1e9fea0295f5"
+            ]
+        ]
+    },
+    {
+        "id": "bbadd339d650ae1c",
+        "type": "debug",
+        "z": "903fc29aeb6467f7",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 220,
+        "wires": []
     }
 ]
