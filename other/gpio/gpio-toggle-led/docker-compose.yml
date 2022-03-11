@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+
+  pigpiod:
+    image: zinen2/alpine-pigpiod
+    container_name: pigpiod
+    restart: unless-stopped
+    privileged: true
+    ports:
+        - "8888:8888/tcp"
+    networks:
+      - node-red
+
+  nodered:
+    image: sheng2216/nodered-docker:alpine-latest
+    container_name: NodeRed
+    restart: unless-stopped
+    environment:
+        - NODE_RED_ENABLE_PROJECTS=false
+        - PUID=1000
+        - PGID=100
+        - TZ=Europe/London
+    volumes:
+        - 'node-red-data:/data'
+    ports:
+        - "1880:1880/tcp"
+    networks:
+      - node-red
+
+
+volumes:
+  node-red-data:
+
+networks:
+  node-red:
+

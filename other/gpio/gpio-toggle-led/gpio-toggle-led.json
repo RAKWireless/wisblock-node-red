@@ -2,7 +2,7 @@
     {
         "id": "8ae7f3d34a9429a3",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "gpio-toggle-led",
         "disabled": false,
         "info": "",
         "env": []
@@ -28,8 +28,8 @@
         "topic": "",
         "payload": "1",
         "payloadType": "num",
-        "x": 310,
-        "y": 240,
+        "x": 110,
+        "y": 120,
         "wires": [
             [
                 "178d0b1fb974d3f6"
@@ -41,7 +41,7 @@
         "type": "pi-gpiod out",
         "z": "8ae7f3d34a9429a3",
         "name": "",
-        "host": "localhost",
+        "host": "pigpiod",
         "port": 8888,
         "pin": "4",
         "set": "",
@@ -50,8 +50,8 @@
         "sermin": "1000",
         "sermax": "2000",
         "freq": "800",
-        "x": 530,
-        "y": 280,
+        "x": 330,
+        "y": 160,
         "wires": []
     },
     {
@@ -75,8 +75,8 @@
         "topic": "",
         "payload": "0",
         "payloadType": "num",
-        "x": 310,
-        "y": 320,
+        "x": 110,
+        "y": 200,
         "wires": [
             [
                 "178d0b1fb974d3f6"
@@ -89,8 +89,8 @@
         "z": "8ae7f3d34a9429a3",
         "name": "Notes",
         "info": "Host is set to localhost as pigpiod is running inside the node-red container.\nCheck node-red-node-pi-gpiod's [usage example](https://flows.nodered.org/node/node-red-node-pi-gpiod) for more information. ",
-        "x": 530,
-        "y": 140,
+        "x": 90,
+        "y": 60,
         "wires": []
     }
 ]

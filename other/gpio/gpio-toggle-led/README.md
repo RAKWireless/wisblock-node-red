@@ -34,7 +34,64 @@ By configuring the status of each pin in software, users can define each pin as 
 
 ## 2. Preparation
 
-### 2.1. Hardware
+### 2.1 Access Setup
+
+#### 2.1.1 Install Node-RED on host machine directly
+
+If you are hosting the Node-RED service on you host machine directly, please follow the [node-red-node-pi-gpiod offical guidance]( https://flows.nodered.org/node/node-red-node-pi-gpiod), add the line  `/usr/bin/pigpiod` to the file `/etc/rc.local` , or start the PIGPIO daemon manually for temporary usage.
+
+#### 2.1.2 Docker compose
+
+If you are going to use the Node-RED docker container, you can bring up the service by using the docker-compose.yml file provided below:
+
+```
+version: '3.7'
+
+services:
+
+  pigpiod:
+    image: zinen2/alpine-pigpiod
+    container_name: pigpiod
+    restart: unless-stopped
+    privileged: true
+    ports:
+        - "8888:8888/tcp"
+    networks:
+      - node-red
+
+  nodered:
+    image: sheng2216/nodered-docker:alpine-latest
+    container_name: NodeRed
+    restart: unless-stopped
+    environment:
+        - NODE_RED_ENABLE_PROJECTS=false
+        - PUID=1000
+        - PGID=100
+        - TZ=Europe/London
+    volumes:
+        - 'node-red-data:/data'
+    ports:
+        - "1880:1880/tcp"
+    networks:
+      - node-red
+volumes:
+  node-red-data:
+
+networks:
+  node-red:
+```
+
+
+
+#### 2.1.3 Running under Docker Potainer
+
+If you try to run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below), 
+
+![Portainer webUI](assets/portainer-node-red.png)
+
+after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
+
+### 2.2 Hardware
 
 In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then create a flow in node-red to toggle the led.  Please check the figure below for how to connect the LED:
 
@@ -44,19 +101,19 @@ In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then c
 
 Notice that you can connect the Ground to any of the ground pin( Board pin 6、9、14、20、25、30、34、39).
 
-### 2.2. Software
+### 2.3 Flow configuration
 
-After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `other/gpio/gpio-toggle-led` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **gpio-toggle-led.json** file or just copy and paste the .json file contents into your new flow.
+ you can clone /copy the flow example. The example is under `other/gpio/gpio-toggle-led` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **gpio-toggle-led.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
-![gpio-toggle-led-overview](assets/gpio-toggle-led-overview.png)
+![GPIO toggle led flow](assets/gpio-toggle-led-overview.png)
 
 Hit the **Deploy** button on the top right to deploy the flow.
 
- This is a simple flow with two inject nodes for ON and OFF that toggles an LED connected to a Board pin 7 （GPIO 4). Now you should be able to toggle the LED by hitting the On and OFF button. 
+This is a simple flow with two inject nodes for ON and OFF that toggles an LED connected to a Board pin 7 (GPIO 4). Now you should be able to toggle the LED by hitting the On and OFF button. 
 
-### 2.3. Flow configuration
+![pi-gpio-node](assets/pi-gpio-node.png)
 
-The two inject nodes are responsible for sending digital 0 and 1 (or true or false) to **pi-gpiod out** node, the **pi-gpiod out** node will set the selected Board pin high or low depending on the value passed in by the inject nodes.  One more thing to notice is that the **Host** defined in the  **pi-gpiod out** node is set to localhost, because the PiGPIO daemon is running inside the container. To control the GPIOs on another device/outside the container, please change this Host virable.
+The two inject nodes are responsible for sending digital 0 and 1 (or true or false) to **pi-gpiod out** node, the **pi-gpiod out** node will set the selected Board pin high or low depending on the value passed in by the inject nodes.  One more thing to notice is that the **Host** defined in the  **pi-gpiod out** node is set to **pigpiod**, because the PiGPIO daemon is running in another container called **pigpiod** (as defined in the docker-compose file/Portainer stackfile). To control the GPIOs on another device/outside the container, please change this Host variable based on your setup.
 
