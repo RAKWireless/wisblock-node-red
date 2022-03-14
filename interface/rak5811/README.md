@@ -78,13 +78,15 @@ volumes:
 
 To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
 
+Notice that 998 is the group id of the I2C group in rakpios, you can use the command we mentioned in section 2.1.1 to double check the group id. If you are working on another OS in which your i2c group id is not 998,  please change this number 998 in docker-compose.yml file to match your set-up.
+
 #### 2.1.3 Running under Docker Portainer
 
 If you try to run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below), 
 
 ![Portainer webUI](assets/portainer-node-red.png)
 
-after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
+in the template, we defined a customized Node-RED docker image for you to use, so you don't need to worry about the configuration or permission anymore. After the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
 
 ### 2.2. Hardware preparation 
 
