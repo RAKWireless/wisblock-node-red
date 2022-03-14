@@ -45,13 +45,50 @@ docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/i2c-1:/dev/i2c-
 
 In the command above, the `--device` can mount device to container, the `--cap-add=SYS_RAWIO` give docker the capability to Perform I/O port operations (iopl(2) and ioperm(2)).
 
-#### 2.1.2 Running under Docker Portainer
+Before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
+
+```
+cat /etc/group | grep i2c | awk -F: '{print $3}'
+```
+
+#### 2.1.2 Docker compose
+
+Another way to bring up Node-RED container is to use docker-compose file:
+
+```
+version: "3.9"
+
+services:
+
+  node-red:
+    image: sheng2216/nodered-docker:alpine-latest
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - 998
+    ports:
+      - "1880:1880"
+    restart: unless-stopped
+    volumes:
+      - 'node-red-data:/data'
+    devices:
+      - "/dev/i2c-1:/dev/i2c-1"
+
+volumes:
+  node-red-data:
+```
+
+To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
+
+Notice that 998 is the group id of the I2C group in rakpios, you can use the command we mentioned in section 2.1.1 to double check the group id. If you are working on another OS in which your i2c group id is not 998,  please change this number 998 in docker-compose.yml file to match your set-up.
+
+#### 2.1.3 Running under Docker Portainer
 
 If you try to run a Node-RED container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-RED container use the template (shown below), 
 
 ![image-20220304093748592](assets/portainer-node-red.png)
 
-after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-RED's web interface.
+in the template, we defined a customized Node-RED docker image for you to use, so you don't need to worry about the configuration or permission anymore. After the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
 
 ### 2.2 Hardware preparation 
 
@@ -60,6 +97,14 @@ On RAK7391, the device address of CAT24C32 is configured to 0x50, and connected 
 
 
 ## 3 Flow configuration
+
+If you are using the Node-Red docker image provided by RAKwireless, the `ads1x15_i2c` node is installed by default, however, if you are using the official docker image, or you are hosting your Node-RED service on you host machine, you need to install the `ads1x15_i2c` node first.
+
+To install a new new node, go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **ads1x15-i2c**. Now you should be able to install this node.
+
+![install i2c node](assets/install-i2c-node.png)
+
+
 
 After you deploy Node-RED container,  you can import  [**i2c-EEPROM-example.json**](**i2c-EEPROM-example.json**.json) flow. This flow consists of four sets of nodes: `inject` node,   `node-red-contrib-i2c` nodes (`i2c in` node and `i2c out` node), `function` node , and  `debug` node. After the import is done, the new flow should look like this:
 
