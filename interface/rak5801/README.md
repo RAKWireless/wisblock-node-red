@@ -71,6 +71,8 @@ npm install node-red-contrib-ads1x15_i2c
 
 Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-ads1x15_i2c modules in the `Install` tab and install it.
 
+<img src="assets/install.png" alt="install" style="zoom:67%;" />
+
 #### 2.2.3. Flow configuration 
 
 Now you can import [rak5801-example](rak5801-example-flow.json) flow. this flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `voltage2current` node , and  `debug` node. After the import is done, the new flow should look like this:

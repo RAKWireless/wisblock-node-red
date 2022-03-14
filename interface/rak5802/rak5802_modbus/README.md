@@ -117,6 +117,8 @@ npm install node-red-contrib-modbus
 
 Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-modbus modules in the `Install` tab and install it.
 
+<img src="assets/install.png" alt="install" style="zoom:67%;" />
+
 #### 3.2.3. Flow configuration
 
 After all the preparation, you can import the flow now, the new flow should look like this:
