@@ -1,0 +1,106 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "rak16000-power-monitoring",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d30a08551e463ada",
+        "type": "ina-sensor",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "handle": "06c4032f60f48945",
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "59230720f0e7e17b",
+                "a24ee6d492926a19"
+            ],
+            [
+                "59230720f0e7e17b",
+                "6e0d2e3fb5ed457e"
+            ]
+        ]
+    },
+    {
+        "id": "59230720f0e7e17b",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Calculate Power consumption",
+        "func": "if (msg.topic == 'miliamps') {\n    current = msg.payload;\n} else if (msg.topic == 'voltage') {\n    voltage = msg.payload;\n}\nvar power = parseFloat((current * voltage / 1000).toFixed(2));\nreturn {payload:power};\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 180,
+        "wires": [
+            [
+                "5b351e1b9a600f38"
+            ]
+        ]
+    },
+    {
+        "id": "5b351e1b9a600f38",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Power consumption (W)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "a24ee6d492926a19",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Voltage readings (V)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "6e0d2e3fb5ed457e",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Current readings (mA)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "06c4032f60f48945",
+        "type": "ina-sensor-manager",
+        "address": "0x41",
+        "delay": "5000",
+        "ohms": "0.1",
+        "customResistor": false
+    }
+]
