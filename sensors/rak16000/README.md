@@ -140,7 +140,7 @@ return {payload:power};
 
 and also a screenshot:
 
-![function node](/assets/function-node.png)
+![function node](assets/function-node.png)
 
 ### 3.3 Debug node
 
