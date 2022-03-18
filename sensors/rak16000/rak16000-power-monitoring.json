@@ -12,40 +12,47 @@
         "z": "f6f2187d.f17ca8",
         "name": "",
         "handle": "06c4032f60f48945",
-        "x": 90,
-        "y": 140,
+        "x": 130,
+        "y": 80,
         "wires": [
             [
-                "59230720f0e7e17b",
-                "a24ee6d492926a19"
+                "fc189bb5a669fb33"
             ],
             [
-                "59230720f0e7e17b",
-                "6e0d2e3fb5ed457e"
+                "fc189bb5a669fb33"
             ]
         ]
     },
     {
-        "id": "59230720f0e7e17b",
-        "type": "function",
+        "id": "fc189bb5a669fb33",
+        "type": "join",
         "z": "f6f2187d.f17ca8",
-        "name": "Calculate Power consumption",
-        "func": "if (msg.topic == 'miliamps') {\n    current = msg.payload;\n} else if (msg.topic == 'voltage') {\n    voltage = msg.payload;\n}\nvar power = parseFloat((current * voltage / 1000).toFixed(2));\nreturn {payload:power};\n\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 410,
-        "y": 180,
+        "name": "Join current and vlotage readings",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 400,
+        "y": 80,
         "wires": [
             [
-                "5b351e1b9a600f38"
+                "a7096f9d4ecd9bbd"
             ]
         ]
     },
     {
-        "id": "5b351e1b9a600f38",
+        "id": "85861d22873180f6",
         "type": "debug",
         "z": "f6f2187d.f17ca8",
         "name": "Power consumption (W)",
@@ -57,43 +64,28 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 180,
+        "x": 970,
+        "y": 80,
         "wires": []
     },
     {
-        "id": "a24ee6d492926a19",
-        "type": "debug",
+        "id": "a7096f9d4ecd9bbd",
+        "type": "function",
         "z": "f6f2187d.f17ca8",
-        "name": "Voltage readings (V)",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 380,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "6e0d2e3fb5ed457e",
-        "type": "debug",
-        "z": "f6f2187d.f17ca8",
-        "name": "Current readings (mA)",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 380,
-        "y": 120,
-        "wires": []
+        "name": "Calculate power consumption",
+        "func": "// Retrieve current readings from the join node\nvar current = msg.payload.miliamps;\n// Retrieve voltage readings from the join node\nvar voltage = msg.payload.voltage;\n// Calculate the power consumption \nvar power = parseFloat((current * voltage / 1000).toFixed(2));\nreturn {payload:power};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 80,
+        "wires": [
+            [
+                "85861d22873180f6"
+            ]
+        ]
     },
     {
         "id": "06c4032f60f48945",
