@@ -48,7 +48,7 @@ Provides one node - `shtc3_i2c` in rakwireless category.
 
 To get value of  temperature and humidity you just need to select the correct settings for your device and trigger the node.
 
-<img src="assets/image-20220318194952263.png" alt="image-20220318194952263" style="zoom:80%;" />
+<img src="assets/image-20220321162528246.png" alt="image-20220321162528246" style="zoom:80%;" />
 
 - **Name**
 
@@ -64,7 +64,7 @@ To get value of  temperature and humidity you just need to select the correct se
 
 - **Temperature Unit**
 
-  You can select `Centigrage` or `Fahrenheit` as you like.
+  You can select `Celsius` or `Fahrenheit` as you like.
 
 
 
