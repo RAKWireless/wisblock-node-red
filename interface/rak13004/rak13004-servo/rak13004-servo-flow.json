@@ -1,0 +1,227 @@
+[
+    {
+        "id": "6b01780eaf90884f",
+        "type": "tab",
+        "label": "rak13004-servo-flow",
+        "disabled": false,
+        "info": "It is a example that use RAK13004 PWM modoule to control rotation angle of steering gear.",
+        "env": []
+    },
+    {
+        "id": "a21f43e22577add9",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "90°",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "2500",
+        "payloadType": "num",
+        "x": 330,
+        "y": 260,
+        "wires": [
+            [
+                "9389f5bd56d48931"
+            ]
+        ]
+    },
+    {
+        "id": "ad3f193541bb3180",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "-45°",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1000",
+        "payloadType": "num",
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "9389f5bd56d48931"
+            ]
+        ]
+    },
+    {
+        "id": "f48d8f59d1d68f50",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "-90°",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "500",
+        "payloadType": "num",
+        "x": 330,
+        "y": 420,
+        "wires": [
+            [
+                "9389f5bd56d48931"
+            ]
+        ]
+    },
+    {
+        "id": "9389f5bd56d48931",
+        "type": "PCA9685 out",
+        "z": "6b01780eaf90884f",
+        "name": "PWM output of channel 0 (Servo)",
+        "pca9685": "6ce45bce.cdff94",
+        "channel": "0",
+        "payload": "",
+        "unit": "microseconds",
+        "onStep": "0",
+        "x": 600,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "bb9108436e813475",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "45°",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "2000",
+        "payloadType": "num",
+        "x": 330,
+        "y": 300,
+        "wires": [
+            [
+                "9389f5bd56d48931"
+            ]
+        ]
+    },
+    {
+        "id": "e155201a91a3369f",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "0°",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1500",
+        "payloadType": "num",
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "9389f5bd56d48931"
+            ]
+        ]
+    },
+    {
+        "id": "24b7f55fbb141cac",
+        "type": "pi4ioe5v out",
+        "z": "6b01780eaf90884f",
+        "name": "OE pin",
+        "bus": "1",
+        "address": "0x20",
+        "pin": "23",
+        "x": 530,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d259fd59dc85bd19",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [
+                "24b7f55fbb141cac"
+            ]
+        ]
+    },
+    {
+        "id": "bb38330de0ddfee0",
+        "type": "comment",
+        "z": "6b01780eaf90884f",
+        "name": "Tips: Before test RAK13004 PWM module, IO_7 or IO_6 of pi4ioe5v96224 IO expander\\n  on RAK7391 must be set to 0. If RAK13004 is fixed to Wisblock1 slot, IO_6 should be set to 0.\\n And if RAK13004 is fixed to Wisblock2 slot, IO_7 should be set to 0.",
+        "info": "",
+        "x": 460,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "6ce45bce.cdff94",
+        "type": "PCA9685",
+        "deviceNumber": "1",
+        "address": "64",
+        "frequency": "50"
+    }
+]
