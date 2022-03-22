@@ -64,11 +64,39 @@ After the import is done, the new flow should look like this:
 
 This is a simple flow with four node, where `inject` node supply a trigger event every 1 seconds, `ads1x15_i2c`node convert data from rak12015,  `data_handling` handles the data converted by ads1115,  and `debug` node print the converted data.
 
-The example use `Wisblock2` slot of RAK7391.  If you fixed RAK12015 to `Wisblock1` of RAK7391,  you must modify `ads1x15_i2c` as follows.
+The example use `Wisblock2` slot of RAK7391. If you fixed RAK12015 to  `Wisblock2` slot, just skip modificaiton steps bellow and hit the **Deploy** button to run example.  
+
+If you fixed RAK12015 to `Wisblock1` of RAK7391,  you must modify configure of `ads1x15_i2c`  and `data_handling` function as follows.
+
+Modify configure of `ads1x15_i2c`:
 
 ![image-20220321172525970](assets/image-20220321172525970.png)
 
-Hit the **Deploy** button on the top right to deploy the flow. When Shaking RAK7391 , `debug` node will print a warn message and `data_handling` node will also change status.
+Modify `data_handling` function to change channel to `channel_1`:
+
+```
+let data = {};
+
+data.payload = msg.payload["/dev/i2c-1"]
+.ads1115["0x48"]
+.singleEnded.channel_1.Volts;
+
+data.payload = Math.round(data.payload * 100) / 100;
+if(data.payload > 0) {
+    node.warn('Vibration detected !');
+    node.status({
+        fill: 'red',
+        shape: 'dot',
+        text: "Vibration detected"
+    });
+} else {
+    node.status({});
+}
+
+return data;
+```
+
+As all configure has been done, then hit the **Deploy** button on the top right to deploy the flow. When Shaking RAK7391 , `debug` node will print a warn message and `data_handling` node will also change status.
 
 The test result is as follows:
 
