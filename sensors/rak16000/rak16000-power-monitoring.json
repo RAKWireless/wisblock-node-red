@@ -1,32 +1,15 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "283f69bc3142b259",
         "type": "tab",
         "label": "rak16000-power-monitoring",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "d30a08551e463ada",
-        "type": "ina-sensor",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "handle": "06c4032f60f48945",
-        "x": 130,
-        "y": 80,
-        "wires": [
-            [
-                "fc189bb5a669fb33"
-            ],
-            [
-                "fc189bb5a669fb33"
-            ]
-        ]
-    },
-    {
-        "id": "fc189bb5a669fb33",
+        "id": "83dd8370b91dca3b",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "283f69bc3142b259",
         "name": "Join current and vlotage readings",
         "mode": "custom",
         "build": "object",
@@ -47,14 +30,14 @@
         "y": 80,
         "wires": [
             [
-                "a7096f9d4ecd9bbd"
+                "ca7fbb8e051fb419"
             ]
         ]
     },
     {
-        "id": "85861d22873180f6",
+        "id": "213e0a94b83f7981",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "283f69bc3142b259",
         "name": "Power consumption (W)",
         "active": true,
         "tosidebar": true,
@@ -69,11 +52,11 @@
         "wires": []
     },
     {
-        "id": "a7096f9d4ecd9bbd",
+        "id": "ca7fbb8e051fb419",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "283f69bc3142b259",
         "name": "Calculate power consumption",
-        "func": "// Retrieve current readings from the join node\nvar current = msg.payload.miliamps;\n// Retrieve voltage readings from the join node\nvar voltage = msg.payload.voltage;\n// Calculate the power consumption \nvar power = parseFloat((current * voltage / 1000).toFixed(2));\nreturn {payload:power};\n",
+        "func": "// Retrieve current readings from the join node\nvar current = msg.payload.miliamps;\n// Retrieve voltage readings from the join node\nvar voltage = msg.payload.voltage;\n// Calculate power consumption and output readings\nvar payload = {};\npayload.current = current.toFixed(2) + ' mA';\npayload.voltage = voltage.toFixed(2) + ' V';\npayload.power = (current * voltage / 1000).toFixed(2) + ' W';\nreturn {\n    payload: payload\n};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -83,12 +66,29 @@
         "y": 80,
         "wires": [
             [
-                "85861d22873180f6"
+                "213e0a94b83f7981"
             ]
         ]
     },
     {
-        "id": "06c4032f60f48945",
+        "id": "e3af3741b0560b99",
+        "type": "ina-sensor",
+        "z": "283f69bc3142b259",
+        "name": "",
+        "handle": "e68a1798fca6ce91",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "83dd8370b91dca3b"
+            ],
+            [
+                "83dd8370b91dca3b"
+            ]
+        ]
+    },
+    {
+        "id": "e68a1798fca6ce91",
         "type": "ina-sensor-manager",
         "address": "0x41",
         "delay": "5000",
