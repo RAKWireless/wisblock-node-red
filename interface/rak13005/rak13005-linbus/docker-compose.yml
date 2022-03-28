@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+
+  nodered:
+    image: nodered/node-red
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - dialout
+    restart: unless-stopped
+    volumes:
+        - 'node_red_data:/data'
+    ports:
+        - "1880:1880/tcp"
+    devices:
+        - "/dev/ttyUSB0:/dev/ttyUSB0"
+        - "/dev/ttyUSB1:/dev/ttyUSB1"
+
+volumes:
+  node_red_data:
