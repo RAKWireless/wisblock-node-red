@@ -1,0 +1,42 @@
+[
+    {
+        "id": "903fc29aeb6467f7",
+        "type": "tab",
+        "label": "rak1906-read-all",
+        "disabled": false,
+        "info": "The example is to read data from rak1906 every 5 seconds.",
+        "env": []
+    },
+    {
+        "id": "916f9a45143cbc6a",
+        "type": "bme680rpi",
+        "z": "903fc29aeb6467f7",
+        "name": "RAK1906",
+        "bus": "1",
+        "address": "0x76",
+        "interval": "5000",
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "af4f74ed871c8067"
+            ]
+        ]
+    },
+    {
+        "id": "af4f74ed871c8067",
+        "type": "debug",
+        "z": "903fc29aeb6467f7",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 240,
+        "wires": []
+    }
+]
