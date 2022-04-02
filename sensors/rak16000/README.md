@@ -139,9 +139,14 @@ The function node is only used to calculate the power consumption simply by time
 var current = msg.payload.miliamps;
 // Retrieve voltage readings from the join node
 var voltage = msg.payload.voltage;
-// Calculate the power consumption 
-var power = parseFloat((current * voltage / 1000).toFixed(2));
-return {payload:power};
+// Calculate power consumption and output readings
+var payload = {};
+payload.current = current.toFixed(2) + ' mA';
+payload.voltage = voltage.toFixed(2) + ' V';
+payload.power = (current * voltage / 1000).toFixed(2) + ' W';
+return {
+    payload: payload
+};
 ```
 
 and also a screenshot:
