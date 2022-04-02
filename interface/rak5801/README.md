@@ -1,4 +1,4 @@
-# Read 4-20 mA current input using RAK5811 from NodeRed
+# Read 4-20 mA current input using RAK5801 from NodeRed
 
 [TOC]
 
