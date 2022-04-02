@@ -102,7 +102,7 @@ The device address of RAK16000 is configured to 0x41, and connected to i2c bus 1
 
 Whether you are using the Node-Red docker image provided by RAKwireless or the official latest image, or you host your Node-RED service on your host machine, you need to install the node `node-red-contrib-easybotics-ina219-sensor` before you deploy the flow. 
 
-To install a new node, go to the top-right **Menu**, and then select **Manage palette**. On the **User Settings** page, you need to select **Install**, and search the keyword **ads1x15-i2c**. Now you should be able to install this node.
+To install a new node, go to the top-right **Menu**, and then select **Manage palette**. On the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-easybotics-ina219-sensor**. Now you should be able to install this node.
 
 ![install INA219 sensor node](assets/install-ina219-sensor-node.png)
 
