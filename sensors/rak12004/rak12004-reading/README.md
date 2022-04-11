@@ -171,7 +171,7 @@ As we mentioned in the node introduction section, the `node-red-node-pi-gpiod` n
 
   To get the voltage reading from the adc121c021, users only need to define the i2c bus of the chip. In this case, the adc121c021 is on bus 1, and the I2C address of RAK12004 is configured to 0x51. 
 
-<img src="assets/adc121c021_i2c node.png" alt="adc121c021_i2c node configuration"/>
+<img src="assets/adc121c021_i2c_node.png" alt="adc121c021_i2c node configuration"/>
 
 - function node configuration
 
