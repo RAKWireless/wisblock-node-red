@@ -68,11 +68,11 @@ cd ~/.node-red/node_modules/node-red-contrib-pn532-i2c && npm install
   
   - **i2c_Address**
   
-    The Address for shtc3 is 0x24 which can not be changed. 
+    The Address for pn532 is 0x24 which can not be changed. 
 
 ## 4. Run example
 
-The example is under `interface/rak13600` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **nfc-read.json** file or just copy and paste the .json file contents into your new flow.
+The example is under `wireless/rak13600` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **nfc-read.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
