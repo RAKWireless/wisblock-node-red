@@ -1,0 +1,90 @@
+[
+    {
+        "id": "bced94699edbe2ef",
+        "type": "tab",
+        "label": "libgpiod-blink",
+        "disabled": false,
+        "info": "This is an example flow that toggle led on rak7391 status every 1 second.",
+        "env": []
+    },
+    {
+        "id": "db47e56206a2e391",
+        "type": "libgpiod",
+        "z": "bced94699edbe2ef",
+        "name": "",
+        "gpiochip_dev": "2",
+        "gpio_port": "7",
+        "gpio_direction": "1",
+        "x": 580,
+        "y": 200,
+        "wires": [
+            [
+                "e66a7ebcd6d72520"
+            ]
+        ]
+    },
+    {
+        "id": "e66a7ebcd6d72520",
+        "type": "debug",
+        "z": "bced94699edbe2ef",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "d8aa272c8d7b18f9",
+        "type": "inject",
+        "z": "bced94699edbe2ef",
+        "name": "every 1 second",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "9fd77fac1c624157"
+            ]
+        ]
+    },
+    {
+        "id": "9fd77fac1c624157",
+        "type": "function",
+        "z": "bced94699edbe2ef",
+        "name": "toggle_function",
+        "func": "var count = context.get('count') || 0;\nmsg.payload = 1 - count;\ncontext.set('count', msg.payload);\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "db47e56206a2e391"
+            ]
+        ]
+    }
+]
