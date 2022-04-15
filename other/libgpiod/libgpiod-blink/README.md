@@ -1,10 +1,10 @@
-# Control the PI4IOE5V96224 GPIO Expander in RAK7391 board from NodeRED.
+# Control the GPIO Expander in RAK7391 board from NodeRED.
 
 [TOC]
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use the node **node-red-contrib-libgpiod** to toggles an LED connected to `IO0_7` pin of GPIO Expander in RAK7391 board. 
+This guide explains how to create a flow and then use the node **libgpiod** to toggles an LED connected to `IO0_7` pin of GPIO Expander in RAK7391 board. 
 
 ### 1.1 Requirements
 
@@ -16,7 +16,19 @@ Please create `/etc/udev/rules.d/85-gpiochip.rules` file, and copy the line belo
 KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
 ```
 
+Install `python 3`  and `pip3` firstly. 
 
+```
+sudo apt install python3-dev python3-pip
+```
+
+Install python library - `gpiod` .
+
+```
+python3 -m pip install -U --user pip gpiod
+```
+
+## Install
 
 ## 2. Preparation
 
@@ -29,12 +41,6 @@ Schematic diagram of LED and IO0_7 of GPIO Expander in RAK7391 is showed as foll
 ![image-20220302172023719](assets/image-20220302172023719.png)
 
 ### 2.2. Software
-
-Install `libgpiod` library with the following commands. 
-
-```
-sudo apt install libgpiod
-```
 
 Install `node-red-contrib-libgpiod` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
 
@@ -68,7 +74,7 @@ To set  GPIO port of `/dev/gpiochip?` you just need to select the correct settin
 
 - **/dev/gpiochip?**
 
-  The gpiochip Device # - You can execute 'sudo gpiodetect' to see gpiochip num.
+  The gpiochip Device # - You can execute `sudo gpiodetect` to see gpiochip num.
 
 - **GPIO port**
 
