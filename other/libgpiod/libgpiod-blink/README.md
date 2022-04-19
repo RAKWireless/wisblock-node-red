@@ -12,20 +12,18 @@ Gpio device needs [special udev rules](https://blog.oless.xyz/post/fedorarpigpio
 
 Please create `/etc/udev/rules.d/85-gpiochip.rules` file, and copy the line below to `85-gpiochip.rules` file.
 
-```
-KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
-```
+RNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
 
-Install `python 3`  and `pip3` firstly. 
+Install `libgpiod-dev`  library  and tools firstly. 
 
 ```
-sudo apt install python3-dev python3-pip
+sudo apt install libgpiod-dev gpiod
 ```
 
-Install python library - `gpiod` .
+If you use `NodeRED docker`, you can execute the next command.
 
 ```
-python3 -m pip install -U --user pip gpiod
+apk add libgpiod-dev gpiod
 ```
 
 ## Install
@@ -45,46 +43,53 @@ Schematic diagram of LED and IO0_7 of GPIO Expander in RAK7391 is showed as foll
 Install `node-red-contrib-libgpiod` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
 
 ```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
-
-```
-cp -rf node-red-nodes/node-red-contrib-libgpiod ~/.node-red/node_modules
-```
-
-```
-cd ~/.node-red/node_modules/node-red-contrib-libgpiod && npm install
+cd ~/.node-red
+npm install node-red-contrib-libgpiod
 ```
 
 **Tips:**  After `node-red-contrib-libgpiod` being installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
 
-
-
 ## 3. Configure
 
-Provides one nodes - `libgpiod` to get  and set GPIO state.
+Provides two nodes - `gpio out` to set GPIO state and `gpio om` to get   GPIO state.
+
+### 3.1 gpio out
 
 To set  GPIO port of `/dev/gpiochip?` you just need to select the correct settings for your device and trigger the node. 
 
-<img src="assets/image-20220413164133614.png" alt="image-20220413164133614" style="zoom:80%;" />	
+<img src="assets/image-20220419164135773.png" alt="image-20220419164135773" style="zoom:50%;" />	
 
-- **Name**
-
-  Define the msg name if you wish to change the name displayed on the node.
-
-- **/dev/gpiochip?**
+- **Device**
 
   The gpiochip Device # - You can execute `sudo gpiodetect` to see gpiochip num.
 
-- **GPIO port**
+- **Pin**
 
   The port of selected gpiochip must be number.
 
-- **Direction**
+- **Name**
 
-  The direction of port can be set as `input` or `output` mode.
+  Define the node name if you wish to change the name displayed on the node.
 
 
+
+### 3.1 gpio in
+
+To get  GPIO port of `/dev/gpiochip?` you just need to select the correct settings for your device and trigger the node. 
+
+<img src="assets/image-20220419164519694.png" alt="image-20220419164519694" style="zoom:50%;" />	
+
+- **Device**
+
+  The gpiochip Device # - You can execute `sudo gpiodetect` to see gpiochip num.
+
+- **Pin**
+
+  The port of selected gpiochip must be number.
+
+- **Name**
+
+  Define the node name if you wish to change the name displayed on the node.
 
 ## 4. Run example
 
@@ -92,11 +97,11 @@ The example is under `other/libgpiod/libgpiod-blink` folder in the [`wisblock-no
 
 After the import is done, the new flow should look like this:
 
-![image-20220414104307566](assets/image-20220414104307566.png)
+![image-20220419164726737](assets/image-20220419164726737.png)
 
 Hit the **Deploy** button on the top right to deploy the flow.
 
-This is a simple flow with four node, where `inject` node supply a trigger event every 1 second,  `toggle_function`  function toggle the state's value, `libgpiod`node set state of LED state, and `debug` node print the state of gpio. 
+This is a simple flow with four node, where `inject` node supply a trigger event every 1 second,  `toggle_function`  function toggle the state's value, `gpio out`node set state of LED state, and `debug` node print the state of gpio. 
 
 After hitting **Deploy** button, the LED on board starts to blink.
 

@@ -8,22 +8,6 @@
         "env": []
     },
     {
-        "id": "db47e56206a2e391",
-        "type": "libgpiod",
-        "z": "bced94699edbe2ef",
-        "name": "",
-        "gpiochip_dev": "2",
-        "gpio_port": "7",
-        "gpio_direction": "1",
-        "x": 580,
-        "y": 200,
-        "wires": [
-            [
-                "e66a7ebcd6d72520"
-            ]
-        ]
-    },
-    {
         "id": "e66a7ebcd6d72520",
         "type": "debug",
         "z": "bced94699edbe2ef",
@@ -83,7 +67,23 @@
         "y": 200,
         "wires": [
             [
-                "db47e56206a2e391"
+                "1ac9d0c9f46e254b"
+            ]
+        ]
+    },
+    {
+        "id": "1ac9d0c9f46e254b",
+        "type": "gpio-out",
+        "z": "bced94699edbe2ef",
+        "name": "gpiochip2#7",
+        "state": "OUTPUT",
+        "device": "gpiochip2",
+        "pin": "7",
+        "x": 570,
+        "y": 200,
+        "wires": [
+            [
+                "e66a7ebcd6d72520"
             ]
         ]
     }
