@@ -12,18 +12,20 @@ Gpio device needs [special udev rules](https://blog.oless.xyz/post/fedorarpigpio
 
 Please create `/etc/udev/rules.d/85-gpiochip.rules` file, and copy the line below to `85-gpiochip.rules` file.
 
-RNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
+```
+KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
+```
 
 Install `libgpiod-dev`  library  and tools firstly. 
 
 ```
-sudo apt install libgpiod-dev gpiod
+sudo apt install libgpiod-dev
 ```
 
 If you use `NodeRED docker`, you can execute the next command.
 
 ```
-apk add libgpiod-dev gpiod
+apk add libgpiod-dev
 ```
 
 ## Install
@@ -40,14 +42,9 @@ Schematic diagram of LED and IO0_7 of GPIO Expander in RAK7391 is showed as foll
 
 ### 2.2. Software
 
-Install `node-red-contrib-libgpiod` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
+Install `node-red-contrib-libgpiod` node from the `manage palette` menu.
 
-```
-cd ~/.node-red
-npm install node-red-contrib-libgpiod
-```
-
-**Tips:**  After `node-red-contrib-libgpiod` being installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
+![image-20220421101640284](assets/image-20220421101640284.png)
 
 ## 3. Configure
 
