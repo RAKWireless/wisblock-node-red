@@ -8,14 +8,6 @@ This guide explains how to create a flow and then use the node **libgpiod** to t
 
 ### 1.1 Requirements
 
-Gpio device needs [special udev rules](https://blog.oless.xyz/post/fedorarpigpio/#udev) in order to belong to a special group so non-root users could access it freely.
-
-Please create `/etc/udev/rules.d/85-gpiochip.rules` file, and copy the line below to `85-gpiochip.rules` file.
-
-```
-KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
-```
-
 Install `libgpiod-dev`  library  and tools firstly. 
 
 ```
