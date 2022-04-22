@@ -8,17 +8,43 @@ This guide explains how to create a flow and then use the node **libgpiod** to t
 
 ### 1.1 Requirements
 
+Adding the following line into the `/boot/config.txt`.
+
+```
+dtoverlay=pcf857x,addr=0x20,pi4ioe5v96224
+```
+
+The result will be like this.
+
+![image-20220422143215037](assets/image-20220422143215037.png)
+
 Install `libgpiod-dev`  library  and tools firstly. 
 
 ```
 sudo apt install libgpiod-dev
 ```
 
-If you use `NodeRED docker`, you can execute the next command.
+If you use `NodeRED docker`, you can execute the next command. 
 
 ```
 apk add libgpiod-dev
 ```
+
+Then reboot the `RAK7391`. After reboot, we can execute `gpiodetect` to find whether the new gpio expander has existed.
+
+```
+sudo gpiodetect
+```
+
+We can find gpiochip2 has already exited as follows.
+
+![image-20220422143800348](assets/image-20220422143800348.png)
+
+If we use NodeRED docker, we should all add sometings as bellow.
+
+![image-20220422143943476](assets/image-20220422143943476.png)
+
+
 
 ## Install
 
