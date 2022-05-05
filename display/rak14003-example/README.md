@@ -36,11 +36,6 @@ services:
     group_add:
       - 998
       - 997
-    environment:
-      - NODE_RED_ENABLE_PROJECTS=${NODE_RED_ENABLE_PROJECTS}
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
     volumes:
         - 'node-red-data:/data'
     ports:
@@ -50,12 +45,17 @@ services:
         - "/dev/gpiochip0:/dev/gpiochip0"
     networks:
       - node-red
+  
+volumes:
+  node-red-data:
 
+networks:
+  node-red:
 ```
 
 To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
 
-In the docker-compose file provided above, the --device can mount the device to the container, --group-add adds the I2C group (group id 998 in Rakpios) and the GPIO group((group id 998 in Rakpios) to run as. Notice that **998** and **997** in the compose file needs to be changed if you are not using Rakpios, it needs to match your system group setup. Before adding the node-red user to the matching group, you need to get the group number via running the command below on your host:
+In the docker-compose file provided above, the --device can mount the device to the container, --group-add adds the I2C group (group id 998 in Rakpios) and the GPIO group((group id 997 in Rakpios) to run as. Notice that **998** and **997** in the compose file needs to be changed if you are not using Rakpios, it needs to match your system group setup. Before adding the node-red user to the matching group, you need to get the group number via running the command below on your host:
 
 ```
 cat /etc/group | grep i2c | awk -F: '{print $3}'
