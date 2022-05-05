@@ -1,0 +1,159 @@
+[
+    {
+        "id": "3dc0b7bb68b772b8",
+        "type": "tab",
+        "label": "RAK14003-example",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c690c0651342b903",
+        "type": "MCP PCF Out",
+        "z": "3dc0b7bb68b772b8",
+        "name": "Bit 0",
+        "chip": "c1fa8e6f0502cce9",
+        "bitNum": "0",
+        "invert": false,
+        "x": 350,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "cb347eebf2b9c13a",
+        "type": "inject",
+        "z": "3dc0b7bb68b772b8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 500,
+        "wires": [
+            [
+                "c690c0651342b903"
+            ]
+        ]
+    },
+    {
+        "id": "894f51ddfe4ea7a2",
+        "type": "inject",
+        "z": "3dc0b7bb68b772b8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "c690c0651342b903"
+            ]
+        ]
+    },
+    {
+        "id": "d8d087a1f90b4a09",
+        "type": "MCP PCF Out",
+        "z": "3dc0b7bb68b772b8",
+        "name": "Bit 1",
+        "chip": "c1fa8e6f0502cce9",
+        "bitNum": "1",
+        "invert": false,
+        "x": 350,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "d72e78bddcc5cbf4",
+        "type": "inject",
+        "z": "3dc0b7bb68b772b8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "d8d087a1f90b4a09"
+            ]
+        ]
+    },
+    {
+        "id": "ade3d6211fc83be3",
+        "type": "inject",
+        "z": "3dc0b7bb68b772b8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 680,
+        "wires": [
+            [
+                "d8d087a1f90b4a09"
+            ]
+        ]
+    },
+    {
+        "id": "c1fa8e6f0502cce9",
+        "type": "mcp_pcf_chip",
+        "busNum": "1",
+        "addr": "0x24",
+        "interval": "100",
+        "reset": "16",
+        "startAllHIGH": true
+    }
+]
