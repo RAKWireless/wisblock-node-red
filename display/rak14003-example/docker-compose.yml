@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+
+  nodered:
+    image: sheng2216/nodered-docker:1.1
+    container_name: NodeRed
+    restart: unless-stopped
+    user: node-red
+    group_add:
+      - 998
+      - 997
+    environment:
+      - NODE_RED_ENABLE_PROJECTS=${NODE_RED_ENABLE_PROJECTS}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+        - 'node-red-data:/data'
+    ports:
+        - "1880:1880/tcp"
+    devices:
+        - "/dev/i2c-1:/dev/i2c-1"
+        - "/dev/gpiochip0:/dev/gpiochip0"
+    networks:
+      - node-red
+
+
+volumes:
+  node-red-data:
+
+networks:
+  node-red:
+

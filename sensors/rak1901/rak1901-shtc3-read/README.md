@@ -70,7 +70,7 @@ To get value of  temperature and humidity you just need to select the correct se
 
 ## 4. Run example
 
-After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `sensors\shtc3\shtc3-read` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **shtc3-read.json** file or just copy and paste the .json file contents into your new flow.
+After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `sensors\rak1901\rak1901-shtc3-read` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak1901-shtc3-read.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
