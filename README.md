@@ -10,7 +10,7 @@ Every example has a README.md file with the information about:
 
 * required modules
 * special permissions (specially if you run NodeRED in a docker container)
-* hardware and firmware setup
+* hardware and software setup
 
 You will also have a `flow.json` file with the example code. You just have to import it in your instance of NodeRED (top right menu > import > select a fie to import).
 
@@ -33,17 +33,23 @@ The repository structure follows that on the [RAKwireless store](https://store.r
     * [RAK5802 ModBUS example](interface/rak5802/rak5802_modbus/)
     * [RAK5811 example](interface/rak5811/)
     * [RAK13004 example](interface/rak13004/)
+    * [RAK13005 example](interface/rak13005/)
     * [RAK16001 example](interface/rak16001/)
 * Other
     * [ADS1115 example](other/ads1115/ads1115-read/)
     * [GPIO toggle LED example](other/gpio/gpio-toggle-led/)
     * [I2C EEPROM example](other/i2c/i2c-eeprom/)
     * [PI4IOE5V96224 toggle LED example](other/pi4ioe5v/pi4ioe5v-toggle-led/)
+    * [libgpiod example](other/libgpiod/libgpiod-blink/)
 * Sensors
+    * [RAK1902 example](sensors/rak1902/rak1902-read)
     * [RAK1903 example](sensors/rak1903/rak1903-read)
     * [RAK12004 example](sensors/rak12004/rak12004-reading)
+    * [RAK12009 example](sensors/rak12009/rak12009-reading)
     * [RAK12015 example](sensors/rak12015/rak12015-tampering-detector)
+    * [RAK12019 example](sensors/rak12019/12019-reading)
     * [RAK16000 example](sensors/rak16000)
     * [SHTC3 example](sensors/shtc3/shtc3-read)
-
+* Wireless
+    * ​	[RAK13600 example](wireless/rak13600)
 
