@@ -4,6 +4,20 @@ A collection of examples to interface WisBlock modules and sensors from [Node-RE
 
 These examples are meant to be used with RAK7391 (WisGate Developer Connect) and RAK6421 (WisBlock Pi Hat) boards.
 
+# Hardware requirement
+
+To be able to use the WisBlock module, the hardware must match the WisBlock form factor. Right now, RAKwireless provides two devices to support the WisBlock module for the Raspberry Pi platform. 
+
+### RAK7391
+
+RAK7391 is a powerful CM4 extension board. There are two WisBlock I/O connectors on the board already. Users can connect the WisBlock I/O module with RAK7391 directly. 
+
+### RAK6421
+
+RAK6421 is a Pi HAT board that includes the WisBlock connector. Users can put the WisBlock module on the Pi HAT and plug it on the Raspberry Pi board. 
+
+
+
 ## Installation
 
 Every example has a README.md file with the information about:
@@ -14,19 +28,14 @@ Every example has a README.md file with the information about:
 
 You will also have a `flow.json` file with the example code. You just have to import it in your instance of NodeRED (top right menu > import > select a fie to import).
 
-## Contributing
 
-For simple typos and single line fixes please just raise an issue pointing out our mistakes. 
 
-If you need to raise a pull request please read our [contribution guidelines](https://github.com/RAKwireless/wisblock-node-red/blob/master/CONTRIBUTING.md) before doing so.
-
-## Copyright and license
-
-Copyright (c) 2022 RAKwireless, under MIT License.
-
-# Examples
+## Examples
 
 The repository structure follows that on the [RAKwireless store](https://store.rakwireless.com/pages/wisblock)
+
+* display
+  * [rak14003-example](display/rak14003-example)
 
 * Interface
     * [RAK5801 example](interface/rak5801/)
@@ -49,7 +58,20 @@ The repository structure follows that on the [RAKwireless store](https://store.r
     * [RAK12015 example](sensors/rak12015/rak12015-tampering-detector)
     * [RAK12019 example](sensors/rak12019/12019-reading)
     * [RAK16000 example](sensors/rak16000)
-    * [SHTC3 example](sensors/shtc3/shtc3-read)
+    * [RAK1901 example](sensors/rak1901/rak1901-shtc3-read)
 * Wireless
-    * ​	[RAK13600 example](wireless/rak13600)
+    * [RAK13600 example](wireless/rak13600)
 
+
+
+## Contributing
+
+For simple typos and single line fixes please just raise an issue pointing out our mistakes. 
+
+If you need to raise a pull request please read our [contribution guidelines](https://github.com/RAKwireless/wisblock-node-red/blob/master/CONTRIBUTING.md) before doing so.
+
+
+
+## Copyright and license
+
+Copyright (c) 2022 RAKwireless, under MIT License.
