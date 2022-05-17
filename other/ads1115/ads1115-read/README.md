@@ -55,7 +55,7 @@ An easier way to deploy node-red container is to use docker compose.  we provide
 
 ### 2.3. required modules
 
-This flow use node-red-contrib-ads1x15_i2c  module, so you must install the module to your node-red first. run the following command in the root directory of your node-red install
+This flow use node-red-contrib-ads1x15_i2c  module, so you must install the module to your node-red first. run the following command in the root directory of your node-red install.
 
 ```
 npm install node-red-contrib-ads1x15_i2c

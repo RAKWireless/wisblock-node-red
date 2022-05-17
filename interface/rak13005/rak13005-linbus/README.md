@@ -32,7 +32,7 @@ In this example we will establish a linBus communication between WisBlock Starte
 
 ### 2.2. Other hardware
 
-We will need a couple of cables to connect both RAK13005 modules and an external 5-27v power supply  to RAK13005 modules.
+We will need a couple of cables to connect both RAK13005 modules and an external `5-27v` power supply  to RAK13005 modules.
 
 ### 2.3. Connection diagram
 

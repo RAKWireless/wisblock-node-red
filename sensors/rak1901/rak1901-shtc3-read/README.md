@@ -36,7 +36,7 @@ cp -rf node-red-nodes/node-red-contrib-shtc3 ~/.node-red/node_modules
 cd ~/.node-red/node_modules/node-red-contrib-shtc3 && npm install
 ```
 
-
+**Tips:**  After `node-red-contrib-shtc3`  installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
 
 ## 3. Configure
 
