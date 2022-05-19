@@ -115,7 +115,7 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3 Flow configuration
 
-Whether you are using the Node-Red docker image provided by RAKwireless or the official latest image, or you host your Node-RED service on your host machine, you need to install the node `node-red-node-pi-gpiod`  and `node-red-contrib-ads7830` before you deploy the flow. 
+Whether you are using the Node-Red docker image provided by RAKwireless or the official latest image, or you host your Node-RED service on your host machine, you need to install the node `node-red-node-pi-gpiod`  and `node-red-contrib-adc121c021` before you deploy the flow. 
 
 ### 3.1 Install nodes  
 

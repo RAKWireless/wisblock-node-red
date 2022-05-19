@@ -82,25 +82,32 @@ Whether you are using the Node-Red docker image provided by RAKwireless or the o
 
 ### 3.1 Install nodes  
 
+Please make sure `libgpiod-dev` has been installed before, if not, please install it.
+
+```
+sudo apt update
+sudo apt install libgpiod-dev
+```
+
 You need to install  `mcp-pcf-aio`  with the following commands. If you are using docker for Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`,
 
 ```
 git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
 ```
 
-then copy  `mcp-pcf-aio`  directory  to  the `node_modules` directory,
+then copy  `node-red-contrib-mcp-pcf-aio`  directory  to  the `node_modules` directory,
 
 ```
-cp -rf node-red-nodes/mcp-pcf-aio node-red/node_modules
+cp -rf node-red-nodes/node-red-contrib-mcp-pcf-aio ~/.node-red/node_modules
 ```
 
-lastly, change to the  `mcp-pcf-aio`  directory and install the node, 
+lastly, change to the  `node-red-contrib-mcp-pcf-aio`  directory and install the node,
 
 ```
 cd ~/.node-red/node_modules/mcp-pcf-aio && npm install
 ```
 
-**Tips:**  After the installation of  `mcp-pcf-aio`  is finished, please restart your node-red service/container(s).  Otherwise, the node cannot be found/added to the new flow.
+**Tips:**  After the installation of  `node-red-contrib-mcp-pcf-aio`  is finished, please restart your node-red service/container(s).  Otherwise, the node cannot be found/added to the new flow.
 
 **Warn:**  [mcp-pcf-aio]([mcp-pcf-aio (node) - Node-RED (nodered.org)](https://flows.nodered.org/node/@pizzaprogram/mcp-pcf-aio))  is published by László Szakmári and we made some changes based on it to set RESET pin on the RAK14003. But there is still a serious problem that needs fixing. Please note that once you depoly this example flow, this RESET pin on the RAK14003 will always be used, you will not set it again until NodeRED process exit.
 

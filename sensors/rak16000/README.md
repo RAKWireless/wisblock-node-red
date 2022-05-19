@@ -8,7 +8,7 @@ This guide explains how to use the [WisBlock IO RAK16000](https://docs.rakwirele
 
 ### 1.1 RAK16000
 
-**RAK16000** is a part of the WisBlock Sensor Series that is capable of measuring DC current in the range of 0 to 3 A in a voltage range of 0 to 26 V. With the two measured DC values, you get the power consumption by multiplying the current and voltage. Additionally, this module uses the [INA219BID](https://www.ti.com/store/ti/en/p/product/?p=INA219BID) from Texas Instruments which offers high accuracy maximum rate of 0.5% over temperature.
+**RAK16000** is a part of the WisBlock Sensor Series that is capable of measuring DC current in the range of 0 to `3 A` in a voltage range of `0 to 26 V`. With the two measured DC values, you get the power consumption by multiplying the current and voltage. Additionally, this module uses the [INA219BID](https://www.ti.com/store/ti/en/p/product/?p=INA219BID) from Texas Instruments which offers high accuracy maximum rate of 0.5% over temperature.
 
 The INA219 is a current shunt and power monitor with an I2C- or SMBUS-compatible interface. The device monitors both shunt voltage drop and bus supply voltage, with programmable conversion times and filtering. A programmable calibration value, combined with an internal multiplier, enables direct readouts of current in amperes. An additional multiplying register calculates power in watts. The I2C- or SMbus-compatible interface features 16 programmable addresses. For more information about **INA219BID**, refer to the [Datasheet](https://www.ti.com/lit/ds/symlink/ina219.pdf?ts=1647401885343&ref_url=https%3A%2F%2Fwww.ti.com%2Fproduct%2FINA219).
 
