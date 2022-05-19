@@ -1,4 +1,4 @@
-# Extend RAK16001 in RAK7391 board and test it with NodeRed
+# Extend RAK13600 in RAK7391 board and test it with NodeRed
 
 [TOC]
 
