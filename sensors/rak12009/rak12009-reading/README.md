@@ -95,7 +95,7 @@ After that you need to install the **node-red-contrib-libgpiod** node and import
 You can always running Node-RED inside a container. To run Node-RED in Docker and use the latest Node-RED official image, the easiest way is run the following command:
 
 ```plaintext
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 998 --name NodeRed nodered/node-red
+docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red
 ```
 
 The `--device` can mount device to container, and `--name` can add an user with specified group. Before add node-red user to the local gpio group, you need to verify the group number via running command below on your host:
@@ -116,7 +116,7 @@ apk add libgpiod-dev
 Or, you can use the Node-RED image provided by RAKwireless, it comes with the **libgpiod-dev** package installed:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 998 --name NodeRed sheng2216/nodered-docker:1.1
+docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed sheng2216/nodered-docker:1.1
 ```
 
 #### 2.4.2 Using Docker Compose
