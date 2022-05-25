@@ -6,11 +6,7 @@
 
 This guide explains how to create a flow and then use the node **node-red-contrib-libgpiod** to toggles an LED connected to a GPIO pin in the 40-pin header on a Raspberry Pi or a RAK7391 board.
 
-### 1.1 Requirements
-
-One of the most important things when using **node-red-contrib-libgpiod** in a container is to make sure you have access to the GPIO chip inside the container. We will cover more details about it in section 2.1. If you are interested in using this node locally (outside container), please also check the [node's introduction in Node-RED's library](https://flows.nodered.org/node/node-red-contrib-libgpiod) and also their [repo](https://github.com/s5z6/node-red-contrib-libgpiod). For the hardware side, you need a Raspberry Pi, LED, and some jumper wires. 
-
-### 1.2  The 40-pin header and GPIO
+### 1.1  The 40-pin header and GPIO
 
 There is a 40-pin header on RAK7391 board, it follows the same pinout Raspberry Pi uses. The 40-pin header is a row of GPIO ( general-purpose input/output) pins offers the ability for Raspberry Pi or RAK7391 to interface with the real world. The 40-pin header provides the following power and interface options: 
 
@@ -22,13 +18,17 @@ There is a 40-pin header on RAK7391 board, it follows the same pinout Raspberry 
 * UART (Universal asynchronous receiver-transmitter)
 * PCM (Pulse-code modulation)
 
-Check the following figure for the pinout, make sure don't get confused by BCM numbering (aka “Broadcom” or ”GPIO“ ）and Board pin numbering (aka "physical pin)". They are two different numbering systems. BCM numbering refers to the pins defined by the "Broadcom SOC channel", while the Board pin refers to the pin's physical location on the header. For example, Board pin 7 is actually GPIO 4.  
+Check the following figure for the pinout, make sure don't get confused by BCM numbering (aka “Broadcom” or ”GPIO“ ）and Board pin numbering (aka "physical pin)". They are two different numbering systems. BCM numbering refers to the pins defined by the "Broadcom SOC channel", while the Board pin refers to the pin's physical location on the header. For example, Board pin 7 and GPIO 4 refer to the same pin.  
 
 ![GPIO-Pinout-Diagram](assets/GPIO-Pinout-Diagram.png)
 
 <span style="color:blue">here is the [reference](https://pinout.xyz/), need the documentation team to cite it or create a new one?</span>
 
-By configuring the status of each pin in software, users can define each pin as an input or output pin, and use them for different real-world applications.
+By configuring the status of each pin in software, users can define each pin as an input or output pin, and use them for different applications.
+
+### 1.2 node-red-contrib-libgpiod
+
+The node we used in this flow is **[node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod)**. It contains a set of input and output nodes for controlling General Purpose Input and Outputs (GPIOs) though libgpiod (ioctl). One of the most important things to notice when using **node-red-contrib-libgpiod** in a container is to make sure you have access to the GPIO chip inside the container. We will cover more details about it in section 2.1. If you are interested in using this node locally (outside container), please also check the [node's introduction in Node-RED's library](https://flows.nodered.org/node/node-red-contrib-libgpiod) and also their [repo](https://github.com/s5z6/node-red-contrib-libgpiod). 
 
 ## 2. Preparation
 
@@ -161,7 +161,7 @@ To install a new  node, go to the top right **Menu**, and then select **Manage p
 
 ### 2.5 Hardware
 
-In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then create a flow in node-red to toggle the led.  Please check the figure below for how to connect the LED:
+For the hardware side, you need a Raspberry Pi (or RAK7391), LED, and some jumper wires. In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then create a flow in node-red to toggle the led.  Please check the figure below for how to connect the LED:
 
 ![led_diagram](assets/led_diagram.png)
 

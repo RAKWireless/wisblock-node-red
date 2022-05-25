@@ -11,7 +11,7 @@
         "id": "15078973eecf81b0",
         "type": "inject",
         "z": "08406e984ec8c126",
-        "name": "every 5s",
+        "name": "every 5 seconds",
         "props": [
             {
                 "p": "payload"
@@ -24,87 +24,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 170,
-        "y": 320,
+        "x": 130,
+        "y": 280,
         "wires": [
             [
                 "1a005be120f0eed0"
-            ]
-        ]
-    },
-    {
-        "id": "9588b7451ba915db",
-        "type": "inject",
-        "z": "08406e984ec8c126",
-        "name": "ON",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "1",
-        "payloadType": "num",
-        "x": 170,
-        "y": 160,
-        "wires": [
-            [
-                "8de5473309e4c73e"
-            ]
-        ]
-    },
-    {
-        "id": "8de5473309e4c73e",
-        "type": "pi-gpiod out",
-        "z": "08406e984ec8c126",
-        "name": "",
-        "host": "pigpiod",
-        "port": 8888,
-        "pin": "22",
-        "set": "",
-        "level": "0",
-        "out": "out",
-        "sermin": "1000",
-        "sermax": "2000",
-        "freq": "800",
-        "x": 400,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "6852fd10b55f25fd",
-        "type": "inject",
-        "z": "08406e984ec8c126",
-        "name": "OFF",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "0",
-        "payloadType": "num",
-        "x": 170,
-        "y": 240,
-        "wires": [
-            [
-                "8de5473309e4c73e"
             ]
         ]
     },
@@ -113,9 +37,9 @@
         "type": "comment",
         "z": "08406e984ec8c126",
         "name": "Notes",
-        "info": "The ADC121c021 module has an EN pin (IO_6 in the WisBlock connector) that must be pulled high before the reading. In the example flow, the EN pin is connected to pin 32 (GPIO 12) of the 40-pin header.\n\nTo enable/disable the EN pin, you need to use a pi-gpiod node to control it.  \n\nOnce the EN pin is set to ON, you should be able to read the PPM value and percentage readings from the MQ2 gas sensor.\n\nTo get a more accurate readins, you need to calibrate the MQ2 sensor based on your set-up. For more information about the gas sensor, please check the [datasheet](https://www.mouser.com/datasheet/2/321/605-00008-MQ-2-Datasheet-370464.pdf) and the [tutorial ](https://jayconsystems.com/blog/understanding-a-gas-sensor) ",
-        "x": 150,
-        "y": 80,
+        "info": "The ADC121c021 module has an Enable pin (IO_6 in the WisBlock connector) that must be pulled high before the reading.\n\nThe Enable pin varies based on your hardware setup, when you connect the RAK12009 to the IO slot1 on RAK6421, the ENABLE pin is GPIO 12 (board pin 32). When using IO slot 2 on RAK6421 (check the hardware preparation section for pictures), the ENABLE pin is GPIO 22 (board pin 15). \n\nIn the example flow, the Enable pin is connected to board pin 15 (GPIO 22) of the 40-pin header.\n\n\nOnce the EN pin is set to High, you should be able to read the PPM value and percentage readings from the MQ3 gas sensor.\n\nTo get a more accurate readins, you need to calibrate the MQ3 sensor based on your set-up. For more information about the gas sensor, please check the [datasheet](https://www.mouser.com/datasheet/2/272/mq3-alcohol-sensor-datasheet-1864348.pdf) and the [tutorial ](https://jayconsystems.com/blog/understanding-a-gas-sensor) ",
+        "x": 90,
+        "y": 60,
         "wires": []
     },
     {
@@ -129,8 +53,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 320,
+        "x": 470,
+        "y": 280,
         "wires": [
             [
                 "fa06b4c6d27e62d4"
@@ -150,8 +74,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 730,
-        "y": 320,
+        "x": 610,
+        "y": 280,
         "wires": []
     },
     {
@@ -161,11 +85,102 @@
         "name": "",
         "i2c_device_number": 1,
         "i2c_address": "0x55",
-        "x": 360,
-        "y": 320,
+        "x": 320,
+        "y": 280,
         "wires": [
             [
                 "ceddd2a579edb0e3"
+            ]
+        ]
+    },
+    {
+        "id": "f6d535f8504c0935",
+        "type": "gpio-out",
+        "z": "08406e984ec8c126",
+        "name": "GPIO 22",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "22",
+        "x": 300,
+        "y": 160,
+        "wires": [
+            [
+                "9bb56f0bc49bbe6d"
+            ]
+        ]
+    },
+    {
+        "id": "ae31be8c1d7bf925",
+        "type": "inject",
+        "z": "08406e984ec8c126",
+        "name": "High",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 90,
+        "y": 120,
+        "wires": [
+            [
+                "f6d535f8504c0935"
+            ]
+        ]
+    },
+    {
+        "id": "9bb56f0bc49bbe6d",
+        "type": "debug",
+        "z": "08406e984ec8c126",
+        "name": "Pin status",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ae693158cd48531b",
+        "type": "inject",
+        "z": "08406e984ec8c126",
+        "name": "Low",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "f6d535f8504c0935"
             ]
         ]
     }

@@ -9,12 +9,21 @@ services:
     group_add:
         - 997
     restart: unless-stopped
+    environment:
+        - NODE_RED_ENABLE_PROJECTS=false
+        - PUID=1000
+        - PGID=100
+        - TZ=Europe/London
     devices:
         - "/dev/gpiochip0:/dev/gpiochip0"
     volumes:
         - 'node-red-data:/data'
     ports:
         - "1880:1880/tcp"
-        
+    networks:
+        - node-red
 volumes:
   node-red-data:
+
+networks:
+  node-red:
