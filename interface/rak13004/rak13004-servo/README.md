@@ -1,116 +1,115 @@
-#  Using RAK13004 and NodeRed to control servo
+#  Control a Servomotor using RAK13004 WisBlock PWM Expansion Module from Node-RED 
 
 [TOC]
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use [RAK13004 PWM Expansion Module](https://store.rakwireless.com/products/pwm-expansion-module-rak13004?_pos=1&_sid=620300979&_ss=r) to control servo.
+This guide explains how to use the [RAK13004 PWM Expansion Module](https://store.rakwireless.com/products/pwm-expansion-module-rak13004?_pos=1&_sid=620300979&_ss=r) in combination with RAK6421 Pi-HAT and RAK7391 to control a servomotor using Node-RED.
 
-RAK13004 PWM Expansion Module is powered by `PCA9685` which is an I²C-bus controlled 16-channel PWM controller.
+### 1.1  RAK13004
 
-![image-20220322163107355](assets/image-20220322163107355.png)
+The RAK13004 is a PWM expander module that can be mounted to the IO slot of WisBlock Base board. It can be controlled 16-channel LED, and the module uses PCA9685 from NXP, I2C interface. The I2C address of PCA9685 on RAK13004 is configured to 0x64. The RAK13004 WisBlock PWM Expander Module comprises a standard WisConnector(as shown in figure below). 
 
-**Tips:** `OE`  pin is **output enable** pin which is low active and default is high. so set `OE` pin to 0 before output PWM.
+One important thing to notice is that `OE`  pin is **output enable** pin which is low active and default is high. so set `OE` pin to 0 before output PWM.Please check the [RAK13004‘s hardware datasheet](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK13004/Datasheet/#hardware) for more details. By default, RAK13004 uses `i2c-1` bus when mounted to RAK6421 Pi-HAT. 
 
-When RAK13004 being fixed to RAK7391, it uses `i2c-1` bus.  
-
-### 1.1 Requirements
-
-You need to ensure that the user of system has I2C operation permission.
+![RAK13004 WisBlock PWM Expander Module Pinout](assets/rak13004_pinout.svg)
 
 
 
-## 2. Preparation
-
-### 2.1. Hardware
-
-RAK13004 and RAK7391 are needed. And a servo as bellow is also needed.
-
-![image-20220322164913590](assets/image-20220322164913590.png)
+## 2 Preparation
 
 
+### 2.1 Access setup
+
+Ensure you have access to both I2C devices and GPIO when using RAK13004. The PCA9685 chip on RAK13004 relays on the I2C interface, and we also need access to the GPIO so that we can pull-down the `OE` pin.
+
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) and gpio(/dev/gpiochip0 by default) on your host machine. 
+
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` and `/dev/gpiochip0` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C and GPIO devices. 
+
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](path-to-the-common-README), we provide all the information you need to know about using containerized Node-RED. 
+
+### 2.2 Install dependency & nodes in Node-RED
+
+Before we install the nodes, please make sure `libgpiod-dev` has been installed, if not, please install it.
+
+```
+sudo apt update
+sudo apt install libgpiod-dev
+```
+
+If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](path-to-the-common-README) on install dependency inside container.
+
+Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [node-red-contrib-pca9685](https://flows.nodered.org/node/node-red-contrib-pca9685).
+
+Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
+
+![install node-red-contrib-libgpiod](../../../../../wisblock-node-red-dev-display-rak14003-example/wisblock-node-red-dev-display-rak14003-example/display/rak14003-example/assets/install-node.png)
+
+### 2.3 Hardware
+
+You will need a servomotor, a Raspberry Pi (or RAK7391), and also the Pi-HAT RAK6421, as well as a couple of jumper wires. 
 
 The connection diagram is as follows:
 
-![image-20220322170128300](assets/image-20220322170128300.png)
+![RAK13004 + RAK6421 + RaspberryPi](assets/RAK13004+RAK6421+RaspberryPi.png)
 
-RAK13004 is fixed to  wisblock2 slot of RAK7391. An channel 0 of RAK13004 connect with servo.
+The red wire (power) of the servomotor goes to either one of the Vcc pin on RAK13004; the brown (ground) wire goes to either of the GND pin; while the orange (signal) wire goes to any one of the channel pin you prefer. In the above figure, we connected the servomotor to channel 0.
 
-### 2.2. Software
+## 3 Flow configuration
 
-When RAK13004 being fixed to Wisblock slot of RAK7391, its OE pin connect with pi4ioe5v96224 IO expander on RAK7391.
-
-So pi4ioe5v96224 node of NodeRED should be installed before.
-
-Please install `node-red-contrib-pi4ioe5v` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
-
-```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
-
-```
-cp -rf node-red-nodes/node-red-contrib-pi4ioe5v ~/.node-red/node_modules
-```
-
-```
-cd ~/.node-red/node_modules/node-red-contrib-pi4ioe5v && npm install
-```
-
-And because RAK13004 is powered by `PCA9685`, we also need to install `node-red-contrib-pca9685` node of NodeRED.
-
-Please install it with the following commands. 
-
-```
-cd ~/.node-red/node_modules && npm install node-red-contrib-pca9685
-```
-
-Restarted **node-red**, otherwise the nodes installed cannot be found on the page.
-
-## 3. Configure
-
-You can skip this step and run example directly if you do not want to known how to configure`node-red-contrib-pca9685`node.
-
-![image-20220322173758800](assets/image-20220322173758800.png)
-
-Click pencil picture to add a new PCA9685.
-
-![image-20220322173935901](assets/image-20220322173935901.png)
-
-The default i2c address is 64(0x40). We use default settings for RAK13004. Click `Add` to save.
-
-![image-20220322174150754](assets/image-20220322174150754.png)
-
-Then we set channel as `0`, because we connect servo with channel 0 of RAK13004. For Unit, please select `micoseconds`, because we use it to control servo. We use a `inject` node to input time to control pwm output to control rotation degree of servo.
-
-![image-20220322174755245](assets/image-20220322174755245.png)
-
-The `inject` number(micoseconds) and rotation degree of servo have a relation. Please read the document of manufacture of servo to find the relation.
-
-
-
-## 4. Run example
-
-The example is under `interface/rak13004/rak13004-servo` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the **rak13004-servo-flow.json** file or just copy and paste the .json file contents into your new flow.
+After all the preparations are finished, you can clone/copy the flow example. The example is under `interface/rak13004/rak13004-servo` directory in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the **rak13004-servo-flow.json** file or just copy and paste the `.json` file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
-![image-20220322171351707](assets/image-20220322171351707.png)
+![flow overview](assets/flow-overview.png)
 
 Hit the **Deploy** button on the top right to deploy the flow.
 
-The flow has two sections. The section above is to set `OE` pin 0 to enable pwm of RAK13004.  The example uses `wisblock2` slot of RAK7391. If you also use `wisblock1` slot to fix RAK13004, you must modify OE pin as picture below and hit `Done` to save.
+This is a simple flow that turn the servomotor to different angles. 
 
-![image-20220322171859539](assets/image-20220322171859539.png)
 
-Then, please set OE to 0 before controlling servo.
 
-![image-20220322171556150](assets/image-20220322171556150.png)
+* GPIO out node
 
-Now let us to use the section bellow of flow to control servo. As it is showed, we can use it to control rotation angle of servo.
+  The GPIO out node is for you to define the **OE** pin, and the pin varies if you have a different hardware setup. The GPIO out node read the payload sent from the two inject nodes, and then pull the **OE** pin high or low.
 
-We click `90°` then the servo rotates `90°` , and other degree can also work.
+  ![GPIO out node](assets/GPIO-out-node.png)
 
-![image-20220322172432070](assets/image-20220322172432070.png)
+  RAK13004 + RAK6421 slot 1 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 12;
+  RAK13004 + RAK6421 slot 2 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 22; RAK13004 + RAK7391's wisblock slot 1, set Device to gpiochip2, and pin to 6;
+  RAK13004 + RAK7391's wisblock slot 2, set Device to gpiochip2, and pin to 7.
 
-<img src="assets/image-20220322172540095.png" alt="image-20220322172540095" style="zoom:50%;" />
+* PCA9685 out node
 
+  Click the pencil icon to add a new PCA9685 device.
+
+  ![add new PCA9685](assets/add-new-PCA9685.png)
+
+
+
+The default i2c address is 64(0x40). We use default settings for RAK13004. Click `Add` to save.![set PCA9685 i2c address.png](assets/set-PCA9685-i2c-address.png)
+
+Then we set channel as `0`, because we connect servo with channel 0 of RAK13004. For Unit, please select `micoseconds`, because we use it to control servo. We use a `inject` node to input time to control pwm output to control rotation degree of servo.
+
+![set PCA9685 channel](assets/set-PCA9685-channel.png)
+
+* inject node
+
+  The `inject` number(micoseconds) and rotation degree of servo have a relation. Please read the document of manufacture of servo to find the relation.
+
+  ![inject node](assets/inject-nodes.png)
+
+## 4 Flow output
+
+Click `-90°` to turn the servo:
+
+![change-servo-angle](assets/change-servo-angle.png)
+
+as you can see the servor turns from 0° to -90°.
+
+![RAK13004 + RAK6421 + RaspberryPi turns to -90°](assets/RAK13004+RAK6421+RaspberryPi turns to -90 degree.png)
+
+## License
+
+This project is licensed under MIT license.
