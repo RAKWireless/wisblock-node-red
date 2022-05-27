@@ -44,7 +44,7 @@ Now we need to install some nodes for the example flow. Browse to http://{host-i
 
 Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
-![install node-red-contrib-libgpiod](../../../../../wisblock-node-red-dev-display-rak14003-example/wisblock-node-red-dev-display-rak14003-example/display/rak14003-example/assets/install-node.png)
+![install node-red-contrib-libgpiod](assets/install-node.png)
 
 ### 2.3 Hardware
 
