@@ -72,14 +72,19 @@ This is a simple flow that turn the servomotor to different angles.
 
 * GPIO out node
 
-  The GPIO out node is for you to define the **OE** pin, and the pin varies if you have a different hardware setup. The GPIO out node read the payload sent from the two inject nodes, and then pull the **OE** pin high or low.
+  The GPIO out node is for you to define the **OE** pin, and the pin varies if you have a different hardware setup. 
+  
+  RAK13004 + RAK6421 slot 1 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 12.
 
-  ![GPIO out node](assets/GPIO-out-node.png)
+  RAK13004 + RAK6421 slot 2 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 22.
 
-  RAK13004 + RAK6421 slot 1 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 12;
-  RAK13004 + RAK6421 slot 2 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 22; RAK13004 + RAK7391's wisblock slot 1, set Device to gpiochip2, and pin to 6;
+  RAK13004 + RAK7391's wisblock slot 1, set Device to gpiochip2, and pin to 6.
+  
   RAK13004 + RAK7391's wisblock slot 2, set Device to gpiochip2, and pin to 7.
 
+  The GPIO out node read the payload sent from the two inject nodes, and then pull the **OE** pin high or low.
+
+  ![GPIO out node](assets/GPIO-out-node.png)
 * PCA9685 out node
 
   Click the pencil icon to add a new PCA9685 device.
