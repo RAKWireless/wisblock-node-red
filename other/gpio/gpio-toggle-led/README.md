@@ -32,134 +32,36 @@ The node we used in this flow is **[node-red-contrib-libgpiod](https://flows.nod
 
 ## 2. Preparation
 
-### 2.1 Get gpiochip number and pin number 
+### 2.1 Access Setup
 
-Whether you are going to use Node-RED locally or inside container, we highly recommend you to install a package called **gpiod** on your host machine to help you identify the gpiochip number and interact with Linux GPIO character device if necessary. In your terminal, run the following command to install **gpiod**:
+Ensure you have access to GPIO device. In this example, since we are going to deploy a flow in Node-RED to toggle a LED connected to GPIO4 (board pin 7), you need to make sure you can detect the GPIO chip first whether you use Node-RED locally or inside container. 
 
-```
-sudo apt install gpiod
-```
+If you are only trying to control the native 40-pin header on Raspberry or RAK7391, you won't need to modify the `config.txt` file; however, if you need to control other gpiochips connected to the Raspberry Pi/RAK7391, for example, a built-in GPIO expander on RAK7391, please check [this example](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/other/libgpiod/libgpiod-blink) for instructions on how to modify the `config.txt` file and enable device tree overlay(s). 
 
-Then reboot your Raspberry Pi or the RAK7391 board. After reboot, we can execute `gpiodetect` to detect existing or new gpio chips.
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the gpio(/dev/gpiochip0 by default) on your host machine.
 
-```plaintext
-sudo gpiodetect
-```
+If your Node-RED is deployed inside a container, you need to mount `/dev/gpiochip0` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to GPIO devices.
 
-You should be able to see a list of detected gpio chips:
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-```
-rak@rakpios:~ $ gpiodetect
-gpiochip0 [pinctrl-bcm2835] (54 lines)
-gpiochip1 [raspberrypi-exp-gpio] (8 lines)
-```
+### 2.2 Install dependency & nodes in Node-RED
 
-Notice that `gpiochip0` is for the native 40-pin header. 
-
-In this example, we are going to deploy a flow in Node-RED to toggle a LED connected to GPIO4 (board pin 7), you can run `gpioinfo` to see the current status of this pin, you will find that it's defined as line 4, currently, it's set as Input:
-
-```
-rak@rakpios:~ $ gpioinfo
-gpiochip0 - 54 lines:
-	line   0:     "ID_SDA"       unused   input  active-high 
-	line   1:     "ID_SCL"       unused   input  active-high 
-	line   2:       "SDA1"       unused   input  active-high 
-	line   3:       "SCL1"       unused   input  active-high 
-	line   4:  "GPIO_GCLK"       unused   input  active-high 
-	line   5:      "GPIO5"       unused   input  active-high 
-	...
-```
-
-Now you know the gpiochip number and also the pin number, we are going to need both of them for the node configuration section when we deploy the node in Node-RED.
-
-### 2.2 Running Node-RED locally
-
-Make sure you can detect the GPIO chip first. If you are only trying to control the native 40-pin header on Raspberry or RAK7391, you won't need to modify the `config.txt` file, however, if you need to control other gpiochips connected to the Raspberry Pi/RAK7391, for example, a built-in GPIO expander on RAK7391, please check [this example](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/other/libgpiod/libgpiod-blink) for instructions on how to modify the `config.txt` file and enable device tree overlay(s). 
-
-Users need to install `libgpiod-dev`  first if they are running Node-RED locally:
+Before we install the nodes, please make sure `libgpiod-dev` has been installed, if not, please install it.
 
 ```plaintext
+sudo apt update
 sudo apt install libgpiod-dev
 ```
 
-After that you need to install the **node-red-contrib-libgpiod** node and import the example flow we provided. We will cover this in section 2.4.
+If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) on install dependency inside container.
 
-### 2.3 Running Node-RED in Docker 
+Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [node-red-contrib-pca9685](https://flows.nodered.org/node/node-red-contrib-pca9685).
 
-#### 2.3.1 Using Docker Command Line
+Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
-You can always running Node-RED inside a container. To run Node-RED in Docker and use the latest Node-RED official image, the easiest way is run the following command:
+![install node-red-contrib-libgpiod](assets/install-node.png)
 
-```plaintext
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --restart=unless-stopped --user node-red:997 --name NodeRed nodered/node-red
-```
-
-The `--device` can mount device to container, and `--name` can add an user with specified group. Before add node-red user to the local gpio group, you need to verify the group number via running command below on your host:
-
-```
-cat /etc/group | grep gpio | awk -F: '{print $3}'
-```
-
-On a Raspbian-based-image, the group id is usually defined as 997.
-
-Once the container is up, there is one more thing you need to do, and this step is critical. Since the offical Node-RED image doesn't have **libgpiod-dev** pre-installed, users have to install it manually inside the container, otherwise, users won'e be able to install the **node-red-contrib-libgpiod** node  :
-
-```
-apk add libgpiod-dev
-```
-
-Or, you can use the Node-RED image provided by RAKwireless, it comes with the **libgpiod-dev** package installed:
-
-```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --restart=unless-stopped --user node-red:997 --name NodeRed sheng2216/nodered-docker:1.1
-```
-
-#### 2.3.2 Using Docker Compose
-
-If you are going to use the Node-RED docker container, you can bring up the service by using the docker-compose.yml file provided below:
-
-```
-version: '3.7'
-
-services:
-
-  nodered:
-    image: sheng2216/nodered-docker:1.1
-    container_name: NodeRed
-    user: node-red
-    group_add:
-        - 997
-    restart: unless-stopped
-    devices:
-        - "/dev/gpiochip0:/dev/gpiochip0"
-    volumes:
-        - 'node-red-data:/data'
-    ports:
-        - "1880:1880/tcp"
-        
-volumes:
-  node-red-data:
-```
-
-If you want to use the latest official image from Node-RED, feel free to change the image defined in the docker-compose file. But don't forget to install **libgpiod-dev** once the container is up. Then you need to install the node **node-red-contrib-libgpiod**（check section 2.4）
-
-#### 2.3.3 Using Portainer
-
-If you have Portainer installed on your Raspberry Pi or RAK7391,  you can use the Portainer template provided by RAKwireless. In this case, you won't need to make any changes to the configurations, just deploy a Node-Red container using the template (shown below), 
-
-![Portainer webUI](assets/portainer-node-red.png)
-
-then you need to install the node **node-red-contrib-libgpiod**(check section 2.4).
-
-### 2.4 Install the Node in Node-RED
-
-After the previous software setup is completed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface. Then you need to install the node **node-red-contrib-libgpiod**.
-
-To install a new  node, go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
-
-![image-20220524154528958](assets/install-node.png)
-
-### 2.5 Hardware
+### 2.3 Hardware  
 
 For the hardware side, you need a Raspberry Pi (or RAK7391), LED, and some jumper wires. In this example, we will first connect a LED to Board pin 7 (GPIO 4), and then create a flow in node-red to toggle the led.  Please check the figure below for how to connect the LED:
 
@@ -201,6 +103,14 @@ This is a simple flow with one inject node to trigger the function node once a s
 
 
 
+## 4. Flow output
+
 Once the flow is correctly configured and deployed, you should see the LED connected to GPIO 4 is blinking at a frequency of 1 Hz, and also the output payloads in the debug window.
 
 ![debug window](assets/debug-window.png)
+
+
+
+## License
+
+This project is licensed under MIT license.

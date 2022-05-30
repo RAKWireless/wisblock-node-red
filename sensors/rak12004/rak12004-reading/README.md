@@ -12,13 +12,9 @@ This guide explains how to use the [WisBlock Sensor RAK12004](https://docs.rakwi
 
 The **RAK12004** is a gas sensor module, part of the RAKWireless WisBlock Sensor series. The RAK12004 has an electronic sensor used for sensing the concentration of gases in the air. The sensor used is the [MQ2](https://www.pololu.com/file/0J309/MQ2.pdf) from Zhengzhou Winsen Electronics, it contains a sensing material whose resistance changes when it comes in contact with the gas. MQ-2 gas sensor has a high sensitivity to LPG, Propane, and Hydrogen, also could be used for Methane and other combustible steam. For more information about RAK12004, refer to the [Datasheet](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK12004/Datasheet/).
 
-### 1.2 I2C protocol
-
-**I2C** (**Inter-Integrated Circuit**) is a synchronous, multi-controller/multi-target (controller/target), packet switched, single-ended, serial communication bus invented in 1982 by Philips Semiconductors. It is widely used for attaching lower-speed peripheral ICs to processors and microcontrollers in short-distance, intra-board communication. 
-
 In RAK12004, the concentrations of gas is measured using a voltage divider network present in the sensor. The output of the sensing element is connected to a 12-bit ADC (ADC121C021) which communicates through I2C to the application. The ADC121C021 supports the I2C serial bus and data transmission protocol, and it operates as a slave device on the I2C bus. For more information about ADC121C021, refer to the [datasheet](https://www.ti.com/lit/ds/symlink/adc121c021.pdf?ts=1649226964688&ref_url=https%253A%252F%252Fwww.google.com.hk%252F). 
 
-### 1.3 node-red-contrib-adc121c021 & node-red-contrib-libgpiod
+### 1.2 node-red-contrib-adc121c021 & node-red-contrib-libgpiod
 
 The node we used in this flow is **[node-red-contrib-adc121c021](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-adc121c021)**, as well as [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod). 
 
@@ -26,161 +22,44 @@ The `node-red-contrib-adc121c021` provides the very basic configuration for user
 
 The `node-red-contrib-libgpiod` node contains a set of input and output nodes for controlling General Purpose Input and Outputs (GPIOs) though libgpiod (ioctl). It is used to pull the EN pin that must be pulled high before ASC121C021 can read analog inputs.
 
-One of the most important things to notice when using `node-red-contrib-libgpiod` inside a container is to make sure you have access to the GPIO chip inside the container. We will cover more details about it in section 2.1. If you are interested in using this node locally (outside container), please also check the [node's introduction in Node-RED's library](https://flows.nodered.org/node/node-red-contrib-libgpiod) and also their [repo](https://github.com/s5z6/node-red-contrib-libgpiod). 
+One of the most important things to notice when using `node-red-contrib-libgpiod` inside a container is to make sure you have access to the GPIO chip inside the container. We will cover more details about it in this [documentation](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md). If you are interested in using this node locally (outside container), please also check the [node's introduction in Node-RED's library](https://flows.nodered.org/node/node-red-contrib-libgpiod) and also their [repo](https://github.com/s5z6/node-red-contrib-libgpiod). 
 
 
 
 ## 2 Preparation
 
-### 2.1 Get gpiochip number and pin number 
+### 2.1 Access Setup
 
-Whether you are going to use Node-RED locally or inside container, we highly recommend you to install a package called **gpiod** on your host machine to help you identify the gpiochip number and interact with Linux GPIO character device if necessary. In your terminal, run the following command to install **gpiod**:
+Ensure you have access to both I2C devices and GPIO when using RAK12004. In this example, we are going to deploy a flow in Node-RED to to measure alcohol gas PPM through the I2C interface. To make the measurement, we need to enable the ADC121C021 chip first. The Enable pin varies based on your hardware setup, when you connect the RAK12004 to the IO slot1 on RAK6421, the ENABLE pin is GPIO 12 (board pin 32). When using IO slot 2 on RAK6421 (check the hardware preparation section for pictures), the ENABLE pin is GPIO 22 (board pin 15). 
 
-```
-sudo apt install gpiod
-```
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) and gpio(/dev/gpiochip0 by default) on your host machine.
 
-Then reboot your Raspberry Pi or the RAK7391 board. After reboot, we can execute `gpiodetect` to detect existing or new gpio chips.
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` and `/dev/gpiochip0` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C and GPIO devices.
 
-```plaintext
-sudo gpiodetect
-```
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-You should be able to see a list of detected gpio chips:
+### 2.2 Install dependency & nodes in Node-RED
 
-```
-rak@rakpios:~ $ gpiodetect
-gpiochip0 [pinctrl-bcm2835] (54 lines)
-gpiochip1 [raspberrypi-exp-gpio] (8 lines)
-```
-
-Notice that `gpiochip0` is for the native 40-pin header. 
-
-In this example, we are going to deploy a flow in Node-RED to to measure alcohol gas PPM through the I2C interface. To make the measurement, we need to enable the ADC121C021 chip first. The Enable pin varies based on your hardware setup, when you connect the RAK12004 to the IO slot1 on RAK6421, the ENABLE pin is GPIO 12 (board pin 32). When using IO slot 2 on RAK6421 (check the hardware preparation section for pictures), the ENABLE pin is GPIO 22 (board pin 15). 
-
-You can run `gpioinfo` to check the status of GPIO 12 and GPIO 22 to see whether they are used or not.
-
-```
-rak@rakpios:~ $ gpioinfo
-gpiochip0 - 54 lines:
-	line   0:     "ID_SDA"       unused   input  active-high 
-	line   1:     "ID_SCL"       unused   input  active-high 
-	line   2:       "SDA1"       unused   input  active-high 
-	line   3:       "SCL1"       unused   input  active-high 
-	...
-	line  12:     "GPIO12"       unused   input  active-high
-	...
-	line  22:     "GPIO22"       unused   input  active-high 
-	...
-```
-
-Now you know the gpiochip number and also the pin number, we are going to need both of them for the node configuration section when we deploy the node in Node-RED.
-
-### 2.2 I2C Access setup
-
-Ensure you have access to both I2C devices and GPIO when using the sensor. The ADC121C021 chip on RAK12004 supports I2C protocol, if you are using Node-RED in the host machine directly (without using the docker container), you need to make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine. 
-
-If running Node-RED using docker, you need to mount `/dev/i2c-1` device to the Node-RED container using the docker command we provided below;  you also need to make sure you have access to the GPIO devices  inside the container. If you use the Portainer template provided by us, you don't need to change anything, as we have already mounted the device for you.
-
-### 2.3 Running Node-RED locally
-
-Make sure you can detect the GPIO chip first. Then, users need to install `libgpiod-dev`  if they are running Node-RED locally:
+Before we install the nodes, please make sure `libgpiod-dev` has been installed, if not, please install it.
 
 ```plaintext
+sudo apt update
 sudo apt install libgpiod-dev
 ```
 
-After that you need to install the **node-red-contrib-libgpiod** node and import the example flow we provided. We will cover this in section 2.5.
+If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) on install dependency inside container.
 
-### 2.4 Running Node-RED in Docker 
+Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [node-red-contrib-pca9685](https://flows.nodered.org/node/node-red-contrib-pca9685).
 
-#### 2.4.1 Using Docker Command Line
-
-You can always running Node-RED inside a container. To run Node-RED in Docker and use the latest Node-RED official image, the easiest way is run the following command:
-
-```plaintext
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 998 --name NodeRed nodered/node-red
-```
-
-The `--device` can mount device to container, and `--name` can add an user with specified group. Before add node-red user to the local gpio group, you need to verify the group number via running command below on your host:
-
-```
-cat /etc/group | grep gpio | awk -F: '{print $3}'
-cat /etc/group | grep i2c | awk -F: '{print $3}'
-```
-
-On a Raspbian-based-image, the group id of GPIO is usually defined as 997, and 998 for I2C.
-
-Once the container is up, there is one more thing you need to do, and this step is critical. Since the offical Node-RED image doesn't have **libgpiod-dev** pre-installed, users have to install it manually inside the container, otherwise, users won'e be able to install the **node-red-contrib-libgpiod** node  :
-
-```
-apk add libgpiod-dev
-```
-
-Or, you can use the Node-RED image provided by RAKwireless, it comes with the **libgpiod-dev** package installed:
-
-```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 998 --name NodeRed sheng2216/nodered-docker:1.1
-```
-
-#### 2.4.2 Using Docker Compose
-
-If you are going to use the Node-RED docker container, you can bring up the service by using the docker-compose.yml file provided below:
-
-```
-version: '3.7'
-
-services:
-
-  nodered:
-    image: sheng2216/nodered-docker:1.1
-    container_name: NodeRed
-    user: node-red
-    group_add:
-      - 997
-      - 998
-    restart: unless-stopped
-    devices:
-      - "/dev/gpiochip0:/dev/gpiochip0"
-      - "/dev/i2c-1:/dev/i2c-1"
-    volumes:
-      - 'node-red-data:/data'
-    ports:
-      - "1880:1880"
-
-volumes:
-  node-red-data:
-```
-
-To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
-
-If you want to use the latest official image from Node-RED, feel free to change the image defined in the docker-compose file. But don't forget to install **libgpiod-dev** once the container is up. Then you need to install the node **node-red-contrib-libgpiod**（check section 2.4）
-
-#### 2.4.3 Using Portainer
-
-If you have Portainer installed on your Raspberry Pi or RAK7391,  you can use the Portainer template provided by RAKwireless. In this case, you won't need to make any changes to the configurations, just deploy a Node-Red container using the template (shown below), 
-
-![image-20220304093748592](assets/portainer-node-red.png)
-
-then you need to install the node **node-red-contrib-libgpiod**(check section 2.4).
-
-### 2.5 Install Node in Node-RED
-
-After the previous software setup is completed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface. Then you need to install the node **node-red-contrib-libgpiod**.
-
-To install a new  node, go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
+Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
 ![install node-red-contrib-libgpiod](assets/install-node.png)
 
-#### 2.1.1 Docker compose
-
-Since PiGPIO daemon requires users to have root access, we recommend the user to use the network connection to link out of the Node-RED container to the PiGPIO daemon running on another container to get rid of the permission issues. So that your Node-RED container's default user is set to "node-red", and the container has PiGPIO daemon running on is running in the privileged mode. The example docker-compose is provided below:
-
-### 2.6 Hardware  
+### 2.3 Hardware  
 
 The device address of RAK12009 is configured to 0x55, and connected to i2c bus 1. 
 
-The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that exposes all the Wisbock high-density connector pins.  The RAK12009 can be mounted to the HAT, and the HAT goes to the 40-pin headers located on Raspberry Pi 4B/IO board/RAK7391. Based on your hardware selections, there are three ways to mount RAK12009, please check the following figured(use slot 2 on RAK6421, you can switch to use slot 1, make sure to change the Enable pin defined in the flow):
+The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that exposes all the Wisbock high-density connector pins.  The RAK12009 can be mounted to the HAT, and the HAT goes to the 40-pin headers located on Raspberry Pi 4B/IO board/RAK7391. Based on your hardware selections, there are three ways to mount RAK12009, please check the following figured(use slot 2 on RAK6421, you can switch to use slot 1, make sure to change the Enable pin defined in the flow, and also section 2.1):
 
 1. Raspberry Pi model B + RAK6421 WisBlock Hat +  RAK12004
 
@@ -196,45 +75,13 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 
 
-
-
-## 3 Flow configuration
-
-Whether you are using the Node-Red docker image provided by RAKwireless or the official latest image, or you host your Node-RED service locally, you need to install `node-red-contrib-adc121c021` before you deploy the flow. 
-
-### 3.1 Install nodes  
-
-### 3.1 Install node-red-contrib-adc121c021
-
-While the `node-red-contrib-adc121c021` hasn't been published, so you need to install it in another way. Please install `node-red-contrib-adc121c021` node with the following commands. If you are using docker for Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`,
-
-```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
-
-then copy `node-red-contrib-adc121c021` directory  to  the `node_modules` directory,
-
-```
-cp -rf node-red-nodes/node-red-contrib-adc121c021 ~/.node-red/node_modules
-```
-
-lastly, change to the `node-red-contrib-adc121c021` directory and install the node, 
-
-```
-cd ~/.node-red/node_modules/node-red-contrib-adc121c021 && npm install
-```
-
-**Tips:**  After the installation of  `node-red-contrib-adc121c021`  is finished, please restart your node-red service/container(s).  Otherwise, the node cannot be found/added to the new flow.
-
-### 3.2 Deploy the Example Flow 
+## 3 Flow Configuration
 
 After the installation of `node-red-contrib-adc121c021` is completed, you can clone/copy the flow example. The example is under `sensor/rak12004/rak12004-reading` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12004-reading.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
 <img src="assets/flow-overview.png" alt="flow overview"/>As we mentioned in section 2.5,  `node-red-contrib-libgpiod` node is used to pull the Enable pin that must be pulled high before ADC121C021 can read analog input.
-
-### 3.3 Nodes Configurations 
 
 * Inject nodes
 
@@ -375,7 +222,7 @@ After the import is done, the new flow should look like this:
 
   
 
-### 3.4 Flow output
+## 4 Flow output
 
 The output of the node is a payload that contains the PPM value, percentage readings, and the value of R0,
 

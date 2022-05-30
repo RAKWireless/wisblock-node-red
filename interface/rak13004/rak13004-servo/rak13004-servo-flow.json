@@ -28,7 +28,7 @@
         "topic": "",
         "payload": "2500",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 260,
         "wires": [
             [
@@ -57,7 +57,7 @@
         "topic": "",
         "payload": "1000",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 380,
         "wires": [
             [
@@ -86,27 +86,13 @@
         "topic": "",
         "payload": "500",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 420,
         "wires": [
             [
                 "9389f5bd56d48931"
             ]
         ]
-    },
-    {
-        "id": "9389f5bd56d48931",
-        "type": "PCA9685 out",
-        "z": "6b01780eaf90884f",
-        "name": "PWM output of channel 0 (Servo)",
-        "pca9685": "6ce45bce.cdff94",
-        "channel": "0",
-        "payload": "",
-        "unit": "microseconds",
-        "onStep": "0",
-        "x": 600,
-        "y": 340,
-        "wires": []
     },
     {
         "id": "bb9108436e813475",
@@ -129,7 +115,7 @@
         "topic": "",
         "payload": "2000",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 300,
         "wires": [
             [
@@ -158,7 +144,7 @@
         "topic": "",
         "payload": "1500",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 340,
         "wires": [
             [
@@ -167,19 +153,31 @@
         ]
     },
     {
-        "id": "24b7f55fbb141cac",
-        "type": "pi4ioe5v out",
+        "id": "bb38330de0ddfee0",
+        "type": "comment",
         "z": "6b01780eaf90884f",
-        "name": "OE pin",
-        "bus": "1",
-        "address": "0x20",
-        "pin": "23",
-        "x": 530,
-        "y": 140,
+        "name": "Tips: Please change the OE pin based on your hardware setup",
+        "info": "Tips: The OE pin varies on different harware setups.\n\nRAK13004 + RAK6421 slot 1 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 12;\n\nRAK13004 + RAK6421 slot 2 + Raspberry Pi 4B/RAK7391, set Device to gpiochip0, and pin to 22; \n\nRAK13004 + RAK7391's wisblock slot 1, set Device to gpiochip2, and pin to 6;\n\nRAK13004 + RAK7391's wisblock slot 2, set Device to gpiochip2, and pin to 7.",
+        "x": 240,
+        "y": 60,
         "wires": []
     },
     {
-        "id": "d259fd59dc85bd19",
+        "id": "9389f5bd56d48931",
+        "type": "PCA9685 out",
+        "z": "6b01780eaf90884f",
+        "name": "PWM output of channel 0 (Servo)",
+        "pca9685": "6ce45bce.cdff94",
+        "channel": "0",
+        "payload": "",
+        "unit": "microseconds",
+        "onStep": "0",
+        "x": 360,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "0a36b42b609e40d0",
         "type": "inject",
         "z": "6b01780eaf90884f",
         "name": "",
@@ -199,23 +197,56 @@
         "topic": "",
         "payload": "0",
         "payloadType": "num",
-        "x": 330,
+        "x": 90,
         "y": 140,
         "wires": [
             [
-                "24b7f55fbb141cac"
+                "5342c10265b1acc4"
             ]
         ]
     },
     {
-        "id": "bb38330de0ddfee0",
-        "type": "comment",
+        "id": "5342c10265b1acc4",
+        "type": "gpio-out",
         "z": "6b01780eaf90884f",
-        "name": "Tips: Before test RAK13004 PWM module, IO_7 or IO_6 of pi4ioe5v96224 IO expander\\n  on RAK7391 must be set to 0. If RAK13004 is fixed to Wisblock1 slot, IO_6 should be set to 0.\\n And if RAK13004 is fixed to Wisblock2 slot, IO_7 should be set to 0.",
-        "info": "",
-        "x": 460,
-        "y": 60,
-        "wires": []
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "12",
+        "x": 330,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c3f7b898140d100c",
+        "type": "inject",
+        "z": "6b01780eaf90884f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "5342c10265b1acc4"
+            ]
+        ]
     },
     {
         "id": "6ce45bce.cdff94",
