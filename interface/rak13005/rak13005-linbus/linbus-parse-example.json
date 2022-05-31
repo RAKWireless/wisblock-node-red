@@ -1,60 +1,114 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "d17c59f16b0a53d6",
         "type": "tab",
         "label": "rak13005-linbus-parse-example",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "b053b697a1a93552",
+        "id": "30ac4b9d888b0431",
+        "type": "gpio-out",
+        "z": "d17c59f16b0a53d6",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "12",
+        "x": 370,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39e8db3c66e855aa",
+        "type": "inject",
+        "z": "d17c59f16b0a53d6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "30ac4b9d888b0431"
+            ]
+        ]
+    },
+    {
+        "id": "58da286c8b107307",
+        "type": "comment",
+        "z": "d17c59f16b0a53d6",
+        "name": "Use IO slot 1 of RAK6421. If use IO slot 2, please select pin 22 of pi.",
+        "info": "",
+        "x": 340,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "8e9a3bc428b5f222",
         "type": "linbus-parse",
-        "z": "f6f2187d.f17ca8",
+        "z": "d17c59f16b0a53d6",
         "name": "",
         "ID": "1",
         "length": 8,
-        "x": 410,
-        "y": 200,
+        "x": 370,
+        "y": 180,
         "wires": [
             [
-                "110b73f4d93efa50"
+                "c6061f74e1e5c2df"
             ]
         ]
     },
     {
-        "id": "73a255f48b0763df",
+        "id": "a6e5c95154cd0cdd",
         "type": "serial in",
-        "z": "f6f2187d.f17ca8",
+        "z": "d17c59f16b0a53d6",
         "name": "",
         "serial": "8d95e25c93124592",
-        "x": 210,
-        "y": 200,
+        "x": 160,
+        "y": 180,
         "wires": [
             [
-                "b053b697a1a93552"
+                "8e9a3bc428b5f222"
             ]
         ]
     },
     {
-        "id": "110b73f4d93efa50",
+        "id": "c6061f74e1e5c2df",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "d17c59f16b0a53d6",
         "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 610,
-        "y": 200,
+        "x": 570,
+        "y": 180,
         "wires": []
     },
     {
         "id": "8d95e25c93124592",
         "type": "serial-port",
-        "serialport": "/dev/ttyUSB0",
+        "serialport": "/dev/ttyS0",
         "serialbaud": "9600",
         "databits": "8",
         "parity": "none",

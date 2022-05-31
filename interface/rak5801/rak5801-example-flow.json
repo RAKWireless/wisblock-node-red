@@ -7,35 +7,6 @@
         "info": ""
     },
     {
-        "id": "98e86b77ef2b58e2",
-        "type": "inject",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 100,
-        "y": 320,
-        "wires": [
-            [
-                "d270fe599e9073f2"
-            ]
-        ]
-    },
-    {
         "id": "d270fe599e9073f2",
         "type": "ads1x15_i2c",
         "z": "f6f2187d.f17ca8",
@@ -56,8 +27,8 @@
         "samplesPerSecond0": "920",
         "samplesPerSecond1": "128",
         "progGainAmp": "4096",
-        "x": 270,
-        "y": 380,
+        "x": 370,
+        "y": 180,
         "wires": [
             [
                 "e2cd459dad3639a0"
@@ -77,8 +48,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 650,
-        "y": 380,
+        "x": 770,
+        "y": 180,
         "wires": []
     },
     {
@@ -86,18 +57,247 @@
         "type": "function",
         "z": "f6f2187d.f17ca8",
         "name": "voltage2current",
-        "func": "function voltage2current(volt)\n{\n    current = volt / 149.9 * 1000;\n    return current.toFixed(2);\n}\n\nvar volt;\nvar current;\nvar newMsg = {payload:{current:{}}}\nvar channel_1 = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_1\nvar channel_3 = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_3\n\nif(typeof(channel_1) =='undefined' && typeof(channel_3) =='undefined') \n{\n    newMsg[\"payload\"] = \"Error:Wrong Single Ended Channel Selected\"\n   \n}\nif(typeof(channel_1) !='undefined')\n{\n    volt = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_1.Volts\n    current = voltage2current(volt)\n    newMsg[\"payload\"][\"current\"][\"wisblock_slot1\"] = current + \" mA\"\n}\n\nif(typeof(channel_3) !='undefined')\n{\n    volt = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_3.Volts\n    current = voltage2current(volt)\n    newMsg[\"payload\"][\"current\"][\"wisblock_slot2\"] = current + \" mA\"\n}\n\nreturn newMsg;",
+        "func": "function voltage2current(volt)\n{\n    current = volt / 149.9 * 1000;\n    return current.toFixed(2);\n}\n\nvar _address = \"0x48\";\nvar volt;\nvar current;\nvar newMsg = {payload:{current:{}}}\nvar channel = msg.payload[\"/dev/i2c-1\"].ads1115[_address].singleEnded.channel_1\n\nif(typeof(channel) =='undefined') \n{\n    newMsg[\"payload\"] = \"Error:Wrong Single Ended Channel Selected\"\n   \n}\n\nvolt = channel.Volts\ncurrent = voltage2current(volt)\nnewMsg[\"payload\"][\"current\"][\"wisblock_slot2\"] = current + \" mA\"\n\n\nreturn newMsg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 320,
+        "x": 580,
+        "y": 180,
         "wires": [
             [
                 "3ad7074e7adcd9aa"
             ]
         ]
+    },
+    {
+        "id": "46274b7f6147d829",
+        "type": "gpio-out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "17",
+        "x": 370,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a95dbbfa83ca6062",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "46274b7f6147d829"
+            ]
+        ]
+    },
+    {
+        "id": "a3659fac1e8f93e5",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "d270fe599e9073f2"
+            ]
+        ]
+    },
+    {
+        "id": "743f5514b1d34e78",
+        "type": "ads1x15_i2c",
+        "z": "f6f2187d.f17ca8",
+        "property": "payload",
+        "name": "",
+        "i2c_device_number": 1,
+        "chip": "0x01",
+        "i2c_address": "0x48",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": false,
+        "singleEndedChannel1": false,
+        "singleEndedChannel2": false,
+        "singleEndedChannel3": true,
+        "differentialChannel0_1": false,
+        "differentialChannel0_3": false,
+        "differentialChannel1_3": false,
+        "differentialChannel2_3": false,
+        "samplesPerSecond0": "920",
+        "samplesPerSecond1": "128",
+        "progGainAmp": "4096",
+        "x": 370,
+        "y": 420,
+        "wires": [
+            [
+                "b3f95916acc8b731"
+            ]
+        ]
+    },
+    {
+        "id": "70c8282115b70c68",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b3f95916acc8b731",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "voltage2current",
+        "func": "function voltage2current(volt)\n{\n    current = volt / 149.9 * 1000;\n    return current.toFixed(2);\n}\n\nvar _address = \"0x48\";\nvar volt;\nvar current;\nvar newMsg = {payload:{current:{}}}\nvar channel = msg.payload[\"/dev/i2c-1\"].ads1115[_address].singleEnded.channel_3\n\nif(typeof(channel) =='undefined') \n{\n    newMsg[\"payload\"] = \"Error:Wrong Single Ended Channel Selected\"\n   \n}\n\nvolt = channel.Volts\ncurrent = voltage2current(volt)\nnewMsg[\"payload\"][\"current\"][\"wisblock_slot2\"] = current + \" mA\"\n\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 420,
+        "wires": [
+            [
+                "70c8282115b70c68"
+            ]
+        ]
+    },
+    {
+        "id": "bfa0535184af7bf8",
+        "type": "gpio-out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "25",
+        "x": 370,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "385c970557377a09",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "bfa0535184af7bf8"
+            ]
+        ]
+    },
+    {
+        "id": "37c5297b95674a83",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 420,
+        "wires": [
+            [
+                "743f5514b1d34e78"
+            ]
+        ]
+    },
+    {
+        "id": "180bda5b136f4e17",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "Use IO slot 1 of RAK6421",
+        "info": "",
+        "x": 210,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ef05ad2219b29a93",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "Use IO slot 2 of RAK6421",
+        "info": "",
+        "x": 210,
+        "y": 300,
+        "wires": []
     }
 ]

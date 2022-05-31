@@ -1,0 +1,217 @@
+[
+    {
+        "id": "bbf2b426337847b4",
+        "type": "tab",
+        "label": "rak5811-example",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "173d69f58316bbc8",
+        "type": "inject",
+        "z": "bbf2b426337847b4",
+        "name": "trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "e85c27b103047453"
+            ]
+        ]
+    },
+    {
+        "id": "e85c27b103047453",
+        "type": "ads1x15_i2c",
+        "z": "bbf2b426337847b4",
+        "property": "payload",
+        "name": "",
+        "i2c_device_number": 1,
+        "chip": "0x01",
+        "i2c_address": "0x48",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": false,
+        "singleEndedChannel1": true,
+        "singleEndedChannel2": false,
+        "singleEndedChannel3": false,
+        "differentialChannel0_1": true,
+        "differentialChannel0_3": false,
+        "differentialChannel1_3": false,
+        "differentialChannel2_3": true,
+        "samplesPerSecond0": "920",
+        "samplesPerSecond1": "128",
+        "progGainAmp": "4096",
+        "x": 270,
+        "y": 100,
+        "wires": [
+            [
+                "a8e6a858ec07da64"
+            ]
+        ]
+    },
+    {
+        "id": "86706122091f56a1",
+        "type": "debug",
+        "z": "bbf2b426337847b4",
+        "name": "read analog voltage input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a8e6a858ec07da64",
+        "type": "function",
+        "z": "bbf2b426337847b4",
+        "name": "convert raw data",
+        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_1.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 100,
+        "wires": [
+            [
+                "86706122091f56a1"
+            ]
+        ]
+    },
+    {
+        "id": "7aad904367110052",
+        "type": "comment",
+        "z": "bbf2b426337847b4",
+        "name": "RAK7391 IO slot 1",
+        "info": "This example shows how to get the correct analog voltage input measurement from channel 1. To read other channel, please change the way you connect RAK5811. For more information, please check the README file.",
+        "x": 150,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c5bcdb9823808407",
+        "type": "inject",
+        "z": "bbf2b426337847b4",
+        "name": "trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "ba780481f56df9ab"
+            ]
+        ]
+    },
+    {
+        "id": "ba780481f56df9ab",
+        "type": "ads1x15_i2c",
+        "z": "bbf2b426337847b4",
+        "property": "payload",
+        "name": "",
+        "i2c_device_number": 1,
+        "chip": "0x01",
+        "i2c_address": "0x48",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": false,
+        "singleEndedChannel1": false,
+        "singleEndedChannel2": false,
+        "singleEndedChannel3": true,
+        "differentialChannel0_1": true,
+        "differentialChannel0_3": false,
+        "differentialChannel1_3": false,
+        "differentialChannel2_3": true,
+        "samplesPerSecond0": "920",
+        "samplesPerSecond1": "128",
+        "progGainAmp": "4096",
+        "x": 270,
+        "y": 240,
+        "wires": [
+            [
+                "ed49de7478385c3c"
+            ]
+        ]
+    },
+    {
+        "id": "2a2150eeb9fc6f7e",
+        "type": "debug",
+        "z": "bbf2b426337847b4",
+        "name": "read analog voltage input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ed49de7478385c3c",
+        "type": "function",
+        "z": "bbf2b426337847b4",
+        "name": "convert raw data",
+        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_3.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "2a2150eeb9fc6f7e"
+            ]
+        ]
+    },
+    {
+        "id": "4b6ce24eb3615e99",
+        "type": "comment",
+        "z": "bbf2b426337847b4",
+        "name": "RAK7391 IO slot 2",
+        "info": "This example shows how to get the correct analog voltage input measurement from channel 3. To read other channel, please change the way you connect RAK5811. For more information, please check the README file.",
+        "x": 150,
+        "y": 180,
+        "wires": []
+    }
+]

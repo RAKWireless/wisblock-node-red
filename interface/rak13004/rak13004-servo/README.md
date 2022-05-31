@@ -29,7 +29,17 @@ If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` 
 
 For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](path-to-the-common-README), we provide all the information you need to know about using containerized Node-RED. 
 
-### 2.2 Install dependency & nodes in Node-RED
+### 2.2 Hardware
+
+You will need a servomotor, a Raspberry Pi (or RAK7391), and also the Pi-HAT RAK6421, as well as a couple of jumper wires. 
+
+The connection diagram is as follows:
+
+![RAK13004 + RAK6421 + RaspberryPi](assets/RAK13004+RAK6421+RaspberryPi.png)
+
+The red wire (power) of the servomotor goes to either one of the Vcc pin on RAK13004; the brown (ground) wire goes to either of the GND pin; while the orange (signal) wire goes to any one of the channel pin you prefer. In the above figure, we connected the servomotor to channel 0.
+
+### 2.3 Install dependency & nodes in Node-RED
 
 Before we install the nodes, please make sure `libgpiod-dev` has been installed, if not, please install it.
 
@@ -45,16 +55,6 @@ Now we need to install some nodes for the example flow. Browse to http://{host-i
 Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
 ![install node-red-contrib-libgpiod](assets/install-node.png)
-
-### 2.3 Hardware
-
-You will need a servomotor, a Raspberry Pi (or RAK7391), and also the Pi-HAT RAK6421, as well as a couple of jumper wires. 
-
-The connection diagram is as follows:
-
-![RAK13004 + RAK6421 + RaspberryPi](assets/RAK13004+RAK6421+RaspberryPi.png)
-
-The red wire (power) of the servomotor goes to either one of the Vcc pin on RAK13004; the brown (ground) wire goes to either of the GND pin; while the orange (signal) wire goes to any one of the channel pin you prefer. In the above figure, we connected the servomotor to channel 0.
 
 ## 3 Flow configuration
 
@@ -115,6 +115,6 @@ as you can see the servor turns from 0° to -90°.
 
 ![RAK13004 + RAK6421 + RaspberryPi turns to -90°](assets/RAK13004+RAK6421+RaspberryPi turns to -90 degree.png)
 
-## License
+## 5. License
 
 This project is licensed under MIT license.

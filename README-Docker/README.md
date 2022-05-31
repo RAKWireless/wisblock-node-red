@@ -1,3 +1,5 @@
+
+
 # Getting Started with Running Node-RED under Docker  
 
 [TOC]
@@ -123,8 +125,6 @@ If you want to use the latest official image from Node-RED, feel free to change 
 
 In some applications, the sensor/modules we used supports I2C protocol, thus we need to make sure we have access to I2C devices outside containers, to be more specific, you need to make sure the Node-RED user inside container has access to the i2c bus (/dev/i2c-1 by default) on your host machine. 
 
-If you are using Node-RED locally, you can enable I2C either by using **raspi-config** or just change `/boot/config.txt`.
-
 If you are running Node-RED using docker, you need to mount `/dev/i2c-1` device to the Node-RED container using the docker command we provided below;  If you use the Portainer template provided by us, you don't need to change anything, as we have already mounted the device for you.
 
 #### 3.1. Using Docker Command Line
@@ -182,27 +182,123 @@ To bring up the service, save the above file into a file called **docker-compose
 
 If you want to use the latest official image from Node-RED, feel free to change the image defined in the docker-compose file to the offical one: `nodered/node-red`. 
 
-#### 
 
-## 4. Portainer
+
+## 4. Serial port
+
+In some applications, the sensor/modules we used supports serial port protocol , thus we need to make sure we have access to Serial port devices outside containers, to be more specific, you need to make sure the Node-RED user inside container has access to serial port on your host machine. 
+
+#### 4.1. Using Docker Command Line
+
+For RAK7391, to run in Docker in its simplest form just run:
+
+```plaintext
+docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 --user node-red:dialout nodered/node-red
+```
+
+For raspberry pi 4B, to run in Docker in its simplest form just run:
+
+```
+docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyS0:/dev/ttyS0 --user node-red:dialout nodered/node-red
+```
+
+In the command above, the `--device` can mount serial device to container, and `--name` can add an user with specified group.
+
+#### 4.2. Using Docker Compose
+
+If you are going to use the Node-RED docker container, you can bring up the service by using the docker-compose.yml file.
+
+For RAK7391:
+
+```
+version: "3.9"
+
+services:
+
+  nodered:
+    image: nodered/node-red
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - dialout
+    restart: unless-stopped
+    volumes:
+        - 'node_red_data:/data'
+    ports:
+        - "1880:1880/tcp"
+    devices:
+        - "/dev/ttyUSB0:/dev/ttyUSB0"
+        - "/dev/ttyUSB1:/dev/ttyUSB1"
+
+volumes:
+  node_red_data:
+
+```
+
+For Raspberry pi 4B:
+
+```
+version: "3.9"
+
+services:
+
+  nodered:
+    image: nodered/node-red
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - dialout
+    restart: unless-stopped
+    volumes:
+        - 'node_red_data:/data'
+    ports:
+        - "1880:1880/tcp"
+    devices:
+        - "/dev/ttyUSB0:/dev/ttyS0"
+
+volumes:
+  node_red_data:
+```
+
+To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
+
+If you want to use the latest official image from Node-RED, feel free to change the image defined in the docker-compose file to the offical one: `nodered/node-red`.
+
+
+
+## 5. Portainer
 
 Portainer is a self-service container service delivery platform. If you have Portainer installed on your Raspberry Pi or RAK7391,  you can use the [Portainer template](link-to-the-portainer-template) provided by RAKwireless. In this case, you won't need to make any changes to the configurations, just deploy a Node-Red container using the template (shown below):
 
 ![image-20220304093748592](assets/portainer-node-red.png)
 
-## 5. All-in-One
+
+
+## 6. All-in-One
 
 #### 5.1. Using Docker Command Line
 
-When you need access to multiple interfaces, for example, i2c and GPIO at the same time, you can use the following `docker-run` command to use the official Node-RED image:
+When you need access to multiple interfaces, for example, i2c and GPIO at the same time, you can use the following `docker-run` command to use the official Node-RED image.
+
+For RAK7391:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red 
+docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1 --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red 
 ```
+
+For raspberry pi 4B:
+
+```
+docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1  --device /dev/ttyS0:/dev/ttyS0 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red
+```
+
+ 
 
 #### 5.2. Using Docker Compose
 
- You can also use the docker-compose file provided below:
+ You can also use the docker-compose file.
+
+For RAK7391:
 
 ```
 version: '3.7'
@@ -220,6 +316,8 @@ services:
     devices:
       - "/dev/gpiochip0:/dev/gpiochip0"
       - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+      - "/dev/ttyUSB1:/dev/ttyUSB1"
     volumes:
       - 'node-red-data:/data'
     ports:
@@ -229,6 +327,36 @@ volumes:
   node-red-data:
 ```
 
-## License
+For raspberry pi 4B:
+
+```
+version: '3.7'
+
+services:
+
+  nodered:
+    image: sheng2216/nodered-docker:1.1
+    container_name: NodeRed
+    user: node-red
+    group_add:
+      - 997
+      - 998
+    restart: unless-stopped
+    devices:
+      - "/dev/gpiochip0:/dev/gpiochip0"
+      - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/ttyS0:/dev/ttyS0"
+    volumes:
+      - 'node-red-data:/data'
+    ports:
+      - "1880:1880"
+
+volumes:
+  node-red-data:
+```
+
+
+
+## 7. License
 
 This project is licensed under MIT license.

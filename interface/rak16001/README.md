@@ -1,39 +1,59 @@
-# Extend RAK16001 in RAK7391 board and test it with NodeRed
+# Extend RAK16001 and test it with NodeRed
 
 [TOC]
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use the node **node-red-contrib-ads7830** to read 8 channels of [rak16001](https://store.rakwireless.com/products/rak16001-wisblock-adc-module) every 5 seconds with single end mode. ADS7830 use `i2c-1` of RAK7391 board to add 8 single analog inputs or 4 differential analog input. 
+This guide explains how to to read 8 channels of [rak16001](https://store.rakwireless.com/products/rak16001-wisblock-adc-module) every 5 seconds in single end mode with pi-hat rak6421. 
 
-### 1.1 Requirements
+### 1.1. RAK16001 
 
-If you use docker to run Node-RED,  you need to ensure that the user has I2C operation permission.
+RAK16001 is a WisBlock ADC expansion module based on Texas Instruments ADS7830 which adds 8 additional analog input channels to the WisBlock system.
+
+![image-20220531144417661](assets/image-20220531144417661.png)
+
+### 1.2. RAK6421
+
+RAK6421 is a pi-hat for [Wisblock modules](https://docs.rakwireless.com/Product-Categories/WisBlock/). It has **two IO slots** and **four sensor slots**.
+
+<img src="assets/image-20220531142926706.png" alt="image-20220531142926706" style="zoom:50%;" />
+
+
 
 
 
 ## 2. Preparation
 
-### 2.1. Hardware
+### 2.1. Access Setup
 
-We should attach the rak16001 to the wisblock expansion slot of rak7391 as shown below.
+In this example, we are going to deploy a flow in Node-RED to measure temperature and humidity. To make the measurements, ensure you have access to I2C devices. 
 
-<img src="assets/image-20220309105625923.png" alt="image-20220309105625923" style="zoom:50%;" />
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine. You can enable I2C either by using **raspi-config** or just change `/boot/config.txt`.
 
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-Then we connect rak16001 with a DC power supply as follows. A0 of rak16001 connect channel 1 of power suply device and A7 connects channel 2.
+### 2.2. Hardware
+
+There are two method to use RAK16001:
+
+- **Raspberry Pi model 4B + RAK6421 WisBlock Hat +  RAK16001**
+
+<img src="assets/image-20220531151018215.png" alt="image-20220531151018215" style="zoom:50%;" />
+
+- **RAK7391 + Raspberry Pi CM4 +  RAK16001**
 
 <img src="assets/image-20220309111511851.png" alt="image-20220309111511851" style="zoom: 50%;" />
 
 
 
-### 2.2. Software
+### 2.3. Software
 
 Please install `node-red-contrib-ads7830` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
 
 ```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
+git clone https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
 ```
 
 ```
@@ -46,39 +66,9 @@ cd ~/.node-red/node_modules/node-red-contrib-ads7830 && npm install
 
 **Tips:**  After `node-red-contrib-ads7830`  installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
 
-## 3. Configure
+## 3. Run example
 
-To get a voltage or difference of voltage from a ADS7830  analog to digital converter just select the correct setting for your device and trigger the node.
-
-<img src="assets/image-20220309092410807.png" alt="image-20220309092410807" style="zoom:80%;" />
-
-- **Name**
-
-  Define the msg name if you wish to change the name displayed on the node.
-
-- **/dev/i2c-?**
-
-  Default I2C Bus is 1.  `1` is for `'/dev/i2c-1'`.
-
-- **i2c_Address**
-
-  The Address by default is set to `0x4A`. You can setup the ADS7830 with one of four addresses, 0x48, 0x49, 0x4a, 0x4b. Please see ads7830 documentation for more information.
-
-- **Inputs**
-
-  Inputs may be used for Single-ended measurements (like A0-GND) or Differential measurements (like A0-A1). Single-ended measurements measure voltages relative to a shared reference point which is almost always the main units ground. Differential measurements are “floating”, meaning that it has no reference to ground. The measurement is taken as the voltage difference between the two wires. Example: The voltage of a battery can be taken by connecting A0 to one terminal and A1 to the othe with Common-ground.
-
-- **Internal Reference**
-
-  Open or close internal Reference in chip.
-
-- **A/D Converter**
-
-  Open or close A/D Converter in chip.
-
-## 4. Run example
-
-After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `interface/rak16001` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak16001-read.json** file or just copy and paste the .json file contents into your new flow.
+Import the [rak16001-read.json](./rak16001-read.json) file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
@@ -91,3 +81,9 @@ This is a simple flow  contains three nodes, where inject node trigger input eve
 The result  is shown as below.
 
 ![image-20220309112111572](assets/image-20220309112111572.png)
+
+
+
+## 4. License
+
+This project is licensed under MIT license.

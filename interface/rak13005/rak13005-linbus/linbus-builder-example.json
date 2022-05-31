@@ -1,39 +1,39 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "69ab35d4c8e6f9fe",
         "type": "tab",
         "label": "rak13005-linbus-builder-example",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "04fdb23d6f4f9336",
+        "id": "f91fc174dd097dae",
         "type": "linbus-builder",
-        "z": "f6f2187d.f17ca8",
+        "z": "69ab35d4c8e6f9fe",
         "name": "",
         "ID": "1",
-        "x": 330,
-        "y": 300,
+        "x": 360,
+        "y": 180,
         "wires": [
             [
-                "d2b2dbda8ca9f9ac"
+                "dac524f0e078da4d"
             ]
         ]
     },
     {
-        "id": "d2b2dbda8ca9f9ac",
+        "id": "dac524f0e078da4d",
         "type": "serial out",
-        "z": "f6f2187d.f17ca8",
+        "z": "69ab35d4c8e6f9fe",
         "name": "",
         "serial": "8d95e25c93124592",
         "x": 550,
-        "y": 300,
+        "y": 180,
         "wires": []
     },
     {
-        "id": "23ddcb1bc1c99bf6",
+        "id": "ec1d93049da0a91b",
         "type": "inject",
-        "z": "f6f2187d.f17ca8",
+        "z": "69ab35d4c8e6f9fe",
         "name": "",
         "props": [
             {
@@ -51,18 +51,71 @@
         "topic": "",
         "payload": "[0,1,2,3,255,5,6,100]",
         "payloadType": "bin",
-        "x": 150,
-        "y": 300,
+        "x": 180,
+        "y": 180,
         "wires": [
             [
-                "04fdb23d6f4f9336"
+                "f91fc174dd097dae"
             ]
         ]
     },
     {
+        "id": "549198754e459e6a",
+        "type": "gpio-out",
+        "z": "69ab35d4c8e6f9fe",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "12",
+        "x": 350,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "30255577045fd21b",
+        "type": "inject",
+        "z": "69ab35d4c8e6f9fe",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "549198754e459e6a"
+            ]
+        ]
+    },
+    {
+        "id": "165f086aa792b753",
+        "type": "comment",
+        "z": "69ab35d4c8e6f9fe",
+        "name": "Use IO slot 1 of RAK6421. I f use IO slot 2, please select pin 22.",
+        "info": "",
+        "x": 330,
+        "y": 60,
+        "wires": []
+    },
+    {
         "id": "8d95e25c93124592",
         "type": "serial-port",
-        "serialport": "/dev/ttyUSB0",
+        "serialport": "/dev/ttyS0",
         "serialbaud": "9600",
         "databits": "8",
         "parity": "none",

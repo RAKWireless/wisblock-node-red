@@ -8,8 +8,6 @@ The RAK12015 is a high precision vibration sensor module that can detect micro s
 
 In this example, we use it to connect  with RAK7391, and convert the analog to digital value with ads1115 on RAK7391.
 
-
-
 ## 2. Preparation
 
 ### 2.1. Hardware
@@ -56,7 +54,7 @@ At first , we should learn how to configure ads1115.
 
 ## 4. Run example
 
-You can clone /copy the flow example. The example is under `sensors/rak12015/rak12015-tampering-detector` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12015-tampering-detector.json** file or just copy and paste the .json file contents into your new flow.
+You can clone /copy the flow example. The example is . Then you can import the  **rak12015-tampering-detector.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 

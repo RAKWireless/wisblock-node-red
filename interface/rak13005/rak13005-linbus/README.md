@@ -1,10 +1,10 @@
-# LinBUS communication using WisBlock LIN MODULE RAK13005 on RAK7391
+# LinBUS communication using WisBlock LIN MODULE RAK13005
 
 [TOC]
 
 ## 1.Introduction
 
-This guide explains how to use the [RAK13005](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK13005/Overview/) in combination with RAK7391 WisGate Developer Connect to interface a linBUS device using node-red.
+This guide explains how to use the [RAK13005](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK13005/Overview/)  with node-red.
 
 ### 1.1 linBUS protocol
 
@@ -14,42 +14,57 @@ This guide explains how to use the [RAK13005](https://docs.rakwireless.com/Produ
 
 The RAK13005 is a **Local Interconnect Network** (LIN) transceiver module, used in automatic technologies that can be mounted on the IO slot of the WisBlock Base board. It is designed for in-vehicle networks using data transmission rates from 2.4 kBaud to 20 kBaud, and it uses the TLE7259-3 chip from Infineon.
 
-## 2.Hardware
-
-### 2.1. Harderware required
-
-In this example we will establish a linBus communication between WisBlock Starter Kit and RAK7391 WisGate Developer Connect with two RAK13005 modules, so we need: 
-
-- RAK7391 WisGate Developer Connect
-
-- WisBlock Starter Kit (WisBlock Base RAK5005-O + WisBlock Core RAK4631)
-
-<img src="assets/wisblock_starter_kit.png" alt="WisBlock Starter Kit" style="zoom:67%;" />
-
-- RAK13005 
-
 <img src="assets/rak13005.png" alt="rak13005" style="zoom:67%;" />
 
-### 2.2. Other hardware
+## 2. Preparation
 
-We will need a couple of cables to connect both RAK13005 modules and an external `5-27v` power supply  to RAK13005 modules.
+### 2.1. Access Setup
 
-### 2.3. Connection diagram
+In this example, we are going to deploy a flow in Node-RED to communication with LINBUS protocol. To make the measurements, ensure you have access to serial port devices. 
 
-<img src="assets/setup.png" alt="setup" style="zoom:67%;" />
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the serial port device on your host machine.
 
-## 3. Software
+For raspberry pi 4B,  we should enable `ttyS0` before with `sudo raspi-config`.  Then, select `Interface Options`  and  `Serial Port ` to disable serial login shell and enable serial interface.
 
-In this example, we use `node-red-contrib-linbus` module to cerate node-red flows. there are two nodes in this module,  so we have two flows:
+<img src="assets/image-20220531104214191.png" alt="image-20220531104214191" style="zoom:50%;" />
 
--  [linbus-parse-flow](linbus-parse-example.json) use `linbus-parse` node to receive linbus data from a serial node and and output a message upon valid LinBUS message reception.
-- [linbus-builder-flow](linbus-builder-example.json) use `linbus-builder` node to create a valid linbus frame from a frame type and a byte buffer payload, the output will be fed to a serial node.
+![image-20220429120826702](assets/image-20220429120826702.png)
 
-before you import t and deploy them , you still need some preparation.
+If your Node-RED is deployed inside a container, you need to mount serial port to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to serial port  devices.
 
-### 3.1. Required modules
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-#### 3.1.1.node-red-contrib-linbus
+### 2.2. Hardware
+
+In this example we will establish a linBus communication between two RAK13005 LINbus modules.  
+
+- **WisBlock Starter Kit (WisBlock Base RAK5005-O + WisBlock Core RAK4631) + RAK13005**
+
+​	we use WisBlock Starter Kit (WisBlock Base RAK5005-O + WisBlock Core RAK4631) and RAK13005 as an accompanying device.
+
+![image-20220531154900716](assets/image-20220531154900716.png)
+
+
+
+- **The other RAK13005 LINbus module**
+
+  - Connect the other RAK13005 LINbus module with RAK6421 pi-hat and Raspiberry Pi 4B.
+
+    <img src="assets/image-20220531161216827.png" alt="image-20220531161216827" style="zoom:50%;" />
+
+- **Power supply for RAK13005 **
+
+​	we also need a couple of cables to connect both RAK13005 modules and an external `5-27v` power supply  to RAK13005 modules.
+
+**Connection diagram**
+
+Connect Wisblock starter kit with RAK4621 and RPi 4B.
+
+<img src="assets/image-20220531162136463.png" alt="image-20220531162136463" style="zoom:50%;" />
+
+### 2.3. Software
+
+#### 2.3.1. node-red-contrib-linbus
 
 Install the `node-red-contrib-linbus` moulde from our node-red-nodes repository , 
 
@@ -69,7 +84,7 @@ then go to the `node-red-contrib-linbus` folder  and run the installation comman
 cd ~/.node-red/node_modules/node-red-contrib-linbus && npm install
 ```
 
-#### 3.1.2.node-red-node-serialport
+#### 2.3.2. node-red-node-serialport
 
 In our flows, `node-red-contrib-linbus`  is used in combination with a serial port node, so we need to install`node-red-node-serialport` , run the following command in the root directory of your node-red install
 
@@ -79,35 +94,12 @@ npm install node-red-node-serialport@0.15.0
 
 **Note:** the latest version of node-red-node-serialport is `1.0.1`, but it has a serious bugs in a node-red container, so we use old version `0.15.0`.
 
-### 3.2 Access Setup
+## 3. Flow configuration
 
-In our flows, linBUS frames are transmitted through a serial node so the node-red user must have access to the corresponding serial ports. serial ports are `/dev/ttyUSB0` and `/dev/ttyUSB1` on RAK7391, which correspond to two WisBlock IO Connecter(`Wisblcok1` and `Wisblock2`).
+ There are two flows:
 
-No additional settings are required when you run node-red on your host directly. if running node-red using docker,  you need to mount `/dev/ttyUSB0` and `/dev/ttyUSB1` to the node-red container and add node-red user to the i2c group on your host.
-
-##### Running under Docker Command Line
-
-To run in Docker in its simplest form just run:
-
-```plaintext
-docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 --user node-red:dialout nodered/node-red
-```
-
-In the command above, the `--device` can mount serial device to container, and `--name` can add an user with specified group.
-
-##### Running under Docker Portainer
-
-We strongly recommend you run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below),
-
-![app_template](assets/app_template.png)
-
-after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
-
-##### Running under Docker Compose
-
-An easier way to deploy node-red container is to use docker compose.  we provide a [docker-compose.yml](docker-compose.yml) file which has configured everything,  there is no additional settings are required, just start up your node-red by running `docker-compose up`.
-
-### 3.3 Flow configuration
+-  [linbus-parse-flow](linbus-parse-example.json) use `linbus-parse` node to receive linbus data from a serial node and and output a message upon valid LinBUS message reception.
+-  [linbus-builder-flow](linbus-builder-example.json) use `linbus-builder` node to create a valid linbus frame from a frame type and a byte buffer payload, the output will be fed to a serial node.
 
 #### 3.3.1.linbus-parse-flow
 
@@ -128,7 +120,7 @@ when we compile and upload master code successfully, we can open the Serial Moni
 
 Now import the flow, the new flow should look like this:
 
-<img src="assets/linbus-parse-flow.png" alt="linbus-parse-flow" style="zoom:67%;" />
+![linbus-parse-flow](assets/linbus-parse-flow.png)
 
 You must configure `ID` option and `Length` option in the `linbus-parse` node,  `ID` specify the identifier of linbus frame that you want to parse, and `Length` specify the data length of linbus frame that you want to parse.
 
@@ -148,7 +140,7 @@ Hit the `Deploy` button on the top right to deploy this flow, once linBUS data a
 
 Now import the flow , the new flow should look like this:
 
-<img src="assets/linbus-builder-flow.png" alt="linbus-builder-flow" style="zoom:67%;" />
+![linbus-builder-flow](assets/linbus-builder-flow.png)
 
 You must configure `ID` option Specify the identifier of linbus frame that you want to builder.
 
@@ -162,11 +154,9 @@ Hit the `Deploy` button on the top right to deploy this flow, then click `inject
 
 <img src="assets/serial-minitor-slaver.png" alt="serial-minitor-slaver" style="zoom:67%;" />
 
+## 4. RAK7391
 
+We can also use RAK13005 on RAK7391 directly without RAK4621 pi-hat. Its two flow examples is under [rak7391](./rak7391) directory. And we should use `/dev/ttyUSB0` for IO slot 1 and `/dev/ttyUSB1` for IO slot 2.
 
-
-
-
-
-
+<img src="assets/setup.png" alt="setup" style="zoom:67%;" />
 

@@ -1,57 +1,79 @@
-#### Modbus RTU communication using WisBlock IO RAK5802 on RAK7391
+#### Modbus RTU communication using WisBlock IO RAK5802
 
 [TOC]
 
 ## 1.Introduction
 
-This guide explains how to use the [WisBlock IO RAK5802](https://store.rakwireless.com/collections/wisblock-interface/products/rak5802-rs485-interface) in combination with RAK7391 WisGate Developer Connect to interface a Modbus device using node-red.
+This guide explains how to use the [WisBlock IO RAK5802](https://store.rakwireless.com/collections/wisblock-interface/products/rak5802-rs485-interface) to interface a Modbus device using node-red.
 
-### 1.1 RS485 standard
+### 1.1. RAK5802
 
-**RS-485**, also known as **TIA-485(-A)** or **EIA-485**, is a standard defining the electrical characteristics of drivers and receivers for use in serial communications systems. Electrical signaling is balanced, and multipoint systems are supported. The standard is jointly published by the [Telecommunications Industry Association](https://en.wikipedia.org/wiki/Telecommunications_Industry_Association) and [Electronic Industries Alliance](https://en.wikipedia.org/wiki/Electronic_Industries_Alliance) (TIA/EIA). Digital communications networks implementing the standard can be used effectively over long distances and in electrically noisy environments. Multiple receivers may be connected to such a network in a linear, multidrop bus. These characteristics make RS-485 useful in industrial control systems and similar applications.
+The RAK5802 is a RS485 Modbus extension module that allows users to provide IoT connectivity to a new/existing solution with an RS485 interface. This module converts the RS485 signals into UART signals.
+
+![WisBlock IO RAK5802](assets/rak5802.png)
 
 ### 1.2. Modbus protocol
 
 [Modbus](https://en.wikipedia.org/wiki/Modbus) is an industrial protocol published for the first time in 1979 but still widely used in industrial sensors and appliances. The RAK5802 IO Module allows you to interface sensors using Modbus over RS485 serial lines (a.k.a Modbus RTU).
 
-## 2.Hardware
+## 2. Preparation
 
-### 2.1. Sensor hardware
+### 2.1. Access Setup
+
+In this example, we are going to deploy a flow in Node-RED to communication with LINBUS protocol. To make the measurements, ensure you have access to serial port devices. 
+
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the serial port device on your host machine.
+
+For raspberry pi 4B,  we should enable `ttyS0` before with `sudo raspi-config`.  Then, select `Interface Options`  and  `Serial Port ` to disable serial login shell and enable serial interface.
+
+<img src="assets/image-20220531104214191.png" alt="image-20220531104214191" style="zoom:50%;" />
+
+![image-20220429120826702](assets/image-20220429120826702.png)
+
+If your Node-RED is deployed inside a container, you need to mount serial port to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to serial port  devices.
+
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+
+### 2.2. Hardware
+
+#### 2.1. Sensor hardware
 
 In this example we will first create a Modbus sensor (a.k.a. master or sender) using a WisBlock Starting Kit with a RAK1901 Temperature and Humidity Sensor and a RAK5802 IO Module.
 
-- WisBlock Starter Kit (WisBlock Base RAK5005-O + WisBlock Core RAK4631)
+- WisBlock Starter Kit (WisBlock Base RAK5005-O + WisBlock Core RAK4631) * 1
 
 ![WisBlock Starter Kit](assets/wisblock_starter_kit.png)
 
-- WisBlock IO RAK5802
+- RAK5802 * 2
 
-![WisBlock IO RAK5802](assets/rak5802.png)
+  ![WisBlock IO RAK5802](assets/rak5802.png)
 
-- WisBlock Sensor RAK1901
+- WisBlock Sensor RAK1901 * 1
 
 ![WisBlock Sensor RAK1901](assets/rak1901.png)
 
-### 2.2. Client hardware
+#### 2.2. Client hardware
 
 On the client side (a.k.a. receiver) we have two options:
 
-- Raspberry Pi + RAK6421 WisBlock Hat + WisBlock IO RAK5802
+- Raspberry Pi + RAK6421 WisBlock Hat + WisBlock IO RAK5802  (We used it at this example.)
 - RAK7391 WisGate Developer Connect + WisBlock IO RAK5802
 
 In this example, we use a RAK7391 board to interface RAK5802. there are two WisBlock IO Connecter on the RAK7391 already, you can connect RAK5802 with any one of them.
 
-### 2.3. Other hardware
+#### 2.3. Other hardware
 
 You will need a couple of cables to connect both RAK5802 modules (on the client and on the sensor) and the required cabling to flash and power the WisBlock and the client board.
 
-### 2.4. Connection diagram
+#### 2.4. Connection diagram
 
-![Connections](assets/setup.jpg)
+![image-20220531182849406](assets/image-20220531182849406.png)
 
-## 3. Software
 
-### 3.1. Sensor software
+
+### 2.3. Software
+
+#### 2.3.1. Sensor software
 
 The sensor code can be found under the [rak5802_modbus_device](rak5802_modbus_device/rak5802_modbus_device.ino) folder. You can open it directly with the Arduino IDE but you will first have to have it installed as well as the RAK6430 BSP. Check the [RAK4631 Quick Start Guide](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK4631/Quickstart) to know more.
 
@@ -75,39 +97,9 @@ The code for the WisBlock sensor is split into methods:
 * **led_setup**: LED initialization
 * **led_set**: sets the LED on or off
 
-### 3.2. Client software
+#### 2.3.2. Client software
 
 The client side is a node-red flow with [node-red-contrib-modbus](https://flows.nodered.org/node/node-red-contrib-modbus) module,  the flow file can be found in the [rak5802-example-flow](rak5802-example-flow.json).  before you import this flow and deploy it, you still need some preparation.
-
-#### 3.2.1. Access setup
-
-RAK5802 use Modbus over RS485 serial line, in order to run this flow, the node-red user must have access to the corresponding serial ports. serial ports are `/dev/ttyUSB0` and `/dev/ttyUSB1` on RAK7391, which correspond to two WisBlock IO Connecter(`Wisblcok1` and `Wisblock2`).
-
-No additional settings are required when you run node-red on your host directly. if running node-red using docker,  you need to mount `/dev/ttyUSB0` and `/dev/ttyUSB1` to the node-red container and add node-red user to the i2c group on your host. 
-
-##### Running under Docker Command Line
-
-To run in Docker in its simplest form just run:
-
-```
-docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyUSB0:/dev/ttyUSB0 --device /dev/ttyUSB1:/dev/ttyUSB1 --user node-red:dialout nodered/node-red
-```
-
-In the command above, the `--device` can mount serial device to container, and `--name` can add an user with specified group.
-
-##### Running under Docker Portainer
-
-We strongly recommend you run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below),
-
-<img src="assets/app_template.png" alt="app_template" style="zoom:67%;" />
-
-after the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
-
-##### Running under Docker Compose 
-
-An easier way to deploy node-red container is to use docker compose.  we provide a [docker-compose.yml](docker-compose.yml) file which has configured everything,  there is no additional settings are required, just start up your node-red by running `docker-compose up`.
-
-#### 3.2.2. Required modules
 
 You must install `node-red-contrib-modbus` module before import this flow, run the following command in the root directory of your node-red install
 
@@ -119,9 +111,9 @@ Another way to install required module is from editor window, open the main menu
 
 <img src="assets/install.png" alt="install" style="zoom:67%;" />
 
-#### 3.2.3. Flow configuration
+## 3. Run example
 
-After all the preparation, you can import the flow now, the new flow should look like this:
+After all the preparation, you can import the [flow](./rak5802-example-flow.json) now, the new flow should look like this:
 
 <img src="assets/rak5802-flow.png" alt="rak5802-flow" style="zoom:67%;" />
 
@@ -131,19 +123,13 @@ There are two part in this flow:
 
 This part toggle a build-in LED on the WisBlock Base RAK5005-O by writing a single coil to either ON or OFF.
 
-`Read LED` is a Modbus-read node, you should set `FC` to `Read Coin Status`
+`Read LED` is a Modbus-read node, you should set `FC` to `Read Coin Status`.
 
-<img src="assets/read_led.png" alt="read_led" style="zoom: 67%;" />
+<img src="assets/read_led.png" alt="read_led" style="zoom:67%;" />
 
 `Set LED` is a Modbus-wirte node, you should set `FC` to `Force Single Coin`
 
 <img src="assets/set_led.png" alt="set_led" style="zoom:67%;" />
-
-You also need to configure Modbus server correctly, if you use `Wisblcok1`,  should set `serial port` to
-
-/dev/ttyUSB0, `Wisblcok2` is /dev/ttyUSB1.
-
-<img src="assets/serial_port.png" alt="serial_port" style="zoom:67%;" />
 
 - **read RAK1901**
 
@@ -155,7 +141,7 @@ This part read temperature and humidity data from RAK1901 by reading holding reg
 
 <img src="assets/read_rak19001.png" alt="read_rak19001" style="zoom:67%;" />
 
-#### 3.3.4.Deploy
+
 
 Hit the `Deploy` button on the top right to deploy this flow, you will see the LED status,  temperature and humidity data on the debug window.
 
@@ -163,5 +149,8 @@ Hit the `Deploy` button on the top right to deploy this flow, you will see the L
 
 
 
+## 4. RAK7391
 
+We can also use RAK5802 on RAK7391 directly without RAK4621 pi-hat. And we should use `/dev/ttyUSB0` for IO slot 1 and `/dev/ttyUSB1` for IO slot 2.
 
+![Connections](assets/setup.jpg)

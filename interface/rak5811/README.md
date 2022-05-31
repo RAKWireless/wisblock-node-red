@@ -4,147 +4,83 @@
 
 ## 1. Introduction
 
-The **ADC**(Analog to Digital Converter)  chip on **RAK7391** board is **ADS1115**. It digitizes the analog input signal routed through RAK5811 module. This flow provides a basic example on how to read analog voltage input in Node-Red with **node-red-contrib-ads1x15_i2c**. 
+This guide explains how to use `RAK5811` with pi-hat `RAK6421` to measure  `0-5V` analog input through a NodeRed flow.
 
-### 1.1 ADS1115
+### 1.1. RAK5811
 
-ADS1115 is a high recision16-bit ADC with 4 channels.  It has a programmable gain from 2/3x to 16x so you can amplify small signals and read them with higher precision. Refer to datasheet for more information : [ADS1115 datasheet](https://cdn-shop.adafruit.com/datasheets/ads1115.pdf).
+The [RAK5811](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK5811/Datasheet/#description) is a `0-5V` analog input interface module. 
 
-### 1.2 RAK5811
+![image-20220531114650182](assets/rak5811.png)
 
-The RAK5811 WisBlock Interface module is designed to be part of a production-ready IoT solution in a modular way. RAKWireless has standardized the way modules are interconnected to the RAK7391's high density slot 1 & slot 2 with the WisBlock Interface Connectors. 
+### 1.2. RAK6421
 
-The RAK5811 is a 0-5 V analog input interface module. The RAK5811 module features two input channels of 0-5 V analog signals. Inside, a high-precision operational amplifier, which supports a wide range of operating temperatures, is used for signal amplification and conversion.
+RAK6421 is a pi-hat for [Wisblock modules](https://docs.rakwireless.com/Product-Categories/WisBlock/). It has **two IO slots** and **four sensor slots**.
 
-In addition, this module integrates a 12 V power supply. The power supply is connected to an operational amplifier and be used to power the external sensors. The connection of the 0-5 V sensors is done through the fast crimping terminal without the need for special tools, this simplifies the installation process on the field
+<img src="assets/rak6421.png" alt="rak6421" style="zoom:40%;" />
 
-### 1.3 node-red-contrib-ads1x15_i2c
 
-The node we used in this flow is **node-red-contrib-ads1x15_i2c**, it provides access to a ADS1x15 I2C analog to digital converter, to get a voltage or difference of voltage from a ADS1115 or ADS1015. More information is available at: [node-red-contrib-ads1x15_i2c]([node-red-contrib-ads1x15_i2c (node) - Node-RED (nodered.org)](https://flows.nodered.org/node/node-red-contrib-ads1x15_i2c))
+
+### 1.3. ADS1115
+
+ADS1115 is an onboard ADC chip in the RAK6421. it is a high precision 16-bit ADC with 4 channels. it have a programmable gain from 2/3x to 16x so you can amplify small signals and read them with higher precision. Refer to datasheet for more information : [ADS1115 datasheet](https://cdn-shop.adafruit.com/datasheets/ads1115.pdf).
 
 
 
 ## 2. Preparation
 
+### 2.1. Access Setup
 
-### 2.1 Access setup
+In this example, we are going to deploy a flow in Node-RED to measure temperature and humidity. To make the measurements, ensure you have access to I2C devices. 
 
-ADS1115 use an I2C communication protocol to read analog values, in order to ensure this flow works well in your node-red runtime, the node-red user should have access to i2c bus(`/dev/i2c-1` by default) on your host.
+If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine. You can enable I2C either by using **raspi-config** or just change `/boot/config.txt`.
 
-No additional settings are required when you run node-red on your host directly. If running node-red using docker, you need to mount `/dev/i2c-1` device to the node-red container. If you use the portainer template provided by us, you don't need to change anything, as we already mount the device for you.
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-#### 2.1.1 Docker command line
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-The simplest way to bring up Node-RED container is through docker command line: 
+### 2.2. Hardware
 
-```
-docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/i2c-1:/dev/i2c-1 --user node-red:998 nodered/node-red
-```
+There are two WisBlock IO connectors (`wisblock#1` and `wisblock#2`)on the RAK6421. User can connect RAK5811 module with any one of them. 
 
-In the command above, the `--device` can mount device to container, and `--name` can add an user with specified group.
+In my example, I use an external power supply to simulate changes in the sensor's input current.
 
-Before add node-red user to the local i2c group, you need to get the group number via running command below on your host:
+- **Raspberry Pi model 4B + RAK6421 WisBlock Hat +  RAK5811**
 
-```
-cat /etc/group | grep i2c | awk -F: '{print $3}'
-```
+<img src="assets/image-20220531111019812.png" alt="image-20220531111019812" style="zoom:50%;" />
 
-#### 2.1.2 Docker compose
 
-Another way to bring up Node-RED container is to use docker-compose file:
 
-```
-version: "3.9"
-
-services:
-
-  node-red:
-    image: sheng2216/nodered-docker:alpine-latest
-    container_name: NodeRed
-    user: node-red
-    group_add:
-      - 998
-    ports:
-      - "1880:1880"
-    restart: unless-stopped
-    volumes:
-      - 'node-red-data:/data'
-    devices:
-      - "/dev/i2c-1:/dev/i2c-1"
-
-volumes:
-  node-red-data:
-```
-
-To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
-
-Notice that 998 is the group id of the I2C group in rakpios, you can use the command we mentioned in section 2.1.1 to double check the group id. If you are working on another OS in which your i2c group id is not 998,  please change this number 998 in docker-compose.yml file to match your set-up.
-
-#### 2.1.3 Running under Docker Portainer
-
-If you try to run a Node-Red container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-Red container use the template (shown below), 
-
-![Portainer webUI](assets/portainer-node-red.png)
-
-in the template, we defined a customized Node-RED docker image for you to use, so you don't need to worry about the configuration or permission anymore. After the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
-
-### 2.2. Hardware preparation 
-
-To use RAK5811 on RAK7391 board, you need to connect RAK5811 to the high-density slots on RAK7391 board. In this example, we use slot 1, and trying to measure the input voltage connected to channel 1. Please check the picture below for more details. Please connect your analog input to the RAK5811. In this example below, the positive pin goes to the red wire, and the ground pin goes to the brown wire.
+- **RAK7391 + Raspberry Pi CM4 +  RAK5811**
 
 ![rak5811+rak7391](assets/rak5811+rak7391.png)
 
-### 2.3. Flow configuration
+### 2.3. Software
 
-If you are using the Node-Red docker image provided by RAKwireless, the `ads1x15_i2c` node is installed by default, however, if you are using the official docker image, or you are hosting your Node-RED service on you host machine, you need to install the `ads1x15_i2c` node first.
+This flow use `node-red-contrib-ads1x15_i2c`  module, so you must install the module to your node-red first. run the following command in the root directory of your node-red install
 
-To install a new new node, go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **ads1x15-i2c**. Now you should be able to install this node.
+```
+npm install node-red-contrib-ads1x15_i2c
+```
 
-![install ads1x15_i2c node](assets/install-ads1x15_i2c.png)
+Another way to install required module is from editor window, open the main menu on the right, select  the `Manage Palette` option,  search node-red-contrib-ads1x15_i2c modules in the `Install` tab and install it.
 
-After you deploy node-red container,  you can import  [rak5811-example.json](rak5811-example.json) flow. This flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `function` node , and  `debug` node. After the import is done, the new flow should look like this:
-
-![image-20220304111658844](assets/rak5811-example.png)
-
-before you deploy this flow, you need to select the correct configuration for `ads1x15_i2c` node
-
-<img src="assets/ads1x15_i2c.png" alt="ads1x15_i2c" style="zoom: 50%;" />
-
-- **Name**: define the msg name if you wish to change the name displayed on the node.
-
-- **Property**: define the msg property name you wish. the name you select (msg.example) will also be the output property.the payload must be a number! anything else will try to be parsed into a number and rejected if that fails.
-
-- **Chipset**: the chipset by default is set to 1115. the chipset is the version of ads supported. If you have an ads1015 select that option.
-
-- **/dev/i2c-?**: the i2c device file you will access, the value by default is set to 1, which means the i2c bus index is 1.
-
-- **i2c_Address**: the address by default is set to 0x48. you can setup the ADS1X15 with one of four addresses, 0x48, 0x49, 0x4a, 0x4b. Please see ads1X15 documentation for more information
-
-- **Inputs**: inputs may be used for Single-ended measurements (A0-GND) or Differential measurements (A0-A1). Single-ended measurements measure voltages relative to a shared reference point which is almost always the main units ground. Differential measurements are “floating”, meaning that it has no reference to ground. the measurement is taken as the voltage difference between the two wires. Example: The voltage of a battery can be taken by connecting A0 to one terminal and A1 to the other.
-
-- **Samples**: select the sample per second you want your ADS to make. higher rate equals more samples taken before being averaged and sent back from the ADS. please see ads1X15 documentation for more information
-
-- **Gain**: select the gain you want. to increase accuracy of smaller voltage signals, the gain can be adjusted to a lower range. Do NOT input voltages higher than the range or device max voltage, pi 3.3v use a voltage devider to lower input voltages as needed.
+<img src="assets/install.png" alt="install" style="zoom:67%;" />
 
 
+
+## 3. Run example
+
+You can import  [rak5811-example.json](rak5811-example.json) flow.   This flow consists of four nodes: `inject` node,  `ads1x15_i2c` node, `function` node , and  `debug` node. After the import is done, the new flow should look like this:
+
+![image-20220531115125607](assets/rak5811-example.png)
+
+If you use rak7391 without pi-hat rak6421, you should import [another](./rak5811-rak7391-example-flow.json) flow. 
 
 Hit the `Deploy` button on the top right to deploy the flow, then click inject node to trigger a reading, debug node will print the details about each channels to debug window. However, without a function node to convert the raw readings, the value in the msg.payload object is not right (as shown below). 
 
-![rak5811 raw debug](assets/rak5811-raw-debug.png)
+![image-20220531113340709](assets/rak5811-raw-debug.png)
 
+## 4. License
 
-
-Thus we need to add a unction node to the flow to process the output. 
-
-![image-20220304112456367](assets/function-node.png)Inside the function node, we have the following code to convert the raw readings to the actual measurements:
-
-```
-raw_voltage = msg.payload["/dev/i2c-1"].ads1115["0x48"].singleEnded.channel_1.Volts;
-msg.payload = raw_voltage/0.6;
-return msg;
-```
-
-The code above convert the readings from channel 1 by divided the `raw_voltage` by 0.6 to get the correct measurement value. In order to read from other channels. please change both the channel number in the code and how you connect the anlog input to RAK7391. Slot 1 on RAK7391 handles channel 0 and 1 of RAK5811, while slot 2 on RAK7391 handels channel 2 and 3 of RAK5811.
-
-
+This project is licensed under MIT license.
 
