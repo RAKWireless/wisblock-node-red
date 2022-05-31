@@ -37,7 +37,7 @@ Now we need to install the required nodes for the example flow. Browse to http:/
 
 To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-opt3001**. Now you should be able to install this node. This node is developed by RAKWireless, the source code is hosted in this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ltr-390uv), and you can also check this [documentation](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) about how to install the node manually using command line.
 
-![install node-red-contrib-libgpiod](../../../../../wisblock-node-red-dev-sensors-rak12019-12019-reading/wisblock-node-red-dev-sensors-rak12019-12019-reading/sensors/rak12019/12019-reading/assets/install-node.png)
+![install node-red-contrib-libgpiod](assets/install-node.png)
 
 need to change this image once out node is published.
 
