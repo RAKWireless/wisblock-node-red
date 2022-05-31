@@ -1,6 +1,6 @@
 [
     {
-        "id": "934beb088c6a4869",
+        "id": "d54076853c755568",
         "type": "tab",
         "label": "rak12015-tampering-detector",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "389f9c85393c0408",
+        "id": "acc13d7e4d19b8fa",
         "type": "ads1x15_i2c",
-        "z": "934beb088c6a4869",
+        "z": "d54076853c755568",
         "property": "payload",
         "name": "",
         "i2c_device_number": 1,
@@ -18,9 +18,9 @@
         "i2c_address": "0x48",
         "inputsForChannel": "singleEnded",
         "singleEndedChannel0": false,
-        "singleEndedChannel1": false,
+        "singleEndedChannel1": true,
         "singleEndedChannel2": false,
-        "singleEndedChannel3": true,
+        "singleEndedChannel3": false,
         "differentialChannel0_1": true,
         "differentialChannel0_3": false,
         "differentialChannel1_3": false,
@@ -32,14 +32,14 @@
         "y": 240,
         "wires": [
             [
-                "e0b212a0a2a62334"
+                "73d2b240c95474a2"
             ]
         ]
     },
     {
-        "id": "2b78a60be6bb6281",
+        "id": "8de2ad35e6208954",
         "type": "inject",
-        "z": "934beb088c6a4869",
+        "z": "d54076853c755568",
         "name": "every 1 seconds",
         "props": [
             {
@@ -61,14 +61,14 @@
         "y": 160,
         "wires": [
             [
-                "389f9c85393c0408"
+                "acc13d7e4d19b8fa"
             ]
         ]
     },
     {
-        "id": "d6a49faefffb9edb",
+        "id": "e48e24dda67e7bad",
         "type": "debug",
-        "z": "934beb088c6a4869",
+        "z": "d54076853c755568",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -83,11 +83,11 @@
         "wires": []
     },
     {
-        "id": "e0b212a0a2a62334",
+        "id": "73d2b240c95474a2",
         "type": "function",
-        "z": "934beb088c6a4869",
+        "z": "d54076853c755568",
         "name": "data_handling",
-        "func": "let data = {};\n\ndata.payload = msg.payload[\"/dev/i2c-1\"]\n.ads1115[\"0x48\"]\n.singleEnded.channel_3.Volts;\n\ndata.payload = Math.round(data.payload * 100) / 100;\nif(data.payload > 0) {\n    node.warn('Vibration detected !');\n    node.status({\n        fill: 'red',\n        shape: 'dot',\n        text: \"Vibration detected\"\n    });\n} else {\n    node.status({});\n}\n\nreturn data;",
+        "func": "let data = {};\n\ndata.payload = msg.payload[\"/dev/i2c-1\"]\n.ads1115[\"0x48\"]\n.singleEnded.channel_1.Volts;\n\ndata.payload = Math.round(data.payload * 100) / 100;\nif(data.payload > 0) {\n    node.warn('Vibration detected !');\n    node.status({\n        fill: 'red',\n        shape: 'dot',\n        text: \"Vibration detected\"\n    });\n} else {\n    node.status({});\n}\n\nreturn data;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -97,7 +97,7 @@
         "y": 240,
         "wires": [
             [
-                "d6a49faefffb9edb"
+                "e48e24dda67e7bad"
             ]
         ]
     }
