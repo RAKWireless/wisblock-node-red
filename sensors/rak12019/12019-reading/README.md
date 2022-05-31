@@ -1,4 +1,4 @@
-# Measure lux and uvi using WisBlock UV sensor RAK12019 from Node-RED 
+# Measure LUX and UVI using WisBlock UV sensor RAK12019 from Node-RED 
 
 [TOC]
 
@@ -12,66 +12,34 @@ The RAK12019 is an Ambient Light sensor (ALS) or Ultraviolet Light Sensor (UVS),
 
 ### 1.2 LTR-390UV-01
 
-The LTR-390UV-01 is an integrated low voltage I2C  ambient aight sensor(ALS) and  ultraviolet light sensor(UVS) in a single miniature 2x2mm ChipLED lead-free surface mount package. This sensor converts light intensity to a digital output signal capable of direct I2C interface. For more information about LTR-390UV-01, refer to the [Datasheet](https://optoelectronics.liteon.com/upload/download/DS86-2015-0004/LTR-390UV_Final_%20DS_V1%201.pdf). 
+The LTR-390UV-01 is an integrated low voltage I2C  ambient aight sensor(ALS) and ultraviolet light sensor(UVS) in a single miniature 2x2mm ChipLED lead-free surface mount package. This sensor converts light intensity to a digital output signal capable of direct I2C interface. For more information about LTR-390UV-01, refer to the [Datasheet](https://optoelectronics.liteon.com/upload/download/DS86-2015-0004/LTR-390UV_Final_%20DS_V1%201.pdf). 
+
+
 
 ## 2 Preparation
 
 
 ### 2.1 Access setup
 
-Ensure you have access to both I2C devices when using the sensor. The ltr-uv390 chip on RAK12019 supports I2C protocol, if you are using Node-RED in the host machine directly (without using the docker container), you won't need to change anything, just make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine. 
+Ensure you have access to I2C devices when using the sensor. The ltr-uv390 chip on RAK12019 supports I2C protocol.
 
-If running Node-RED using docker, you need to mount `/dev/i2c-1` device to the Node-RED container using the docker command we provided below, If you use the Portainer template provided by us, you don't need to change anything, as we have already mounted the device for you.
+If you are using Node-RED locally (in the host machine without using docker containers), you only need to  make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine. 
 
-#### 2.1.1 Docker compose
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
- The example docker-compose is provided below:
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
-```
-version: '3.9'
+### 2.2 Install dependency & nodes in Node-RED
 
-services:
+Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [node-red-contrib-ltr-390uv](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ltr-390uv).
 
-  nodered:
-    image: sheng2216/nodered-docker:1.0
-    container_name: NodeRed
-    user: node-red
-    group_add:
-      - 998
-    ports:
-      - "1880:1880"
-    restart: unless-stopped
-    volumes:
-      - 'node-red-data:/data'
-    devices:
-      - "/dev/i2c-1:/dev/i2c-1"
-    networks:
-      - node-red
+To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-ltr-390uv**. Now you should be able to install this node. This node is developed by RAKWireless, the source code is hosted in this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ltr-390uv), and you can also check this [documentation](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) about how to install the node manually using command line.
 
-volumes:
-  node-red-data:
+![install node-red-contrib-libgpiod](assets/install-node.png)
 
-networks:
-  node-red:
-```
+need to change this image once out node is published.
 
-To bring up the service, save the above file into a file called **docker-compose.yml**, and in the same directory, run `docker-compose up`. To stop the service, just press **ctrl+c** to exit and then run `docker-compose down` to stop the services defined in the Compose file, and also remove the networks defined.
-
-In the docker-compose file provided above, the --device can mount the device to the container, --group-add 998 adds the I2C group (group id 998 in Rakpios) to run as. Notice that **998** in the compose file needs to be changed if you are not using Rakpios, it needs to match your system group setup. Before adding the node-red user to the i2c group, you need to get the group number via running the command below on your host:
-
-```
-cat /etc/group | grep i2c | awk -F: '{print $3}'
-```
-
-#### 2.1.2 Running under Docker Portainer
-
-If you try to run a Node-RED container with Docker Portainer using the template provided by RAKwireless, you won't need to make any changes to the configurations, just deploy the Node-RED container using the template (shown below), 
-
-![image-20220304093748592](assets/portainer-node-red.png)
-
-in the template, we defined a customized Node-RED docker image for you to use, so you don't need to worry about the configuration or permission anymore. After the app is deployed, you can browse to http://{host-ip}:1880 to access Node-Red's web interface.
-
-### 2.2 Hardware preparation 
+### 2.3 Hardware  
 
 The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that exposes all the Wisblock high-density connector pins.  The RAK12019 can be mounted to the HAT, and the HAT goes to the 40-pin headers located on Raspberry Pi 4B/IO board/RAK7391. Based on your hardware selections, there are three ways to mount RAK12019:
 
@@ -93,41 +61,19 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3 Flow configuration
 
-Whether you are using the Node-Red docker image provided by RAKwireless or the official latest image, or you host your Node-RED service on your host machine, you need to install the node `node-red-node-ltr-390uv` before you deploy the flow. 
+After the installation of `node-red-contrib-ltr-390uv` is completed, you can clone/copy the flow example. The example is under `sensor/rak12019/rak12019-reading` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12019-reading.json** file or just copy and paste the .json file contents into your new flow.
 
-### 3.1 Install nodes  
-
-While the `node-red-contrib-ltr-390uv` hasn't been published, so you need to install it from our gitlib repository. Please install `node-red-contrib-ltr` node with the following commands. If you are using docker for Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`,
-
-```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
-
-then copy `node-red-contrib-ltr-390uv directory  to  the `node_modules` directory,
-
-```
-cp -rf node-red-nodes/node-red-contrib-ltr-390uv ~/.node-red/node_modules
-```
-
-lastly, change to the `node-red-contrib-ltr-390uv` directory and install the node, 
-
-```
-cd ~/.node-red/node_modules/node-red-contrib-ltr-390uv && npm install
-```
-
-**Tips:**  After the installation of  `node-red-contrib-ltr-390uv`  is finished, please restart your node-red service/container(s).  Otherwise, the node cannot be found/added to the new flow.
-
-### 3.2 Deploy the Example Flow 
-
-After you deploy the NodeRED container,  you can import  [**rak12019-reading.json**](rak12019-reading.json) flow. This is a very basic flow and it uses five sets of nodes: `inject` node, `ltr-390uv` node,  and  `debug` node. After the import is done, the new flow should look like this:
+After the import is done, the new flow should look like this:
 
 <img src="assets/flow-overview.png" alt="flow-overview" style="zoom:67%;" />
 
-### 3.3 Nodes Configurations 
+### 3.1 Nodes Configurations 
 
-To get the lux and uvi reading from the RAK12019,  you need to select the correct setting for `node-red-contrib-ltr-390uv` node.
+* node-red-contrib-ltr-390uv 
 
 <img src="assets/ltr-390uv-setting.png" alt="ltr-390uv-setting" style="zoom:67%;" />
+
+To get the lux and uvi reading from the RAK12019,  you need to configure the following settings
 
 **Name**
 
@@ -149,7 +95,7 @@ Define the als/uvs measuring gain range. the default value is `1x`
 
 Define the als/uvs measuring resolution, the default value is `16 Bit`
 
-### 3.4 Flow output
+## 4 Flow output
 
 This flow outputs the measuring result with `debug` node every 2 seconds, the output of the node is a payload contains the raw als data, raw uvs data,  the calculated lux and the calculated uvi.
 
