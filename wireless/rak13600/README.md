@@ -4,19 +4,43 @@
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use the node **node-red-contrib-pn532-i2c** to test [RAK13600](https://store.rakwireless.com/products/rak13600-wisblock-nfc-reader) that use it to read id of RFID card and transfers the id to owner's name of RFID.  RAK13600 use `i2c-1` of RAK7391 board. 
+This guide explains how to create a flow and then use the node **node-red-contrib-pn532-i2c** to test [RAK13600](https://store.rakwireless.com/products/rak13600-wisblock-nfc-reader) that use it to read id of RFID card and transfers the id to owner's name of RFID.  
 
-### 1.1 Requirements
+### 1.1 RAK13600
 
-If you use docker to run Node-RED,  you need to ensure that the user has I2C operation permission.
+The RAK13600 module is designed as wireless module that allows you to scan NFC and RFID tags and devices. It includes an antenna coil that transmits and receives RF signals from the object being scanned. The RAK13600 is based on the popular NFC/RFID chip PN532. For more information about RAK13600, please check the [datasheet](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK13600/Overview/#product-description). 
+
+## 1.2 node-red-contrib-pn532-i2c
+
+[node-red-contrib-pn532-i2c](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-pn532-i2c) is a node-red node providing access to PN532 to read UID of RFID card. It allows users to configure the I2C address of the chip, but the i2c address is fixed to 0x24. The node is developed by RAKwireless, if you want to modify the source code and change the node, please check this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-pn532-i2c), where the instructions on how to install this node manually is porvided.
 
 
 
 ## 2. Preparation
 
-### 2.1. RAK13600
+### 2.1 Access Setup
 
-WisBlock NFC Reader RAK13600 enables reading and writing of NFC tags (RFID cards, NFC enabled devices like phones). It is an WisBlock IO module with an external NFC antenna to connect with the NFC devices.
+Ensure you have access to I2C devices when using the sensor. The Address for pn532 on the RAK13600 is fixed to 0x24. 
+
+You need to enable I2C first, either by using **raspi-config** or just change `/boot/config.txt`.
+
+If you are using Node-RED locally (in the host machine without using docker containers), you only need to  make sure the Node-RED user has access to the i2c bus (/dev/i2c-1 by default) on your host machine.
+
+If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
+
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+
+### 2.2 Install node in Node-RED
+
+To install a new node, go to the top-right **Menu**, and then select **Manage palette**. On the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-pn532-i2c**. Now you should be able to install this node.
+
+![install node-red-contrib-pn532-i2c ](assets/install-node.png)
+
+Node hasn't been published, change to the new picture once published.
+
+### 2.3 Hardware
+
+WisBlock NFC Reader RAK13600 is an WisBlock IO module with an external NFC antenna to connect with the NFC devices.
 
 ![image-20220331154317502](assets/image-20220331154317502.png)
 
@@ -24,53 +48,21 @@ WisBlock NFC Reader RAK13600 enables reading and writing of NFC tags (RFID cards
 
 ![1648712756](assets/1648712756.png)   
 
+#### 2.3.1 Connection diagram
 
+If you are going to use RAK13600 on a Raspberry Pi, the easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that exposes all the Wisblock high-density connector pins.  The RAK13600 can be mounted to the HAT, and the HAT goes to the 40-pin headers located on Raspberry Pi 4B/IO board/RAK731; or you can mount RAK16000 on RAK7391's wisblock IO slot directly.
 
-### 2.2. Connection diagram
+* RAK13600 + RAK6421 + Raspberry Pi
 
-Connect RAK13600  to RAK7391 board.
+  ![RAK13600+RAK6421+RaspberryPi](assets/RAK13600+RAK6421+RaspberryPi.png)
+
+* RAK13600  + RAK7391 + CM4
 
 ![image-20220411093959738](assets/image-20220411093959738.png)
 
 
 
-### 2.2. Software
-
-Please install `node-red-contrib-pn532-i2c` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
-
-```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
-
-```
-cp -rf node-red-nodes/node-red-contrib-pn532-i2c ~/.node-red/node_modules
-```
-
-```
-cd ~/.node-red/node_modules/node-red-contrib-pn532-i2c && npm install
-```
-
-**Tips:**  After `node-red-contrib-pn532-i2c` being installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
-
-## 3. Configure
-
-- To get  UID of RFID card from PN532 you just need to select the correct settings for your device and trigger the node.
-
-  <img src="assets/image-20220408160754221.png" alt="image-20220408160754221" style="zoom: 80%;" />	
-  
-  - **Name**
-  
-    Define the msg name if you wish to change the name displayed on the node.
-  
-  - **/dev/i2c-?**
-  
-    Default I2C Bus is 1.  `1` is for `'/dev/i2c-1'`.
-  
-  - **i2c_Address**
-  
-    The Address for pn532 is 0x24 which can not be changed. 
-
-## 4. Run example
+## 3. Flow Configuration
 
 The example is under `wireless/rak13600` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak13600-nfc-read.json** file or just copy and paste the .json file contents into your new flow.
 
@@ -78,7 +70,29 @@ After the import is done, the new flow should look like this:
 
 ![image-20220411094928684](assets/image-20220411094928684.png)
 
-Hit the **Deploy** button on the top right to deploy the flow.
+
+
+#### 3.1 Node configuration
+
+To get  UID of RFID card from PN532 you just need to select the correct settings for your device and trigger the node.
+
+<img src="assets/image-20220408160754221.png" alt="image-20220408160754221" style="zoom: 80%;" />	
+
+- **Name**
+
+  Define the msg name if you wish to change the name displayed on the node.
+
+- **/dev/i2c-?**
+
+  Default I2C Bus is 1.  `1` is for `'/dev/i2c-1'`.
+
+- **i2c_Address**
+
+  The Address for pn532 is 0x24 which is fixed.
+  
+   
+
+## 4. Flow Output
 
 This is a simple flow  contains four nodes, where `inject` node trigger every 1 seconds,  `pn532_i2c` read id of RFID card, `decodeToUserName` function transfers id to owner of RFID card, and `debug` node print the read result.
 
