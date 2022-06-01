@@ -24,11 +24,23 @@ In this example, we are going to deploy a flow in Node-RED to communication with
 
 If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the serial port device on your host machine.
 
-For raspberry pi 4B,  we should enable `ttyS0` before with `sudo raspi-config`.  Then, select `Interface Options`  and  `Serial Port ` to disable serial login shell and enable serial interface.
+For raspberry pi 4B,  we should enable `/dev/ttyAMA0`. To enable it , we should modify `/boot/config.txt` and `/boot/cmdline.txt`.
 
-<img src="assets/image-20220531104214191.png" alt="image-20220531104214191" style="zoom:50%;" />
+1. Add two lines to `/boot/config.txt`.
 
-![image-20220429120826702](assets/image-20220429120826702.png)
+```
+enable_uart=1
+dtoverlay=pi3-miniuart-bt
+```
+
+![image-20220601154722652](assets/image-config.png)
+
+2. Delete `console=serial0,115200` from `/boot/cmdline.txt`.
+   ![](assets/image-cmdline.png)
+
+3. Then, reboot raspberry pi 4B. After reboot,  we can see /dev/serial0 links with ttyAMA0.
+
+   ![image-20220601164331093](assets/image-serial-port.png)
 
 If your Node-RED is deployed inside a container, you need to mount serial port to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to serial port  devices.
 
@@ -125,9 +137,9 @@ This part toggle a build-in LED on the WisBlock Base RAK5005-O by writing a sing
 
 `Read LED` is a Modbus-read node, you should set `FC` to `Read Coin Status`.
 
-<img src="assets/read_led.png" alt="read_led" style="zoom:67%;" />
+<img src="assets/read_rak19001.png" alt="read_rak19001" style="zoom:67%;" />
 
-`Set LED` is a Modbus-wirte node, you should set `FC` to `Force Single Coin`
+`Set LED` is a Modbus-wirte node, you should set `FC` to `Force Single Coin`.
 
 <img src="assets/set_led.png" alt="set_led" style="zoom:67%;" />
 
@@ -140,8 +152,6 @@ This part read temperature and humidity data from RAK1901 by reading holding reg
 `Quantity` specifies the quantity of registers to be read.
 
 <img src="assets/read_rak19001.png" alt="read_rak19001" style="zoom:67%;" />
-
-
 
 Hit the `Deploy` button on the top right to deploy this flow, you will see the LED status,  temperature and humidity data on the debug window.
 

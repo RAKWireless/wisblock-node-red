@@ -199,7 +199,7 @@ docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/
 For raspberry pi 4B, to run in Docker in its simplest form just run:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyS0:/dev/ttyS0 --user node-red:dialout nodered/node-red
+docker run -it -p 1880:1880 -v node_red_data:/data --name NodeRed --device /dev/ttyAMA0:/dev/ttyAMA0 --user node-red:dialout nodered/node-red
 ```
 
 In the command above, the `--device` can mount serial device to container, and `--name` can add an user with specified group.
@@ -254,7 +254,7 @@ services:
     ports:
         - "1880:1880/tcp"
     devices:
-        - "/dev/ttyUSB0:/dev/ttyS0"
+        - "/dev/ttyUSB0:/dev/ttyAMA0"
 
 volumes:
   node_red_data:
@@ -289,7 +289,7 @@ docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/
 For raspberry pi 4B:
 
 ```
-docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1  --device /dev/ttyS0:/dev/ttyS0 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red
+docker run -it -p 1880:1880 -v node_red_data:/data --device /dev/gpiochip0:/dev/gpiochip0 --device /dev/i2c-1:/dev/i2c-1  --device /dev/ttyAMA0:/dev/ttyAMA0 --restart=unless-stopped --user node-red:997 --group-add 998 --name NodeRed nodered/node-red
 ```
 
  
@@ -345,7 +345,7 @@ services:
     devices:
       - "/dev/gpiochip0:/dev/gpiochip0"
       - "/dev/i2c-1:/dev/i2c-1"
-      - "/dev/ttyS0:/dev/ttyS0"
+      - "/dev/ttyAMA0:/dev/ttyAMA0"
     volumes:
       - 'node-red-data:/data'
     ports:

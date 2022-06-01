@@ -24,11 +24,23 @@ In this example, we are going to deploy a flow in Node-RED to communication with
 
 If you are using Node-RED locally (in the host machine without using docker containers), you need to make sure the Node-RED user has access to the serial port device on your host machine.
 
-For raspberry pi 4B,  we should enable `ttyS0` before with `sudo raspi-config`.  Then, select `Interface Options`  and  `Serial Port ` to disable serial login shell and enable serial interface.
+For raspberry pi 4B,  we should enable `/dev/ttyAMA0`. To enable it , we should modify `/boot/config.txt` and `/boot/cmdline.txt`.
 
-<img src="assets/image-20220531104214191.png" alt="image-20220531104214191" style="zoom:50%;" />
+1. Add two lines to `/boot/config.txt`.
 
-![image-20220429120826702](assets/image-20220429120826702.png)
+```
+enable_uart=1
+dtoverlay=pi3-miniuart-bt
+```
+
+![](assets/image-config.png)
+
+2. Delete `console=serial0,115200` from `/boot/cmdline.txt`.
+   ![](assets/image-cmdline.png)
+
+3. Then, reboot raspberry pi 4B. After reboot,  we can see /dev/serial0 links with ttyAMA0.
+
+   ![](assets/image-serial.png)
 
 If your Node-RED is deployed inside a container, you need to mount serial port to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to serial port  devices.
 
@@ -120,7 +132,7 @@ when we compile and upload master code successfully, we can open the Serial Moni
 
 Now import the flow, the new flow should look like this:
 
-![linbus-parse-flow](assets/linbus-parse-flow.png)
+![](assets/linbus-parse-flow.png)
 
 You must configure `ID` option and `Length` option in the `linbus-parse` node,  `ID` specify the identifier of linbus frame that you want to parse, and `Length` specify the data length of linbus frame that you want to parse.
 
@@ -140,7 +152,7 @@ Hit the `Deploy` button on the top right to deploy this flow, once linBUS data a
 
 Now import the flow , the new flow should look like this:
 
-![linbus-builder-flow](assets/linbus-builder-flow.png)
+![image-20220601165818453](assets/linbus-builder-flow.png)
 
 You must configure `ID` option Specify the identifier of linbus frame that you want to builder.
 

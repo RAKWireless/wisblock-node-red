@@ -1,6 +1,6 @@
 [
     {
-        "id": "0c93a91486e02b6e",
+        "id": "ee9209fa4c2aab5a",
         "type": "tab",
         "label": "rak5802-example-flow",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "f73f307c641c2b61",
+        "id": "a262309606090fc0",
         "type": "modbus-write",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "Set LED",
         "showStatusActivities": false,
         "showErrors": false,
@@ -21,19 +21,19 @@
         "server": "93e320106f5dcdb6",
         "emptyMsgOnFail": false,
         "keepMsgProperties": false,
-        "x": 620,
-        "y": 340,
+        "x": 540,
+        "y": 120,
         "wires": [
             [
-                "4c4d158a9636206a"
+                "5ce36dfd9c46b608"
             ],
             []
         ]
     },
     {
-        "id": "5f6d3ded3618a07d",
+        "id": "bda305d488294ef7",
         "type": "modbus-read",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "Read LED",
         "topic": "",
         "showStatusActivities": false,
@@ -52,19 +52,19 @@
         "ioFile": "",
         "useIOForPayload": false,
         "emptyMsgOnFail": false,
-        "x": 240,
-        "y": 340,
+        "x": 160,
+        "y": 120,
         "wires": [
             [
-                "7df5c58b4374fe0f"
+                "b5daf7ab8a4853dc"
             ],
             []
         ]
     },
     {
-        "id": "7df5c58b4374fe0f",
+        "id": "b5daf7ab8a4853dc",
         "type": "function",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "toggle",
         "func": "var newMsg = {};\n\nif(msg.payload[0] == true)\n{\n    newMsg.payload = 0;\n}\nelse\n{\n    newMsg.payload = 1;\n}\nreturn newMsg;",
         "outputs": 1,
@@ -72,18 +72,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 340,
+        "x": 350,
+        "y": 120,
         "wires": [
             [
-                "f73f307c641c2b61"
+                "a262309606090fc0"
             ]
         ]
     },
     {
-        "id": "1f2debd3910da372",
+        "id": "b5e97e4f996f3a1b",
         "type": "modbus-read",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "Read RAK1901",
         "topic": "",
         "showStatusActivities": false,
@@ -102,19 +102,19 @@
         "ioFile": "",
         "useIOForPayload": false,
         "emptyMsgOnFail": false,
-        "x": 260,
-        "y": 440,
+        "x": 180,
+        "y": 220,
         "wires": [
             [
-                "697044ef5b04df9b"
+                "3fd8490717540f35"
             ],
             []
         ]
     },
     {
-        "id": "697044ef5b04df9b",
+        "id": "3fd8490717540f35",
         "type": "function",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "RAK1901 status",
         "func": "newMsg = {};\nnewMsg.payload = {};\nnewMsg.payload.humidity = msg.payload[0] + \"%\"\nnewMsg.payload.temperature = msg.payload[1] / 100 +\"C\"\nreturn newMsg;",
         "outputs": 1,
@@ -122,18 +122,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 440,
+        "x": 380,
+        "y": 220,
         "wires": [
             [
-                "a095e86808cf313f"
+                "366850a9962da089"
             ]
         ]
     },
     {
-        "id": "a095e86808cf313f",
+        "id": "366850a9962da089",
         "type": "debug",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -142,14 +142,14 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 810,
-        "y": 440,
+        "x": 730,
+        "y": 220,
         "wires": []
     },
     {
-        "id": "4c4d158a9636206a",
+        "id": "5ce36dfd9c46b608",
         "type": "function",
-        "z": "0c93a91486e02b6e",
+        "z": "ee9209fa4c2aab5a",
         "name": "LED status",
         "func": "var newMsg = {};\nif(msg.payload.value == true)\n{\n    newMsg.payload = \"LED Turn On\"  \n}\nelse\n{\n    newMsg.payload = \"LED Turn Off\"  \n}\nreturn newMsg;",
         "outputs": 1,
@@ -157,11 +157,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
-        "y": 340,
+        "x": 770,
+        "y": 120,
         "wires": [
             [
-                "a095e86808cf313f"
+                "366850a9962da089"
             ]
         ]
     },
@@ -176,7 +176,7 @@
         "tcpHost": "127.0.0.1",
         "tcpPort": "502",
         "tcpType": "DEFAULT",
-        "serialPort": "/dev/ttyUSB0",
+        "serialPort": "/dev/ttyAMA0",
         "serialType": "RTU",
         "serialBaudrate": "9600",
         "serialDatabits": "8",

@@ -144,19 +144,19 @@ void setup() {
 	led_setup();
 
 	// Initalize SHTC3 and populate the registers
-	shtc3_setup();
-	shtc3_read();
+//	shtc3_setup();
+//	shtc3_read();
 
 }
 
 void loop() {
 
 	// We update the sensor value every SENSOR_READ_INTERVAL
-	static unsigned long last = 0;
-	if (millis() - last > SENSOR_READ_INTERVAL) {
-		last = millis();
-		shtc3_read();
-	}
+//	static unsigned long last = 0;
+//	if (millis() - last > SENSOR_READ_INTERVAL) {
+//		last = millis();
+//		shtc3_read();
+//	}
 
 	// Poll Modbus
 	modbus_loop();

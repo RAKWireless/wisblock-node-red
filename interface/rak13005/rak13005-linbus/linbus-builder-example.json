@@ -26,7 +26,7 @@
         "z": "69ab35d4c8e6f9fe",
         "name": "",
         "serial": "8d95e25c93124592",
-        "x": 550,
+        "x": 560,
         "y": 180,
         "wires": []
     },
@@ -115,7 +115,7 @@
     {
         "id": "8d95e25c93124592",
         "type": "serial-port",
-        "serialport": "/dev/ttyS0",
+        "serialport": "/dev/ttyAMA0",
         "serialbaud": "9600",
         "databits": "8",
         "parity": "none",
