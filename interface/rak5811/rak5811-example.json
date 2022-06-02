@@ -28,7 +28,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 130,
-        "y": 100,
+        "y": 220,
         "wires": [
             [
                 "98f3945fd7ecb3c1"
@@ -43,12 +43,12 @@
         "name": "",
         "i2c_device_number": 1,
         "chip": "0x01",
-        "i2c_address": "0x48",
+        "i2c_address": "0x4A",
         "inputsForChannel": "singleEnded",
-        "singleEndedChannel0": true,
+        "singleEndedChannel0": false,
         "singleEndedChannel1": true,
-        "singleEndedChannel2": true,
-        "singleEndedChannel3": true,
+        "singleEndedChannel2": false,
+        "singleEndedChannel3": false,
         "differentialChannel0_1": true,
         "differentialChannel0_3": false,
         "differentialChannel1_3": false,
@@ -56,8 +56,8 @@
         "samplesPerSecond0": "920",
         "samplesPerSecond1": "128",
         "progGainAmp": "4096",
-        "x": 270,
-        "y": 100,
+        "x": 310,
+        "y": 220,
         "wires": [
             [
                 "f850aa8e0924678c"
@@ -77,8 +77,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 100,
+        "x": 750,
+        "y": 220,
         "wires": []
     },
     {
@@ -86,14 +86,14 @@
         "type": "function",
         "z": "8ee081255d2599ec",
         "name": "convert raw data",
-        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x48\"].singleEnded.channel_1.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
+        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x4A\"].singleEnded.channel_1.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 100,
+        "x": 510,
+        "y": 220,
         "wires": [
             [
                 "5eaaedb6da612113"
@@ -101,13 +101,203 @@
         ]
     },
     {
-        "id": "3b5e633b9bd0c2af",
+        "id": "33d37c59d5840c3c",
+        "type": "gpio-out",
+        "z": "8ee081255d2599ec",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "17",
+        "x": 330,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "49156c48c4d48cdd",
+        "type": "inject",
+        "z": "8ee081255d2599ec",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "33d37c59d5840c3c"
+            ]
+        ]
+    },
+    {
+        "id": "44f38375065edf21",
+        "type": "inject",
+        "z": "8ee081255d2599ec",
+        "name": "trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 500,
+        "wires": [
+            [
+                "fe8f7f0e99745a95"
+            ]
+        ]
+    },
+    {
+        "id": "fe8f7f0e99745a95",
+        "type": "ads1x15_i2c",
+        "z": "8ee081255d2599ec",
+        "property": "payload",
+        "name": "",
+        "i2c_device_number": 1,
+        "chip": "0x01",
+        "i2c_address": "0x4A",
+        "inputsForChannel": "singleEnded",
+        "singleEndedChannel0": false,
+        "singleEndedChannel1": false,
+        "singleEndedChannel2": false,
+        "singleEndedChannel3": true,
+        "differentialChannel0_1": true,
+        "differentialChannel0_3": false,
+        "differentialChannel1_3": false,
+        "differentialChannel2_3": true,
+        "samplesPerSecond0": "920",
+        "samplesPerSecond1": "128",
+        "progGainAmp": "4096",
+        "x": 310,
+        "y": 500,
+        "wires": [
+            [
+                "cb1d2aae06fbaffb"
+            ]
+        ]
+    },
+    {
+        "id": "fa3e3aa20d701fc1",
+        "type": "debug",
+        "z": "8ee081255d2599ec",
+        "name": "read analog voltage input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "cb1d2aae06fbaffb",
+        "type": "function",
+        "z": "8ee081255d2599ec",
+        "name": "convert raw data",
+        "func": "raw_voltage = msg.payload[\"/dev/i2c-1\"].ads1115[\"0x4A\"].singleEnded.channel_3.Volts;\nmsg.payload = raw_voltage/0.6;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 500,
+        "wires": [
+            [
+                "fa3e3aa20d701fc1"
+            ]
+        ]
+    },
+    {
+        "id": "966720cbe68db976",
+        "type": "gpio-out",
+        "z": "8ee081255d2599ec",
+        "name": "",
+        "state": "OUTPUT",
+        "device": "gpiochip0",
+        "pin": "25",
+        "x": 330,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c517f228a0ba98a9",
+        "type": "inject",
+        "z": "8ee081255d2599ec",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "966720cbe68db976"
+            ]
+        ]
+    },
+    {
+        "id": "68b128c7d25da9de",
         "type": "comment",
         "z": "8ee081255d2599ec",
-        "name": "notes",
-        "info": "This example shows how to get the correct analog voltage input measurement from channel 1. To read other channel, please change the way you connect RAK5811. For more information, please check the README file.",
-        "x": 110,
-        "y": 40,
+        "name": "USE IO SLOT 1 of RAK6421",
+        "info": "",
+        "x": 180,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ae6fe1857587bee8",
+        "type": "comment",
+        "z": "8ee081255d2599ec",
+        "name": "USE IO SLOT 2 of RAK6421",
+        "info": "",
+        "x": 180,
+        "y": 340,
         "wires": []
     }
 ]
