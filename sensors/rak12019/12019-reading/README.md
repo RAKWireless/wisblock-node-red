@@ -27,17 +27,15 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Install dependency & nodes in Node-RED
 
-Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [node-red-contrib-ltr-390uv](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ltr-390uv).
+Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [@rakwireless/ltr-390uv](https://www.npmjs.com/package/@rakwireless/ltr-390uv).
 
-To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-ltr-390uv**. Now you should be able to install this node. This node is developed by RAKWireless, the source code is hosted in this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-ltr-390uv), and you can also check this [documentation](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) about how to install the node manually using command line.
+To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-ltr-390uv**. Now you should be able to install this node. 
 
-![install node-red-contrib-libgpiod](assets/install-node.png)
-
-need to change this image once out node is published.
+![install-node](assets/install-node.png)
 
 ### 2.3 Hardware  
 
@@ -61,15 +59,13 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3 Flow configuration
 
-After the installation of `node-red-contrib-ltr-390uv` is completed, you can clone/copy the flow example. The example is under `sensor/rak12019/rak12019-reading` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12019-reading.json** file or just copy and paste the .json file contents into your new flow.
+After the installation of `@rakwireless/ltr-390uv` is completed,  you can import the  [rak12019-reading.json](rak12019-reading.json) file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
 <img src="assets/flow-overview.png" alt="flow-overview" style="zoom:67%;" />
 
 ### 3.1 Nodes Configurations 
-
-* node-red-contrib-ltr-390uv 
 
 <img src="assets/ltr-390uv-setting.png" alt="ltr-390uv-setting" style="zoom:67%;" />
 

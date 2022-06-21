@@ -4,7 +4,7 @@
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use the node **node-red-contrib-pi4ioe5v** to toggles an LED connected to `IO0_7` pin of PI4IOE5V96224 GPIO Expander in RAK7391 board.  PI4IOE5V96224 GPIO Expander use `i2c-1` of RAK7391 board to expand 24 IO pins.  Its pin-map is showed as follows.
+This guide explains how to create a flow and then use the node **@rakwireless/pi4ioe5v** to toggles an LED connected to `IO0_7` pin of PI4IOE5V96224 GPIO Expander in RAK7391 board.  PI4IOE5V96224 GPIO Expander use `i2c-1` of RAK7391 board to expand 24 IO pins.  Its pin-map is showed as follows.
 
 ![image-20220302171903406](assets/image-20220302171903406.png)
 
@@ -30,21 +30,15 @@ Schematic diagram of LED and IO0_7 of PI4IOE5V96224  in RAK7391 is showed as fol
 
 ### 2.2. Software
 
-Please install `node-red-contrib-pi4ioe5v` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
+Please install `@rakwireless/pi4ioe5v` node with the following commands in your Node-RED user directory (typically `~/.node-red`),
 
 ```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
+npm install @rakwireless/pi4ioe5v
 ```
 
-```
-cp -rf node-red-nodes/node-red-contrib-pi4ioe5v ~/.node-red/node_modules
-```
+ Or install it through `Manage palette` menu.
 
-```
-cd ~/.node-red/node_modules/node-red-contrib-pi4ioe5v && npm install
-```
-
-
+![image-20220621163057940](assets/image-20220621163057940.png)
 
 ## 3. Configure
 
@@ -100,7 +94,7 @@ PI4IOE5VXXX IO expander output node. Set specific IO pin as  0 or 1.
 
 ## 4. Run example
 
-After you deployed the Node-Red container using the [portainer app template](link to our portainer template) by Rakwireless, you can clone /copy the flow example. The example is under `other/pi4ioe5v` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **pi4ioe5v-toggle-led.json** file or just copy and paste the .json file contents into your new flow.
+You can import the  [pi4ioe5v-toggle-led.json](./pi4ioe5v-toggle-led.json) file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 

@@ -4,15 +4,15 @@
 
 ## 1. Introduction
 
-This guide explains how to create a flow and then use the node **node-red-contrib-pn532-i2c** to test [RAK13600](https://store.rakwireless.com/products/rak13600-wisblock-nfc-reader) that use it to read id of RFID card and transfers the id to owner's name of RFID.  
+This guide explains how to create a flow and then use the node [@rakwireless/pn532](https://www.npmjs.com/package/@rakwireless/pn532) to test [RAK13600](https://store.rakwireless.com/products/rak13600-wisblock-nfc-reader) that use it to read id of RFID card and transfers the id to owner's name of RFID.  
 
 ### 1.1 RAK13600
 
 The RAK13600 module is designed as wireless module that allows you to scan NFC and RFID tags and devices. It includes an antenna coil that transmits and receives RF signals from the object being scanned. The RAK13600 is based on the popular NFC/RFID chip PN532. For more information about RAK13600, please check the [datasheet](https://docs.rakwireless.com/Product-Categories/WisBlock/RAK13600/Overview/#product-description). 
 
-## 1.2 node-red-contrib-pn532-i2c
+## 1.2 @rakwireless/pn532
 
-[node-red-contrib-pn532-i2c](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-pn532-i2c) is a node-red node providing access to PN532 to read UID of RFID card. It allows users to configure the I2C address of the chip, but the i2c address is fixed to 0x24. The node is developed by RAKwireless, if you want to modify the source code and change the node, please check this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-pn532-i2c), where the instructions on how to install this node manually is porvided.
+[@rakwireless/pn532](https://www.npmjs.com/package/@rakwireless/pn532) is a node-red node providing access to PN532 to read UID of RFID card. It allows users to configure the I2C address of the chip, but the i2c address is fixed to 0x24. 
 
 
 
@@ -28,15 +28,13 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Install node in Node-RED
 
-To install a new node, go to the top-right **Menu**, and then select **Manage palette**. On the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-pn532-i2c**. Now you should be able to install this node.
+To install a new node, go to the top-right **Menu**, and then select **Manage palette**. On the **User Settings** page, you need to select **Install**, and search the keyword `@rakwireless/pn532`. Now you should be able to install this node.
 
-![install node-red-contrib-pn532-i2c ](assets/install-node.png)
-
-Node hasn't been published, change to the new picture once published.
+![install-node](assets/install-node.png)
 
 ### 2.3 Hardware
 
@@ -64,7 +62,7 @@ If you are going to use RAK13600 on a Raspberry Pi, the easiest way to set up th
 
 ## 3. Flow Configuration
 
-The example is under `wireless/rak13600` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak13600-nfc-read.json** file or just copy and paste the .json file contents into your new flow.
+You can import the  **rak13600-nfc-read.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 

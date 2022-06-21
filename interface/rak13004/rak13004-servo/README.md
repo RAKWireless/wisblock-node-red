@@ -27,7 +27,7 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` and `/dev/gpiochip0` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C and GPIO devices. 
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](path-to-the-common-README), we provide all the information you need to know about using containerized Node-RED. 
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md) , we provide all the information you need to know about using containerized Node-RED. 
 
 ### 2.2 Hardware
 

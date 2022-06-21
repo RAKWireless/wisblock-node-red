@@ -26,7 +26,7 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Install nodes in Node-RED
 
@@ -52,7 +52,7 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3. Flow Configuration
 
-After the installation of `node-red-contrib-ads1x15_i2c ` is completed, you can clone/copy the flow example. The example is under `sensor/rak12015/rak12015-tampering-detector` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12015-tampering-detector.json** file or just copy and paste the `.json` file contents into your new flow.
+After the installation of `node-red-contrib-ads1x15_i2c ` is completed, you can clone/copy the flow example. You can import the  [rak12015-tampering-detector](./rak12015-tampering-detector.json) file or just copy and paste the `.json` file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 

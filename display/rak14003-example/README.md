@@ -23,7 +23,7 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Hardware
 
@@ -40,29 +40,11 @@ sudo apt update
 sudo apt install libgpiod-dev
 ```
 
-You need to install  `mcp-pcf-aio`  with the following commands. If you are using docker for Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`,
+Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [@rakwireless/mcp-pcf-aio](https://www.npmjs.com/package/@rakwireless/mcp-pcf-aio).
 
-```
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
-```
+To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **@rakwireless/mcp-pcf-aio **.
 
-then copy  `node-red-contrib-mcp-pcf-aio`  directory  to  the `node_modules` directory,
-
-```
-cp -rf node-red-nodes/node-red-contrib-mcp-pcf-aio ~/.node-red/node_modules
-```
-
-lastly, change to the  `node-red-contrib-mcp-pcf-aio`  directory and install the node,
-
-```
-cd ~/.node-red/node_modules/mcp-pcf-aio && npm install
-```
-
-**Tips:**  After the installation of  `node-red-contrib-mcp-pcf-aio`  is finished, please restart your node-red service/container(s).  Otherwise, the node cannot be found/added to the new flow.
-
-**Warn:**  [mcp-pcf-aio]([mcp-pcf-aio (node) - Node-RED (nodered.org)](https://flows.nodered.org/node/@pizzaprogram/mcp-pcf-aio))  is published by László Szakmári and we made some changes based on it to set RESET pin on the RAK14003. But there is still a serious problem that needs fixing. Please note that once you depoly this example flow, this RESET pin on the RAK14003 will always be used, you will not set it again until NodeRED process exit.
-
-
+![image-20220621164342053](assets/image-20220621164342053.png)
 
 ## 3 Run example
 

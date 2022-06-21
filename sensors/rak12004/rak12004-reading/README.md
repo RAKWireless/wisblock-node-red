@@ -14,11 +14,11 @@ The **RAK12004** is a gas sensor module, part of the RAKWireless WisBlock Sensor
 
 In RAK12004, the concentrations of gas is measured using a voltage divider network present in the sensor. The output of the sensing element is connected to a 12-bit ADC (ADC121C021) which communicates through I2C to the application. The ADC121C021 supports the I2C serial bus and data transmission protocol, and it operates as a slave device on the I2C bus. For more information about ADC121C021, refer to the [datasheet](https://www.ti.com/lit/ds/symlink/adc121c021.pdf?ts=1649226964688&ref_url=https%253A%252F%252Fwww.google.com.hk%252F). 
 
-### 1.2 node-red-contrib-adc121c021 & node-red-contrib-libgpiod
+### 1.2 @rakwireless/adc121c021 & node-red-contrib-libgpiod
 
-The node we used in this flow is **[node-red-contrib-adc121c021](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/dev/node-red-contrib-adc121c021)**, as well as [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod). 
+The node we used in this flow is **[@rakwireless/adc121c021](https://www.npmjs.com/package/@rakwireless/adc121c021)**, as well as [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod). 
 
-The `node-red-contrib-adc121c021` provides the very basic configuration for users to configure, the user only needs to define the i2c bus of the chip. The chip is set to the automatic conversion mode by default, and the cycle time is set to 32. The I2C address of adc121c021 is configured to 0x51 on RAK12004. 
+The `@rakwireless/adc121c021` provides the very basic configuration for users to configure, the user only needs to define the i2c bus of the chip. The chip is set to the automatic conversion mode by default, and the cycle time is set to 32. The I2C address of adc121c021 is configured to `0x51` on RAK12004. 
 
 The `node-red-contrib-libgpiod` node contains a set of input and output nodes for controlling General Purpose Input and Outputs (GPIOs) though libgpiod (ioctl). It is used to pull the EN pin that must be pulled high before ASC121C021 can read analog inputs.
 
@@ -47,13 +47,15 @@ sudo apt update
 sudo apt install libgpiod-dev
 ```
 
-If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) on install dependency inside container.
+If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](../../../README-Docker/README.md) on install dependency inside container.
 
-Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [node-red-contrib-pca9685](https://flows.nodered.org/node/node-red-contrib-pca9685).
+Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [@rakwireless/adc121c021](https://www.npmjs.com/package/@rakwireless/adc121c021).
 
-Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
+To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
 ![install node-red-contrib-libgpiod](assets/install-node.png)
+
+![install-node2](assets/install-node2.png)
 
 ### 2.3 Hardware  
 
@@ -77,11 +79,13 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3 Flow Configuration
 
-After the installation of `node-red-contrib-adc121c021` is completed, you can clone/copy the flow example. The example is under `sensor/rak12004/rak12004-reading` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak12004-reading.json** file or just copy and paste the .json file contents into your new flow.
+Import the  **rak12004-reading.json** file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
-<img src="assets/flow-overview.png" alt="flow overview"/>As we mentioned in section 2.5,  `node-red-contrib-libgpiod` node is used to pull the Enable pin that must be pulled high before ADC121C021 can read analog input.
+<img src="assets/flow-overview.png" alt="flow overview"/>
+
+`node-red-contrib-libgpiod` node is used to pull the Enable pin that must be pulled high before ADC121C021 can read analog input.
 
 * Inject nodes
 

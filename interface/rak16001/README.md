@@ -32,7 +32,7 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2. Hardware
 
@@ -50,21 +50,15 @@ There are two method to use RAK16001:
 
 ### 2.3. Software
 
-Please install `node-red-contrib-ads7830` node with the following commands. If you use docker of Node-RED, you may need to replace `~/.node-red` with `/usr/src/node-red`.
+Please install `@rakwireless/ads7830` node with the following commands in your Node-RED user directory (typically `~/.node-red`), 
 
 ```
-git clone https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
+npm install @rakwireless/ads7830
 ```
 
-```
-cp -rf node-red-nodes/node-red-contrib-ads7830 ~/.node-red/node_modules
-```
+Or install it through `Manage palette` menu. 
 
-```
-cd ~/.node-red/node_modules/node-red-contrib-ads7830 && npm install
-```
-
-**Tips:**  After `node-red-contrib-ads7830`  installed,  **node-red should be restarted**, otherwise, the node cannot be found on the page.
+![image-20220621164026049](assets/image-20220621164026049.png)
 
 ## 3. Run example
 

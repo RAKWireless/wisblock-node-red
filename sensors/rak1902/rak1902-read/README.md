@@ -12,9 +12,9 @@ RAK1902 is a WisBlock Sensor based on the STMicroelectronics LPS22HB chip which 
 
 RAK1902's pressure range from 260 to 1260 hPa makes it suitable for the use in weather prediction systems The relative accuracy of ±0.1 hPa is su­cient for most applications.
 
-### 1.2 node-red-contrib-lps2x
+### 1.2 @rakwireless/lps2x
 
-The [node-red-contrib-lps2x](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-lps2x) is used in this flow to configure the sensor. It supports lps22hb or lps25hb I2C barometer sensor, it allows users to change the bus number, the chipset, and also the i2c address. 
+The [@rakwireless/lps2x](https://www.npmjs.com/package/@rakwireless/lps2x) is used in this flow to configure the sensor. It supports lps22hb or lps25hb I2C barometer sensor, it allows users to change the bus number, the chipset, and also the i2c address. 
 
 ## 2. Preparation
 
@@ -26,17 +26,15 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/i2c-1` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to I2C devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Install nodes in Node-RED
 
-Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [node-red-contrib-lps2x](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-lps2x).
+Now we need to install the required nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install only one node: [@rakwireless/lps2x](https://www.npmjs.com/package/@rakwireless/lps2x).
 
-To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **node-red-contrib-lps2x **. Now you should be able to install this node. This node is developed by RAKWireless, the source code is hosted in this [repo](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes/-/tree/master/node-red-contrib-lps2x), and you can also check this [documentation](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) about how to install the node manually using command line.
+To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the keyword **@rakwireless/lps2x **.
 
-![install node](assets/install-node.png)
-
-need to change this image once out node is published.
+![install-node](assets/install-node.png)
 
 #### 2.3 Hardware
 
@@ -54,7 +52,7 @@ The easiest way to set up the hardware is to use the RAK6421 WisBlock Hat that e
 
 ## 3. Flow Configuration
 
-After the installation of `node-red-contrib-lps2x` is completed, you can clone/copy the flow example. The example is under `sensor/rak1902/rak1902-read` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **rak1902-read.json** file or just copy and paste the `.json` file contents into your new flow.
+Import the [rak1902-read](./rak1902-read.json) file or just copy and paste the `.json` file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 

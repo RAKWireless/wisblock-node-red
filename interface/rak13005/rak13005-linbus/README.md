@@ -44,7 +44,7 @@ dtoverlay=pi3-miniuart-bt
 
 If your Node-RED is deployed inside a container, you need to mount serial port to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to serial port  devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2. Hardware
 
@@ -76,29 +76,21 @@ Connect Wisblock starter kit with RAK4621 and RPi 4B.
 
 ### 2.3. Software
 
-#### 2.3.1. node-red-contrib-linbus
+#### 2.3.1. @rakwireless/linbus
 
-Install the `node-red-contrib-linbus` moulde from our node-red-nodes repository , 
+Install the `@rakwireless/linbus` moulde with command as bellow in your Node-RED user directory (typically `~/.node-red`), 
 
-```plaintext
-git clone -b dev https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/node-red-nodes.git
+```
+npm install @rakwireless/linbus
 ```
 
-copy `node-red-contrib-linbus` folder to  `node_modules` folder, `node_modules`  folder is located in the root directory of your node-red install.
+Or install it through `Manage palette` menu.
 
-```plaintext
-cp -rf node-red-nodes/node-red-contrib-linbus ~/.node-red/node_modules
-```
-
-then go to the `node-red-contrib-linbus` folder  and run the installation command
-
-```plaintext
-cd ~/.node-red/node_modules/node-red-contrib-linbus && npm install
-```
+![image-20220621163908421](assets/image-20220621163908421.png)
 
 #### 2.3.2. node-red-node-serialport
 
-In our flows, `node-red-contrib-linbus`  is used in combination with a serial port node, so we need to install`node-red-node-serialport` , run the following command in the root directory of your node-red install
+In our flows, `@rakwireless/linbus`  is used in combination with a serial port node, so we need to install`node-red-node-serialport` , run the following command in your Node-RED user directory (typically `~/.node-red`).
 
 ```
 npm install node-red-node-serialport@0.15.0 

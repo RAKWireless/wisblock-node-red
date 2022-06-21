@@ -42,7 +42,7 @@ If you are using Node-RED locally (in the host machine without using docker cont
 
 If your Node-RED is deployed inside a container, you need to mount `/dev/gpiochip0` to the Node-RED container, and also make sure the user inside the container is assigned to the right group so that it has access to GPIO devices.
 
-For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
+For detailed "docker run" command, docker-compose file, and information about how to use a pre-configured Portainer template, please check this [instruction](../../../README-Docker/README.md), we provide all the information you need to know about using containerized Node-RED.
 
 ### 2.2 Install dependency & nodes in Node-RED
 
@@ -53,9 +53,9 @@ sudo apt update
 sudo apt install libgpiod-dev
 ```
 
-If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/blob/dev/README-Docker/README.md) on install dependency inside container.
+If your Node-RED is deployed inside a container, you need to install `libgpiod-dev` inside container, please also check the [instruction](../../../README-Docker/README.md) on install dependency inside container.
 
-Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install two nodes: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod) and [node-red-contrib-pca9685](https://flows.nodered.org/node/node-red-contrib-pca9685).
+Now we need to install some nodes for the example flow. Browse to http://{host-ip}:1880 to access Node-Red's web interface. In this example, you need to install one node: [node-red-contrib-libgpiod](https://flows.nodered.org/node/node-red-contrib-libgpiod).
 
 Take `node-red-contrib-libgpiod` as an example. To install this node , go to the top right **Menu**, and then select **Manage palette**. In the **User Settings** page, you need to select **Install**, and search the key word **node-red-contrib-libgpiod**. Now you should be able to install this node.
 
@@ -73,7 +73,7 @@ Notice that you can connect the Ground to any of the ground pin( Board pin 6、9
 
 ## 3. Flow configuration
 
- After the installation of **node-red-contrib-libgpiod** is completed, you can clone/copy the flow example. The example is under `other/gpio/gpio-toggle-led` folder in the [`wisblock-node-red`](https://git.rak-internal.net/product-rd/gateway/wis-developer/rak7391/wisblock-node-red/-/tree/dev/) repository. Then you can import the  **gpio-toggle-led.json** file or just copy and paste the .json file contents into your new flow.
+You can import the  [gpio-toggle-led.json](./gpio-toggle-led.json) file or just copy and paste the .json file contents into your new flow.
 
 After the import is done, the new flow should look like this:
 
