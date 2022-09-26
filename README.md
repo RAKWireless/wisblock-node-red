@@ -43,6 +43,7 @@ The repository structure follows that on the [RAKwireless store](https://store.r
     * [RAK5811 example](interface/rak5811/)
     * [RAK13004 example](interface/rak13004/)
     * [RAK13005 example](interface/rak13005/)
+    * [RAK13006 example](interface/rak13006/)
     * [RAK16001 example](interface/rak16001/)
 * Other
     * [ADS1115 example](other/ads1115/ads1115-read/)
