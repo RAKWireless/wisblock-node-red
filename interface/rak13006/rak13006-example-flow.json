@@ -1,0 +1,44 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "rak13006_example_flow",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "993fbdfc3838be25",
+        "type": "socketcan-out",
+        "z": "f6f2187d.f17ca8",
+        "name": "socketcan-out",
+        "config": "b1e9433c95542a8b",
+        "x": 250,
+        "y": 620,
+        "wires": [
+            [
+                "38bddba95bccad56"
+            ]
+        ]
+    },
+    {
+        "id": "38bddba95bccad56",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "b1e9433c95542a8b",
+        "type": "socketcan-config",
+        "interface": "can0"
+    }
+]
