@@ -90,7 +90,7 @@ You also need to make some changes to the operating system to enable the CAN dev
    
    you check the status of the can0 interface now, it should be "UP" now:
    
-   `ip addr | grep can`
+   `ip addr | grep can`s
    
    ![](assets/can_up.png)
 
@@ -100,7 +100,7 @@ You also need to make some changes to the operating system to enable the CAN dev
 
 ### 3.2. Master device software
 
-The master code sensor code can be found under the [rak13006_canbus_device](rak13006_canbus_device/13006_canbus_device.ino) folder. You need to upload the example script for the master devices to the core using Arduino IDE, the script is stored under the **RAK13006-MCP2518** folder. The library for the MCP2518 is included in the foleder, and you can open it directly with the Arduino IDE but you need to copy the whole folder to Arduino's **libraries** folder, so the library can be corrected included.
+The master code can be found in the github repository [RAK13006-MCP2518](https://github.com/RAKWireless/RAK13006-MCP2518). You need to upload the example script for the master devices to the core using Arduino IDE, the script is stored under the **examples** folder. The library for the MCP2518 is included in the folder, and you can open it directly with the Arduino IDE but you need to copy the whole folder to Arduino's **libraries** folder, so the library can be corrected included.
 
 ### 3.3. Run the example
 
