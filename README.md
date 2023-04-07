@@ -58,6 +58,7 @@ The repository structure follows that on the [RAKwireless store](https://store.r
     * [RAK12009 example](sensors/rak12009/rak12009-reading)
     * [RAK12015 example](sensors/rak12015/rak12015-tampering-detector)
     * [RAK12019 example](sensors/rak12019/12019-reading)
+    * [RAK12037 example](sensors/rak12037)
     * [RAK16000 example](sensors/rak16000)
     * [RAK1901 example](sensors/rak1901/rak1901-shtc3-read)
 * Wireless
