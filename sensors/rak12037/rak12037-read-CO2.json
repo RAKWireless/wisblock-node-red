@@ -1,0 +1,74 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "rak12037-read-CO2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c5f24dec135eea84",
+        "type": "scd30-read-measurement",
+        "z": "f6f2187d.f17ca8",
+        "scd30Config": "865e7d5d158cda8b",
+        "name": "",
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "a24caf9f677ef9c1"
+            ]
+        ]
+    },
+    {
+        "id": "5a26ed38185fb57b",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 230,
+        "y": 100,
+        "wires": [
+            [
+                "c5f24dec135eea84"
+            ]
+        ]
+    },
+    {
+        "id": "a24caf9f677ef9c1",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "865e7d5d158cda8b",
+        "type": "scd30-config",
+        "busNumber": "1"
+    }
+]
